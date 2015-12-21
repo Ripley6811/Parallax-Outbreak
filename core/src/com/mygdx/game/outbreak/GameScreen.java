@@ -79,9 +79,7 @@ public class GameScreen  extends InputAdapter implements Screen {
 
         renderer.setProjectionMatrix(actionViewport.getCamera().combined);
 
-
         player.render(renderer);
-
 
         renderer.begin(ShapeRenderer.ShapeType.Filled);
         renderer.setColor(255,0,0,1);
@@ -92,7 +90,8 @@ public class GameScreen  extends InputAdapter implements Screen {
         renderer.begin(ShapeRenderer.ShapeType.Filled);
         renderer.setColor(0,255,0,1);
         renderer.identity();
-        renderer.translate(actionViewport.getWorldWidth(),5,0);
+        renderer.translate(actionViewport.getWorldWidth(),
+                actionViewport.getWorldHeight(),0);
         renderer.circle(0,0,5);
         renderer.end();
     }

@@ -13,6 +13,8 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 public class Player {
 
     Vector2 position;
+    float velocity;
+    float MAX_DISPLACEMENT = 1.5f;
 
     Viewport viewport;
 
@@ -20,9 +22,9 @@ public class Player {
 
     float accelerometerInput;
 
-
     public Player(Viewport viewport) {
         this.viewport = viewport;
+        velocity = 0.0f;
         deaths = 0;
         init();
     }
@@ -36,28 +38,34 @@ public class Player {
     }
 
     public void update(float delta) {
-        // Key input
-        if (Gdx.input.isKeyPressed(Keys.LEFT)) {
-//            position.x -= delta * Constants.PLAYER_MOVEMENT_SPEED;
-        } else if (Gdx.input.isKeyPressed(Keys.RIGHT)) {
-//            position.x += delta * Constants.PLAYER_MOVEMENT_SPEED;
-        }
-
         // Accelerometer input
         accelerometerInput = Gdx.input.getAccelerometerY() /
-                (Constants.GRAVITATIONAL_ACCELERATION *
-                        Constants.ACCELEROMETER_SENSITIVITY);
+                                 (Constants.GRAVITATIONAL_ACCELERATION *
+                                  Constants.ACCELEROMETER_SENSITIVITY);
 
-//        position.x += -delta * accelerometerInput *
-//                        Constants.PLAYER_MOVEMENT_SPEED;
+        // Key input
+        if (Gdx.input.isKeyPressed(Keys.LEFT)) {
+            velocity -= 0.2;
+        } else if (Gdx.input.isKeyPressed(Keys.RIGHT)) {
+            velocity += 0.2;
+        } else {
+            velocity *= 0.8;
+        }
+        System.out.println(velocity);
+
+        if (velocity < -1 * MAX_DISPLACEMENT) {
+            velocity = -1 * MAX_DISPLACEMENT;
+        } else if (velocity > MAX_DISPLACEMENT) {
+            velocity = MAX_DISPLACEMENT;
+        }
     }
 
     public void render(ShapeRenderer renderer) {
         renderer.begin(ShapeType.Filled);
         renderer.setColor(Constants.PLAYER_COLOR);
         renderer.identity();
-        renderer.translate(position.x + accelerometerInput, 0, 0);
-        renderer.rect(Constants.PLAYER_WIDTH / 2, Constants.PLAYER_HEIGHT / 2,
+        renderer.translate(position.x + velocity, 0, 0);
+        renderer.rect(-Constants.PLAYER_WIDTH / 2, Constants.PLAYER_HEIGHT / 2,
                 Constants.PLAYER_WIDTH, Constants.PLAYER_HEIGHT);
         renderer.end();
 
