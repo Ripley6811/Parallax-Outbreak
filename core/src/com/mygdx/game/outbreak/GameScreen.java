@@ -1,12 +1,13 @@
 package com.mygdx.game.outbreak;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 
 /**
  * Created by Jay on 12/18/2015.
@@ -19,22 +20,37 @@ public class GameScreen  extends InputAdapter implements Screen {
     OutbreakGame game;
 
     ShapeRenderer renderer;
-    ExtendViewport actionViewport;
+    FitViewport actionViewport;
 
+    float scrollPosition;
+    float scrollVelocity;
+    float scrollAcceleration;
+
+    StarScape starscape;
+    Blocks blocks;
     Player player;
 
     public GameScreen(OutbreakGame game) {
         this.game = game;
+        init();
+    }
+
+    public void init() {
+        scrollPosition = 0.0f;
+        scrollVelocity = 0.0f;
+        scrollAcceleration = 0.0f;
     }
 
     @Override
     public void show() {
-        actionViewport = new ExtendViewport(
+        actionViewport = new FitViewport(
                 Constants.WORLD_SIZE, Constants.WORLD_SIZE);
 
         renderer = new ShapeRenderer();
         renderer.setAutoShapeType(true);
 
+        starscape = new StarScape(actionViewport);
+        blocks = new Blocks(actionViewport);
         player = new Player(actionViewport);
 
         Gdx.input.setInputProcessor(this);
@@ -59,6 +75,8 @@ public class GameScreen  extends InputAdapter implements Screen {
     public void resize(int width, int height) {
         actionViewport.update(width, height, true);
 
+        starscape.init();
+        blocks.init();
         player.init();
     }
 
@@ -67,20 +85,59 @@ public class GameScreen  extends InputAdapter implements Screen {
         renderer.dispose();
     }
 
+    public void updateScroll(float delta) {
+        // Accelerometer input
+        scrollAcceleration = -3.0f * Gdx.input.getAccelerometerY() /
+                             Constants.GRAVITATIONAL_ACCELERATION;
+        // Key input
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+            scrollAcceleration = Constants.KEYPRESS_ACCELERATION;
+        } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+            scrollAcceleration = -Constants.KEYPRESS_ACCELERATION;
+        }
+
+        // Adjust velocity
+        scrollVelocity += Math.abs(scrollAcceleration)
+                          > Constants.STATIC_FRICTION ?
+                          scrollAcceleration : 0;
+        // Max velocity
+        if (Math.abs(scrollVelocity) > Constants.MAX_SCROLL_SPEED) {
+            scrollVelocity = Math.signum(scrollVelocity)
+                    * Constants.MAX_SCROLL_SPEED;
+        }
+        // Slow down
+        scrollVelocity *= 0.8;
+
+        // Update position based on velocity
+        scrollPosition += scrollVelocity;
+
+        // Wrap around
+        scrollPosition %= Constants.WORLD_SIZE;
+
+//        System.out.println(scrollPosition + ", " + scrollVelocity + ", " + scrollAcceleration);
+    }
+
     @Override
     public void render(float delta) {
         actionViewport.apply(true);
 
-        player.update(delta);
+        updateScroll(delta);
+        starscape.update(delta, scrollVelocity);
+        blocks.update(delta, scrollPosition);
+        player.update(delta, scrollVelocity);
 
         Color BG_COLOR = Constants.BACKGROUND_COLOR;
-        Gdx.gl.glClearColor(BG_COLOR.r, BG_COLOR.g, 135, 1);
+        Gdx.gl.glClearColor(BG_COLOR.r, BG_COLOR.g, BG_COLOR.b, 1);
         Gdx.gl20.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         renderer.setProjectionMatrix(actionViewport.getCamera().combined);
 
+        starscape.render(renderer);
+        blocks.render(renderer);
         player.render(renderer);
 
+        // TODO: Delete the following balls
+        // Red and green balls to identify corners
         renderer.begin(ShapeRenderer.ShapeType.Filled);
         renderer.setColor(255,0,0,1);
         renderer.identity();
