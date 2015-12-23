@@ -36,7 +36,7 @@ public class GameScreen  extends InputAdapter implements Screen {
     }
 
     public void init() {
-        scrollPosition = 0.0f;
+        scrollPosition = Constants.WORLD_SIZE;
         scrollVelocity = 0.0f;
         scrollAcceleration = 0.0f;
     }
@@ -112,7 +112,9 @@ public class GameScreen  extends InputAdapter implements Screen {
         scrollPosition += scrollVelocity;
 
         // Wrap around
-        scrollPosition %= Constants.WORLD_SIZE;
+        if (scrollPosition < 0) {
+            scrollPosition += Constants.WORLD_SIZE;
+        }
 
 //        System.out.println(scrollPosition + ", " + scrollVelocity + ", " + scrollAcceleration);
     }

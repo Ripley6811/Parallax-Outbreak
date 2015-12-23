@@ -66,7 +66,7 @@ public class Player {
     public void render(ShapeRenderer renderer) {
         renderer.begin(ShapeType.Filled);
         renderer.identity();
-        renderer.translate(position.x, 0, 0);
+        renderer.translate(position.x, position.y, 0);
 
         // TODO: Replace with engines firing to the sides.
         // Draw red player reference

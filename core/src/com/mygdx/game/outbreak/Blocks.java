@@ -1,5 +1,6 @@
 package com.mygdx.game.outbreak;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
@@ -51,7 +52,12 @@ public class Blocks {
         renderer.identity();
         renderer.setColor(121,255,211,1);
         for (Vector2 block : blocks){
-            renderer.rect((block.x + scrollPosition) % worldWidth, block.y, Constants.BLOCK_WIDTH, Constants.BLOCK_HEIGHT);
+            renderer.rect((block.x + scrollPosition) % worldWidth,
+                    block.y,
+                    Constants.BLOCK_WIDTH,
+                    Constants.BLOCK_HEIGHT,
+                    Color.BLUE, Color.FIREBRICK,
+                    Color.BLUE, Color.FIREBRICK);
         }
         renderer.end();
     }
