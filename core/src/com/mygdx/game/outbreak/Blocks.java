@@ -58,6 +58,13 @@ public class Blocks {
                     Constants.BLOCK_HEIGHT,
                     Color.BLUE, Color.FIREBRICK,
                     Color.BLUE, Color.FIREBRICK);
+            // Draw again to ensure each block can show on both ends of screen
+            renderer.rect((block.x + scrollPosition) % worldWidth - worldWidth,
+                    block.y,
+                    Constants.BLOCK_WIDTH,
+                    Constants.BLOCK_HEIGHT,
+                    Color.BLUE, Color.FIREBRICK,
+                    Color.BLUE, Color.FIREBRICK);
         }
         renderer.end();
     }
