@@ -89,6 +89,8 @@ public class GameScreen  extends InputAdapter implements Screen {
     }
 
     public void updateScroll(float delta) {
+        // Slow down
+        scrollVelocity *= 0.8;
         // Accelerometer input
         scrollAcceleration = -3.0f * Gdx.input.getAccelerometerY() /
                              Constants.GRAVITATIONAL_ACCELERATION;
@@ -100,16 +102,15 @@ public class GameScreen  extends InputAdapter implements Screen {
         }
 
         // Adjust velocity
-        scrollVelocity += Math.abs(scrollAcceleration)
-                          > Constants.STATIC_FRICTION ?
-                          scrollAcceleration : 0;
+        scrollVelocity += Constants.ACCELERATION_MULTIPLIER * (
+                            Math.abs(scrollAcceleration)
+                            > Constants.STATIC_FRICTION ?
+                            scrollAcceleration : 0 );
         // Max velocity
         if (Math.abs(scrollVelocity) > Constants.MAX_SCROLL_SPEED) {
             scrollVelocity = Math.signum(scrollVelocity)
                     * Constants.MAX_SCROLL_SPEED;
         }
-        // Slow down
-        scrollVelocity *= 0.8;
 
         // Update position based on velocity
         scrollPosition += scrollVelocity;
@@ -119,7 +120,7 @@ public class GameScreen  extends InputAdapter implements Screen {
             scrollPosition += Constants.WORLD_SIZE;
         }
 
-        System.out.println(scrollPosition + ", " + scrollVelocity + ", " + scrollAcceleration);
+//        System.out.println(scrollPosition + ", " + scrollVelocity + ", " + scrollAcceleration);
     }
 
     @Override

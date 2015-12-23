@@ -1,7 +1,6 @@
 package com.mygdx.game.outbreak;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -59,9 +58,10 @@ public class Player {
             for (float i = -0.9f; i < 1.0f; i += 0.1) {
                 // Calculate endpoints along a hemisphere.
                 float x2 = (float) Math.sqrt(1 - i * i);
+                float multiplier = (0.8f + 0.2f*random.nextFloat()) * Math.abs(velocity) * Constants.EXHAUST_LENGTH_MULTIPLIER;
                 renderer.line(offset, 0,
-                        offset + x2 * 1f * (velocity < 0 ? 1 : -1) * Math.abs(velocity),
-                        i * Math.abs(velocity) / 2,
+                        offset + x2 * 2f * (velocity < 0 ? 1 : -1) * multiplier,
+                        i * multiplier,
                         Color.RED,
                         new Color(1, random.nextFloat(), 0, random.nextFloat()));
             }

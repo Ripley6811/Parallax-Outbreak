@@ -15,9 +15,11 @@ public class Constants {
     public static final float PLAYER_HEIGHT = 1.0f;
 
     public static final float GRAVITATIONAL_ACCELERATION = 9.8f;
+    public static final float ACCELERATION_MULTIPLIER = 0.3f;
     public static final float STATIC_FRICTION = 0.2f;
-    public static final float MAX_SCROLL_SPEED = 4.0f;
+    public static final float MAX_SCROLL_SPEED = 2.0f;
     public static final float KEYPRESS_ACCELERATION = 1.0f;
+    public static final float EXHAUST_LENGTH_MULTIPLIER = 1.5f;
 
     public static final float STAR_RADIUS = 0.25f;
     // Starscape width relative to world size.

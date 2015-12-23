@@ -18,7 +18,7 @@ public class Blocks {
     int worldWidth;
 
     int N_BLOCKS = 10;
-    Array<Vector2> blocks;
+    Array<SingleBlock> blocks;
 
     public Blocks(Viewport viewport) {
         this.viewport = viewport;
@@ -27,13 +27,13 @@ public class Blocks {
 
     public void init() {
         scrollPosition = 0.0f;
-        blocks = new Array<Vector2>(N_BLOCKS);
+        blocks = new Array<SingleBlock>(N_BLOCKS);
         worldWidth = (int)viewport.getWorldWidth();
         Random random = new Random();
         for (int i = 0; i < N_BLOCKS; i++) {
             int x = (int)(i * Constants.BLOCK_WIDTH + i);
             int y = (int)(50 + Constants.BLOCK_HEIGHT);
-            blocks.add(new Vector2(x, y));
+            blocks.add(new SingleBlock(x, y));
         }
     }
 
@@ -42,30 +42,9 @@ public class Blocks {
 
     }
 
-
-//    public void updateScrollPosition (Vector2 camPosition) {
-//        position.set(camPosition.x, position.y);
-//    }
-
     public void render(ShapeRenderer renderer) {
-        renderer.begin(ShapeRenderer.ShapeType.Filled);
-        renderer.identity();
-        renderer.setColor(121,255,211,1);
-        for (Vector2 block : blocks){
-            renderer.rect((block.x + scrollPosition) % worldWidth,
-                    block.y,
-                    Constants.BLOCK_WIDTH,
-                    Constants.BLOCK_HEIGHT,
-                    Color.BLUE, Color.FIREBRICK,
-                    Color.BLUE, Color.FIREBRICK);
-            // Draw again to ensure each block can show on both ends of screen
-            renderer.rect((block.x + scrollPosition) % worldWidth - worldWidth,
-                    block.y,
-                    Constants.BLOCK_WIDTH,
-                    Constants.BLOCK_HEIGHT,
-                    Color.BLUE, Color.FIREBRICK,
-                    Color.BLUE, Color.FIREBRICK);
+        for (SingleBlock block : blocks){
+            block.render(renderer, scrollPosition);
         }
-        renderer.end();
     }
 }

@@ -41,7 +41,7 @@ public class DebrisLayer {
     public void update(float deltaTime, float scrollVelocity) {
         // Update star position based on player velocity.
         debrisScrollPosition += scrollVelocity *
-                Constants.STARSCAPE_SPEED_MULTIPLIER / 2;
+                Constants.STARSCAPE_SPEED_MULTIPLIER * 2;
         // Keep star field as a high positive value.
         if (debrisScrollPosition < debrisViewWidth) {
             debrisScrollPosition += debrisViewWidth;
