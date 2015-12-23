@@ -3,10 +3,13 @@ package com.mygdx.game.outbreak;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.Viewport;
+
+import java.util.Random;
 
 /**
  * Created by Jay on 12/18/2015.
@@ -40,44 +43,46 @@ public class Player {
 
     public void update(float delta, float scrollVelocity) {
         this.velocity = -scrollVelocity;
-//        // Accelerometer input
-//        accelerometerInput = Gdx.input.getAccelerometerY() /
-//                                 (Constants.GRAVITATIONAL_ACCELERATION *
-//                                  Constants.ACCELEROMETER_SENSITIVITY);
-//        // Key input
-//        if (Math.abs(accelerometerInput) > 0.2f) {
-//            velocity += accelerometerInput / 2.0f;
-//        } else if (Gdx.input.isKeyPressed(Keys.LEFT)) {
-//            velocity -= 0.2;
-//        } else if (Gdx.input.isKeyPressed(Keys.RIGHT)) {
-//            velocity += 0.2;
-//        } else {
-//            velocity *= 0.8;
-//        }
-////        System.out.println(velocity);
-//
-//        if (velocity < -1 * MAX_DISPLACEMENT) {
-//            velocity = -1 * MAX_DISPLACEMENT;
-//        } else if (velocity > MAX_DISPLACEMENT) {
-//            velocity = MAX_DISPLACEMENT;
-//        }
     }
 
     public void render(ShapeRenderer renderer) {
+        // Draw engine fire
+        Gdx.gl.glEnable(GL20.GL_BLEND);
+        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+        if (Math.abs(velocity) > Constants.STATIC_FRICTION) {
+            Random random = new Random();
+            renderer.begin(ShapeType.Line);
+            renderer.identity();
+            renderer.translate(position.x, position.y, 0);
+            float offset = velocity / 2 + (velocity < 0 ? Constants.PLAYER_WIDTH / 2 - 1 :
+                    -Constants.PLAYER_WIDTH / 2 + 1);
+            for (float i = -0.9f; i < 1.0f; i += 0.1) {
+                // Calculate endpoints along a hemisphere.
+                float x2 = (float) Math.sqrt(1 - i * i);
+                renderer.line(offset, 0,
+                        offset + x2 * 1f * (velocity < 0 ? 1 : -1) * Math.abs(velocity),
+                        i * Math.abs(velocity) / 2,
+                        Color.RED,
+                        new Color(1, random.nextFloat(), 0, random.nextFloat()));
+            }
+            renderer.end();
+        }
+        Gdx.gl.glDisable(GL20.GL_BLEND);
+
+        // Draw player paddle
         renderer.begin(ShapeType.Filled);
         renderer.identity();
         renderer.translate(position.x, position.y, 0);
-
-        // TODO: Replace with engines firing to the sides.
-        // Draw red player reference
-        renderer.setColor(Color.RED);
-        renderer.rect(-Constants.PLAYER_WIDTH / 2, Constants.PLAYER_HEIGHT / 2,
-                Constants.PLAYER_WIDTH, Constants.PLAYER_HEIGHT);
-
-        // Draw player
-        renderer.setColor(Constants.PLAYER_COLOR);
-        renderer.rect(-Constants.PLAYER_WIDTH / 2 + velocity, Constants.PLAYER_HEIGHT / 2,
-                Constants.PLAYER_WIDTH, Constants.PLAYER_HEIGHT);
+        renderer.rect(-Constants.PLAYER_WIDTH / 2 + velocity / 2,
+                -Constants.PLAYER_HEIGHT,
+                Constants.PLAYER_WIDTH, Constants.PLAYER_HEIGHT,
+                Color.LIGHT_GRAY, Color.LIGHT_GRAY,
+                Color.DARK_GRAY, Color.DARK_GRAY);
+        renderer.rect(-Constants.PLAYER_WIDTH / 2 + velocity / 2,
+                0,
+                Constants.PLAYER_WIDTH, Constants.PLAYER_HEIGHT,
+                Color.DARK_GRAY, Color.DARK_GRAY,
+                Color.LIGHT_GRAY, Color.LIGHT_GRAY);
         renderer.end();
     }
 }
