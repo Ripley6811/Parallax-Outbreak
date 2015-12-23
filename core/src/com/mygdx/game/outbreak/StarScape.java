@@ -31,7 +31,7 @@ public class StarScape {
         starScrollPosition = 0.0f;
         stars = new Array<Vector2>(N_STARS);
         starScapeWidth = (int)(viewport.getWorldWidth() * Constants.STARSCAPE_WIDTH_MULTIPLIER);
-        Random random = new Random();
+        Random random = new Random(Constants.SEED_LVL_1);
         for (int i = 0; i < N_STARS; i++) {
             int x = random.nextInt(starScapeWidth);
             int y = random.nextInt((int)viewport.getWorldHeight());
