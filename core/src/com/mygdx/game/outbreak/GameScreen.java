@@ -26,7 +26,8 @@ public class GameScreen  extends InputAdapter implements Screen {
     float scrollVelocity;
     float scrollAcceleration;
 
-    StarScape starscape;
+    StarScape starScape;
+    DebrisLayer debrisLayer;
     Blocks blocks;
     Player player;
 
@@ -49,7 +50,8 @@ public class GameScreen  extends InputAdapter implements Screen {
         renderer = new ShapeRenderer();
         renderer.setAutoShapeType(true);
 
-        starscape = new StarScape(actionViewport);
+        starScape = new StarScape(actionViewport);
+        debrisLayer = new DebrisLayer(actionViewport);
         blocks = new Blocks(actionViewport);
         player = new Player(actionViewport);
 
@@ -75,7 +77,8 @@ public class GameScreen  extends InputAdapter implements Screen {
     public void resize(int width, int height) {
         actionViewport.update(width, height, true);
 
-        starscape.init();
+        starScape.init();
+        debrisLayer.init();
         blocks.init();
         player.init();
     }
@@ -116,7 +119,7 @@ public class GameScreen  extends InputAdapter implements Screen {
             scrollPosition += Constants.WORLD_SIZE;
         }
 
-//        System.out.println(scrollPosition + ", " + scrollVelocity + ", " + scrollAcceleration);
+        System.out.println(scrollPosition + ", " + scrollVelocity + ", " + scrollAcceleration);
     }
 
     @Override
@@ -124,7 +127,8 @@ public class GameScreen  extends InputAdapter implements Screen {
         actionViewport.apply(true);
 
         updateScroll(delta);
-        starscape.update(delta, scrollVelocity);
+        starScape.update(delta, scrollVelocity);
+        debrisLayer.update(delta, scrollVelocity);
         blocks.update(delta, scrollPosition);
         player.update(delta, scrollVelocity);
 
@@ -134,24 +138,10 @@ public class GameScreen  extends InputAdapter implements Screen {
 
         renderer.setProjectionMatrix(actionViewport.getCamera().combined);
 
-        starscape.render(renderer);
+        starScape.render(renderer);
+        debrisLayer.render(renderer);
         blocks.render(renderer);
         player.render(renderer);
 
-        // TODO: Delete the following balls
-        // Red and green balls to identify corners
-        renderer.begin(ShapeRenderer.ShapeType.Filled);
-        renderer.setColor(255,0,0,1);
-        renderer.identity();
-        renderer.circle(0,0,5);
-        renderer.end();
-
-        renderer.begin(ShapeRenderer.ShapeType.Filled);
-        renderer.setColor(0,255,0,1);
-        renderer.identity();
-        renderer.translate(actionViewport.getWorldWidth(),
-                actionViewport.getWorldHeight(),0);
-        renderer.circle(0,0,5);
-        renderer.end();
     }
 }
