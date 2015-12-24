@@ -29,6 +29,8 @@ public class Blocks {
         scrollPosition = 0.0f;
         blocks = new Array<SingleBlock>(N_BLOCKS);
         worldWidth = (int)viewport.getWorldWidth();
+
+        // Temporary random blocks until levels and loader are done.
         Random random = new Random();
         for (int i = 0; i < N_BLOCKS; i++) {
             int x = (int)(i * Constants.BLOCK_WIDTH + i);
