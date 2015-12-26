@@ -30,6 +30,12 @@ public class Constants {
 
     public static final float BLOCK_WIDTH = 5.0f;
     public static final float BLOCK_HEIGHT = 3.0f;
+    public static final Color[] BLOCK_COLOR_1 = {
+            Color.CLEAR, Color.BLUE, Color.ORANGE, Color.GREEN, Color.FIREBRICK
+    };
+    public static final Color[] BLOCK_COLOR_2 = {
+            Color.CLEAR, Color.ORANGE, Color.GREEN, Color.FIREBRICK, Color.BLUE
+    };
 
     public static final long SEED_LVL_1 = 12345L;
 }

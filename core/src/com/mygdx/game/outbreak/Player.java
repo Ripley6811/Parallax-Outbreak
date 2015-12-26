@@ -13,7 +13,7 @@ import java.util.Random;
 /**
  * Created by Jay on 12/18/2015.
  */
-public class Player {
+public class Player extends Constants {
 
     Vector2 position;
     float velocity;
@@ -36,7 +36,7 @@ public class Player {
         // Centered starting position.
         position = new Vector2(
                 viewport.getWorldWidth() / 2,
-                Constants.PLAYER_Y_POSITION
+                PLAYER_Y_POSITION
         );
     }
 
@@ -48,17 +48,17 @@ public class Player {
         // Draw engine fire
         Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-        if (Math.abs(velocity) > Constants.STATIC_FRICTION) {
+        if (Math.abs(velocity) > STATIC_FRICTION) {
             Random random = new Random();
             renderer.begin(ShapeType.Line);
             renderer.identity();
             renderer.translate(position.x, position.y, 0);
-            float offset = velocity / 2 + (velocity < 0 ? Constants.PLAYER_WIDTH / 2 - 1 :
-                    -Constants.PLAYER_WIDTH / 2 + 1);
+            float offset = velocity / 2 + (velocity < 0 ? PLAYER_WIDTH / 2 - 1 :
+                    -PLAYER_WIDTH / 2 + 1);
             for (float i = -0.9f; i < 1.0f; i += 0.1) {
                 // Calculate endpoints along a hemisphere.
                 float x2 = (float) Math.sqrt(1 - i * i);
-                float multiplier = (0.8f + 0.2f*random.nextFloat()) * Math.abs(velocity) * Constants.EXHAUST_LENGTH_MULTIPLIER;
+                float multiplier = (0.8f + 0.2f*random.nextFloat()) * Math.abs(velocity) * EXHAUST_LENGTH_MULTIPLIER;
                 renderer.line(offset, 0,
                         offset + x2 * 2f * (velocity < 0 ? 1 : -1) * multiplier,
                         i * multiplier,
@@ -73,14 +73,14 @@ public class Player {
         renderer.begin(ShapeType.Filled);
         renderer.identity();
         renderer.translate(position.x, position.y, 0);
-        renderer.rect(-Constants.PLAYER_WIDTH / 2 + velocity / 2,
-                -Constants.PLAYER_HEIGHT,
-                Constants.PLAYER_WIDTH, Constants.PLAYER_HEIGHT,
+        renderer.rect(-PLAYER_WIDTH / 2 + velocity / 2,
+                -PLAYER_HEIGHT,
+                PLAYER_WIDTH, PLAYER_HEIGHT,
                 Color.LIGHT_GRAY, Color.LIGHT_GRAY,
                 Color.DARK_GRAY, Color.DARK_GRAY);
-        renderer.rect(-Constants.PLAYER_WIDTH / 2 + velocity / 2,
+        renderer.rect(-PLAYER_WIDTH / 2 + velocity / 2,
                 0,
-                Constants.PLAYER_WIDTH, Constants.PLAYER_HEIGHT,
+                PLAYER_WIDTH, PLAYER_HEIGHT,
                 Color.DARK_GRAY, Color.DARK_GRAY,
                 Color.LIGHT_GRAY, Color.LIGHT_GRAY);
         renderer.end();
