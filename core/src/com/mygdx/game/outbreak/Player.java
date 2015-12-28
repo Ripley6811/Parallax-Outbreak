@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
@@ -14,8 +15,9 @@ import java.util.Random;
  * Created by Jay on 12/18/2015.
  */
 public class Player extends Constants {
-
-    Vector2 position;
+    Rectangle rectangle;
+    Vector2 home; // Starting position
+    Vector2 position; // Actual position with displacement
     float velocity;
     float MAX_DISPLACEMENT = 2.0f;
 
@@ -34,14 +36,21 @@ public class Player extends Constants {
 
     public void init() {
         // Centered starting position.
-        position = new Vector2(
-                viewport.getWorldWidth() / 2,
+        home = new Vector2(
+                viewport.getWorldWidth() / 2 - PLAYER_WIDTH / 2,
                 PLAYER_Y_POSITION
         );
+        position = new Vector2(
+                home.x,
+                home.y
+        );
+        rectangle = new Rectangle(position.x, position.y, PLAYER_WIDTH, PLAYER_HEIGHT);
     }
 
     public void update(float delta, float scrollVelocity) {
         this.velocity = -scrollVelocity;
+        position.x = home.x + velocity;
+        rectangle.setPosition(position);
     }
 
     public void render(ShapeRenderer renderer) {
@@ -53,15 +62,14 @@ public class Player extends Constants {
             renderer.begin(ShapeType.Line);
             renderer.identity();
             renderer.translate(position.x, position.y, 0);
-            float offset = velocity / 2 + (velocity < 0 ? PLAYER_WIDTH / 2 - 1 :
-                    -PLAYER_WIDTH / 2 + 1);
+            float offset = (velocity < 0 ? PLAYER_WIDTH - 1 : 1);
             for (float i = -0.9f; i < 1.0f; i += 0.1) {
                 // Calculate endpoints along a hemisphere.
                 float x2 = (float) Math.sqrt(1 - i * i);
                 float multiplier = (0.8f + 0.2f*random.nextFloat()) * Math.abs(velocity) * EXHAUST_LENGTH_MULTIPLIER;
-                renderer.line(offset, 0,
+                renderer.line(offset, PLAYER_HEIGHT / 2,
                         offset + x2 * 2f * (velocity < 0 ? 1 : -1) * multiplier,
-                        i * multiplier,
+                        PLAYER_HEIGHT / 2 + i * multiplier,
                         Color.RED,
                         new Color(1, random.nextFloat(), 0, random.nextFloat()));
             }
@@ -73,14 +81,14 @@ public class Player extends Constants {
         renderer.begin(ShapeType.Filled);
         renderer.identity();
         renderer.translate(position.x, position.y, 0);
-        renderer.rect(-PLAYER_WIDTH / 2 + velocity / 2,
-                -PLAYER_HEIGHT,
-                PLAYER_WIDTH, PLAYER_HEIGHT,
+        renderer.rect(0,
+                0,
+                PLAYER_WIDTH, PLAYER_HEIGHT / 2,
                 Color.LIGHT_GRAY, Color.LIGHT_GRAY,
                 Color.DARK_GRAY, Color.DARK_GRAY);
-        renderer.rect(-PLAYER_WIDTH / 2 + velocity / 2,
-                0,
-                PLAYER_WIDTH, PLAYER_HEIGHT,
+        renderer.rect(0,
+                PLAYER_HEIGHT / 2,
+                PLAYER_WIDTH, PLAYER_HEIGHT / 2,
                 Color.DARK_GRAY, Color.DARK_GRAY,
                 Color.LIGHT_GRAY, Color.LIGHT_GRAY);
         renderer.end();

@@ -15,7 +15,8 @@ import java.util.Random;
  * Created by Jay on 12/23/2015.
  */
 public class DebrisLayer {
-
+    // TODO: Change to individual nebula images and randomize position.
+    // TODO: New nebula images may need opacity decreased.
     Viewport viewport;
     float debrisScrollPosition; // horizontal displacement
     int debrisViewWidth, debrisViewHeight;

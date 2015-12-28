@@ -8,11 +8,12 @@ import com.badlogic.gdx.graphics.Color;
 public class Constants {
     public static final float WORLD_SIZE = 100.0f;
     public static final Color BACKGROUND_COLOR = Color.BLACK;
+    public static final float HUD_HEIGHT = 7f;
 
     public static final float PLAYER_Y_POSITION = 5.0f;
     public static final Color PLAYER_COLOR = Color.LIGHT_GRAY;
     public static final float PLAYER_WIDTH = 10.0f;
-    public static final float PLAYER_HEIGHT = 1.0f;
+    public static final float PLAYER_HEIGHT = 2.0f;
 
     public static final float GRAVITATIONAL_ACCELERATION = 9.8f;
     public static final float ACCELERATION_MULTIPLIER = 0.3f;
@@ -41,4 +42,7 @@ public class Constants {
 
     public static final float BALL_RADIUS = 1.0f;
     public static final int BALL_SEGMENTS = 50;
+    public static final float BALL_MAX_VELOCITY = 0.8f;
+    public static final float BALL_LAUNCH_VELOCITY_X_MULTIPLIER = 0.5f;
+    public static final float BALL_TRAIL_LENGTH = 20;
 }

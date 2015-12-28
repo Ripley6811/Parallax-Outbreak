@@ -3,12 +3,14 @@ package com.mygdx.game.outbreak;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Rectangle;
 
 
 /**
  * Created by Jay on 12/23/2015.
  */
 public class SingleBlock extends Constants{
+    Rectangle rectangle;
     float x;
     float y;
     int strength;
@@ -16,6 +18,7 @@ public class SingleBlock extends Constants{
     String type;
 
     public SingleBlock(float x, float y, int strength) {
+        rectangle = new Rectangle(x, y, BLOCK_WIDTH, BLOCK_HEIGHT);
         this.x = x;
         this.y = y;
         // Strength determines how many hits it can take and the color.
@@ -28,8 +31,8 @@ public class SingleBlock extends Constants{
     }
 
     public void render(ShapeRenderer renderer, float xOffset) {
-        float worldWidth = WORLD_SIZE;
-        float xShifted = (x + xOffset) % worldWidth;
+        float xShifted = (x + xOffset) % WORLD_SIZE;
+        rectangle.setX(xShifted);
         Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         renderer.begin(ShapeRenderer.ShapeType.Filled);
@@ -41,7 +44,7 @@ public class SingleBlock extends Constants{
                 BLOCK_COLOR_1[strength], BLOCK_COLOR_1[strength],
                 BLOCK_COLOR_1[strength], BLOCK_COLOR_2[strength]);
         // Draw again to ensure block visible on both ends of screen
-        float xLeft = xShifted - worldWidth;
+        float xLeft = xShifted - WORLD_SIZE;
         if (xLeft < 0 && xLeft >= -BLOCK_WIDTH) {
             renderer.rect(xLeft,
                     y,
