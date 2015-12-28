@@ -13,9 +13,6 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
  * Created by Jay on 12/18/2015.
  */
 public class GameScreen  extends InputAdapter implements Screen {
-    // TODO: Start by adding player and parallax movement with accelerometer
-    // TODO: Paint a background with red and blue nebulas.
-    // TODO: Parallax 3 levels: Stars, Nebulas, (other debris), blocks.
 
     OutbreakGame game;
 
@@ -30,6 +27,7 @@ public class GameScreen  extends InputAdapter implements Screen {
     DebrisLayer debrisLayer;
     Blocks blocks;
     Player player;
+    Balls balls;
 
     public GameScreen(OutbreakGame game) {
         this.game = game;
@@ -54,6 +52,7 @@ public class GameScreen  extends InputAdapter implements Screen {
         debrisLayer = new DebrisLayer(actionViewport);
         blocks = new Blocks(actionViewport);
         player = new Player(actionViewport);
+        balls = new Balls(actionViewport);
 
         Gdx.input.setInputProcessor(this);
     }
@@ -81,6 +80,7 @@ public class GameScreen  extends InputAdapter implements Screen {
         debrisLayer.init();
         blocks.init();
         player.init();
+        balls.init();
     }
 
     @Override
@@ -132,6 +132,7 @@ public class GameScreen  extends InputAdapter implements Screen {
         debrisLayer.update(delta, scrollVelocity);
         blocks.update(delta, scrollPosition);
         player.update(delta, scrollVelocity);
+        balls.update(delta, scrollVelocity);
 
         Color BG_COLOR = Constants.BACKGROUND_COLOR;
         Gdx.gl.glClearColor(BG_COLOR.r, BG_COLOR.g, BG_COLOR.b, 1);
@@ -143,6 +144,6 @@ public class GameScreen  extends InputAdapter implements Screen {
         debrisLayer.render(renderer);
         blocks.render(renderer);
         player.render(renderer);
-
+        balls.render(renderer);
     }
 }

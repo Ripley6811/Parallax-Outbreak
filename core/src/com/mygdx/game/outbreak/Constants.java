@@ -38,4 +38,7 @@ public class Constants {
     };
 
     public static final long SEED_LVL_1 = 12345L;
+
+    public static final float BALL_RADIUS = 1.0f;
+    public static final int BALL_SEGMENTS = 50;
 }
