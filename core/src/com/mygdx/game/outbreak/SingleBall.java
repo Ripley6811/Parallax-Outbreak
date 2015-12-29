@@ -5,6 +5,8 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Circle;
+import com.badlogic.gdx.math.Intersector;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
@@ -22,17 +24,139 @@ public class SingleBall extends Constants {
     float time;
     Array<Vector2> trail;
 
+    Array<SingleBlock> collisions;
+    boolean willCollide = false;
+    Vector2 reflectVector = new Vector2();
+
     public SingleBall(float x, float y) {
         circle = new Circle(x, y, BALL_RADIUS);
         position = new Vector2(x, y);
         velocity = new Vector2(0f, 0f);
         time = 0f;
         trail = new Array<Vector2>(0);
+        collisions = new Array<SingleBlock>(0);
         init();
     }
 
     public void init() {
 
+    }
+
+    public void checkCollision (Array<SingleBlock> blocks) {
+        Vector2 futurePos = new Vector2(position.x + velocity.x, position.y + velocity.y);
+        Circle ballCopy = new Circle(futurePos, circle.radius);
+
+        // Find all future overlaps and put in array
+        // TODO: may speed up if check distance from block center first.
+        collisions.clear(); // Empty previous results.
+        for (SingleBlock block: blocks) {
+            if (block.strength > 0) {
+                if (Intersector.overlaps(ballCopy, block.rectangle)) {
+                    collisions.add(block);
+                }
+            }
+        }
+
+        System.out.println(collisions.size);
+        if (collisions.size > 0) {
+            // Backtrack to find position just before collision
+            do {
+                ballCopy.x -= velocity.x * COLLISION_DETECTION_PRECISION;
+                ballCopy.y -= velocity.y * COLLISION_DETECTION_PRECISION;
+            } while (anyCollision(ballCopy));
+
+            // Find closest rectangle segment to collision
+            float closestDist = 100f;
+            SingleBlock hitBlock = collisions.get(0);
+//            Vector2 pointA = new Vector2();
+//            Vector2 pointB = new Vector2();
+            Vector2 bCenter = new Vector2(ballCopy.x, ballCopy.y);
+            Vector2 pointCollision = new Vector2();
+            for (SingleBlock collisionBlock: collisions) {
+                Vector2 bl, br, tr, tl;
+                Rectangle rect = collisionBlock.rectangle;
+                bl = new Vector2(rect.x, rect.y);
+                br = new Vector2(rect.x + rect.getWidth(), rect.y);
+                tr = new Vector2(rect.x + rect.getWidth(), rect.y + rect.getHeight());
+                tl = new Vector2(rect.x, rect.y + rect.getHeight());
+
+                Vector2 a = new Vector2();
+                Vector2 b = new Vector2();
+                Vector2 c = new Vector2();
+                Vector2 d = new Vector2();
+                Intersector.nearestSegmentPoint(bl, br, bCenter, a);
+                Intersector.nearestSegmentPoint(br, tr, bCenter, b);
+                Intersector.nearestSegmentPoint(tr, tl, bCenter, c);
+                Intersector.nearestSegmentPoint(tl, bl, bCenter, d);
+
+                System.out.println(" ");
+                System.out.println(bl + " " + br);
+                System.out.println(a + ", " + b + ", " + c);
+                System.out.println(br.x == b.x);
+                System.out.println(br.y == b.y);
+
+                float diffA = bCenter.dst2(a);
+                float diffB = bCenter.dst2(b);
+                float diffC = bCenter.dst2(c);
+                float diffD = bCenter.dst2(d);
+
+                if (diffA < closestDist) {
+                    closestDist = diffA;
+                    pointCollision.set(a);
+                    hitBlock = collisionBlock;
+                }
+
+                if (diffB < closestDist) {
+                    closestDist = diffB;
+                    pointCollision.set(b);
+                    hitBlock = collisionBlock;
+                }
+
+                if (diffC < closestDist) {
+                    closestDist = diffC;
+                    pointCollision.set(c);
+                    hitBlock = collisionBlock;
+                }
+
+                if (diffD < closestDist) {
+                    closestDist = diffD;
+                    pointCollision.set(d);
+                    hitBlock = collisionBlock;
+                }
+            }
+
+            // Resolve collision with point on segment
+            // Normalized collision vector from ball center to contact point.
+            reflectVector.set(bCenter).sub(pointCollision).rotate90(1).nor();
+            System.out.println("Norm: " + reflectVector);
+            Vector2 reverseVelocity = new Vector2(-velocity.x, -velocity.y);
+//            velNorm.nor();
+
+//            System.out.println("arccos: " + Math.acos(velNorm.dot(collisionVector)));
+//            Vector2 perpVector = new Vector2(-reflectVector.y, reflectVector.x);
+            reverseVelocity.sub(reflectVector.scl(reverseVelocity.dot(reflectVector)).scl(2f));
+            System.out.println("New vec: " +  reverseVelocity);
+
+            //TODO: following is test. Improve this
+            velocity.set(reverseVelocity);
+            hitBlock.strength -= 1;
+        }
+
+
+    }
+
+    /**
+     * Use in backtracking a position until no collisions occur.
+     * @param ballCopy predicted ball position
+     * @return true if overlaps with any blocks in collision array.
+     */
+    public boolean anyCollision (Circle ballCopy) {
+        for (SingleBlock collisionBlock: collisions) {
+            if (Intersector.overlaps(ballCopy, collisionBlock.rectangle)) {
+                return true;
+            }
+        }
+        return false; // No overlaps.
     }
 
     public void update (float deltaTime, float scrollVelocity) {

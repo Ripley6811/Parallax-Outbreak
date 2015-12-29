@@ -12,7 +12,7 @@ public class Constants {
 
     public static final float PLAYER_Y_POSITION = 5.0f;
     public static final Color PLAYER_COLOR = Color.LIGHT_GRAY;
-    public static final float PLAYER_WIDTH = 10.0f;
+    public static final float PLAYER_WIDTH = 12.0f;
     public static final float PLAYER_HEIGHT = 2.0f;
 
     public static final float GRAVITATIONAL_ACCELERATION = 9.8f;
@@ -45,4 +45,7 @@ public class Constants {
     public static final float BALL_MAX_VELOCITY = 0.8f;
     public static final float BALL_LAUNCH_VELOCITY_X_MULTIPLIER = 0.5f;
     public static final float BALL_TRAIL_LENGTH = 20;
+
+    // Precision (percent of velocity) in backtracking to the exact point of collision.
+    public static final float COLLISION_DETECTION_PRECISION = 0.25f;
 }

@@ -126,17 +126,11 @@ public class GameScreen  extends InputAdapter implements Screen {
     public void checkCollisions() {
         // TODO: Check collision with player and adjust x-velocity
         // TODO: Hand off to Balls class.
-        balls.checkCollision(player.rectangle, player.velocity);
+        // TODO: Paddle collision handle differently because where it hits affects trajectory
+        balls.checkCollision(player);
 
         // TODO: Check collision with all remaining blocks
-        for (SingleBlock block: blocks.blocks) {
-            if (block.strength > 0) {
-                boolean isHit = balls.checkCollision(block.rectangle);
-                if (isHit) {
-                    block.strength -= 1;
-                }
-            }
-        }
+        balls.checkCollision(blocks.blocks);
     }
 
     @Override
@@ -153,13 +147,16 @@ public class GameScreen  extends InputAdapter implements Screen {
         actionViewport.apply(true);
 
         updateScroll(delta);
+
+        // TODO: collision works but check the math and angles again
+        checkCollisions();
+
         starScape.update(delta, scrollVelocity);
         debrisLayer.update(delta, scrollVelocity);
         blocks.update(delta, scrollPosition);
         player.update(delta, scrollVelocity);
         balls.update(delta, scrollVelocity, player.position);
 
-        checkCollisions();
 
         // Background color fill
         Color BG_COLOR = Constants.BACKGROUND_COLOR;
