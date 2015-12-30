@@ -6,6 +6,9 @@ import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
@@ -18,6 +21,8 @@ public class GameScreen  extends InputAdapter implements Screen {
 
     ShapeRenderer renderer;
     FitViewport actionViewport;
+    SpriteBatch batch;
+    Texture scoreboard;
 
     float scrollPosition;
     float scrollVelocity;
@@ -31,6 +36,8 @@ public class GameScreen  extends InputAdapter implements Screen {
 
     public GameScreen(OutbreakGame game) {
         this.game = game;
+        batch = new SpriteBatch();
+        scoreboard = new Texture(createScoreboardPixmap());
         init();
     }
 
@@ -45,6 +52,7 @@ public class GameScreen  extends InputAdapter implements Screen {
         renderer = new ShapeRenderer();
         renderer.setAutoShapeType(true);
         renderer.setProjectionMatrix(actionViewport.getCamera().combined);
+        batch.setProjectionMatrix(actionViewport.getCamera().combined);
     }
 
     @Override
@@ -149,7 +157,7 @@ public class GameScreen  extends InputAdapter implements Screen {
 
         updateScroll(delta);
 
-        // TODO: collision works but check the math and angles again
+        // TODO: collision works but check the math and angles again. Test game a lot.
         checkCollisions();
 
         starScape.update(delta, scrollVelocity);
@@ -158,13 +166,10 @@ public class GameScreen  extends InputAdapter implements Screen {
         player.update(delta, scrollVelocity);
         balls.update(delta, scrollVelocity, player.position);
 
-
         // Background color fill
         Color BG_COLOR = Constants.BACKGROUND_COLOR;
         Gdx.gl.glClearColor(BG_COLOR.r, BG_COLOR.g, BG_COLOR.b, 1);
         Gdx.gl20.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-
 
         starScape.render(renderer);
         debrisLayer.render(renderer);
@@ -172,25 +177,28 @@ public class GameScreen  extends InputAdapter implements Screen {
         player.render(renderer);
         balls.render(renderer);
 
-        // Top border
-        float WORLD_SIZE = Constants.WORLD_SIZE;
-        Gdx.gl.glEnable(GL20.GL_BLEND);
-        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-        renderer.begin(ShapeRenderer.ShapeType.Filled);
-        renderer.identity();
-        renderer.rect(
-                0f, WORLD_SIZE - Constants.HUD_HEIGHT,
-                WORLD_SIZE, Constants.HUD_HEIGHT,
-                Color.LIGHT_GRAY, Color.LIGHT_GRAY,
-                Color.DARK_GRAY, Color.DARK_GRAY
-        );
-        renderer.rect(
-                0f, WORLD_SIZE - (Constants.HUD_HEIGHT - 0.2f),
-                WORLD_SIZE, 0.4f,
-                Color.YELLOW, Color.YELLOW,
-                Color.ORANGE, Color.ORANGE
-        );
-        renderer.end();
-        Gdx.gl.glDisable(GL20.GL_BLEND);
+        // Draw top scoreboard area
+        batch.begin();
+        batch.draw(scoreboard, 0, Constants.WORLD_SIZE - Constants.HUD_HEIGHT,
+                Constants.WORLD_SIZE, Constants.HUD_HEIGHT);
+        batch.end();
+    }
+
+    private Pixmap createScoreboardPixmap() {
+        int W = 1;
+        int H = 64;
+        // NOTE: Coordinate origin for Pixmap is top-left.
+        Pixmap pixmap = new Pixmap(W, H, Pixmap.Format.RGBA8888);
+        pixmap.setColor(Color.LIGHT_GRAY);
+        pixmap.fill();
+        pixmap.setColor(0,0,0,0.02f);
+        for (int i = 0; i < H; i++) {
+            pixmap.drawLine(0, 0, 0, i);
+        }
+        pixmap.setColor(Color.ORANGE);
+        pixmap.drawLine(0, H - 7, 0, H - 2);
+        pixmap.setColor(Color.YELLOW);
+        pixmap.drawPixel(0, H - 5);
+        return pixmap;
     }
 }
