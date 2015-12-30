@@ -75,5 +75,5 @@ public class Constants {
 
     /* COLLISION */
     // Precision (percent of velocity) in backtracking to the exact point of collision.
-    public static final float COLLISION_DETECTION_PRECISION = 0.25f;
+    public static final float COLLISION_DETECTION_PRECISION = 0.10f;
 }

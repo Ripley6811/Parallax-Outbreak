@@ -7,20 +7,17 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.sun.corba.se.impl.orbutil.closure.Constant;
 
 /**
  * Created by Jay on 12/18/2015.
  */
 public class GameScreen  extends InputAdapter implements Screen {
-
+    // TODO: Add score and lives at top
     OutbreakGame game;
 
     ShapeRenderer renderer;
     FitViewport actionViewport;
-    Intersector intersector;
 
     float scrollPosition;
     float scrollVelocity;

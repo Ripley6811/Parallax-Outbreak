@@ -31,6 +31,7 @@ public class SingleBlock extends Constants{
     }
 
     public void render(ShapeRenderer renderer, float xOffset) {
+        // TODO: Create Pixmaps for each kind of block.
         float xShifted = (x + xOffset) % WORLD_SIZE;
         rectangle.setX(xShifted);
         Gdx.gl.glEnable(GL20.GL_BLEND);

@@ -45,6 +45,7 @@ public class SingleBall extends Constants {
     }
 
     public void checkCollision (Array<SingleBlock> blocks) {
+        // TODO: Blocks overhanging left side do not collide with ball
         Vector2 futurePos = new Vector2(position.x + velocity.x, position.y + velocity.y);
         Circle ballCopy = new Circle(futurePos, circle.radius);
 
@@ -68,59 +69,12 @@ public class SingleBall extends Constants {
             } while (anyCollision(ballCopy));
 
             // Find closest rectangle segment to collision
-            float closestDist = 100f;
             SingleBlock hitBlock = collisions.get(0);
-//            Vector2 pointA = new Vector2();
-//            Vector2 pointB = new Vector2();
             Vector2 bCenter = new Vector2(ballCopy.x, ballCopy.y);
             Vector2 pointCollision = new Vector2();
             for (SingleBlock collisionBlock: collisions) {
-                Vector2 bl, br, tr, tl;
-                Rectangle rect = collisionBlock.rectangle;
-                bl = new Vector2(rect.x, rect.y);
-                br = new Vector2(rect.x + rect.getWidth(), rect.y);
-                tr = new Vector2(rect.x + rect.getWidth(), rect.y + rect.getHeight());
-                tl = new Vector2(rect.x, rect.y + rect.getHeight());
-                Gdx.app.log(TAG, "Testing Block: ( " + bl + " " + br + " " + tr + " " + tl + " )");
-
-                Vector2 a = new Vector2();
-                Vector2 b = new Vector2();
-                Vector2 c = new Vector2();
-                Vector2 d = new Vector2();
-                Intersector.nearestSegmentPoint(bl, br, bCenter, a);
-                Intersector.nearestSegmentPoint(br, tr, bCenter, b);
-                Intersector.nearestSegmentPoint(tr, tl, bCenter, c);
-                Intersector.nearestSegmentPoint(tl, bl, bCenter, d);
-
-
-                float diffA = bCenter.dst2(a);
-                float diffB = bCenter.dst2(b);
-                float diffC = bCenter.dst2(c);
-                float diffD = bCenter.dst2(d);
-
-                if (diffA < closestDist) {
-                    closestDist = diffA;
-                    pointCollision.set(a);
-                    hitBlock = collisionBlock;
-                }
-
-                if (diffB < closestDist) {
-                    closestDist = diffB;
-                    pointCollision.set(b);
-                    hitBlock = collisionBlock;
-                }
-
-                if (diffC < closestDist) {
-                    closestDist = diffC;
-                    pointCollision.set(c);
-                    hitBlock = collisionBlock;
-                }
-
-                if (diffD < closestDist) {
-                    closestDist = diffD;
-                    pointCollision.set(d);
-                    hitBlock = collisionBlock;
-                }
+                boolean isHit = getCollisionPoint(bCenter, collisionBlock.rectangle, pointCollision);
+                if (isHit) hitBlock = collisionBlock;
             }
 
             // Resolve collision with point on segment
@@ -137,6 +91,42 @@ public class SingleBall extends Constants {
         }
 
 
+    }
+
+    /**
+     * Calculates closest point of contact on rectangle edge. Updates vector
+     * and returns boolean indicating vector was updated.
+     * @param ballPosition
+     * @param rectangle
+     * @param vector Existing vector to update if closer point found
+     * @return True if closer point found (vector updated).
+     */
+    public boolean getCollisionPoint (Vector2 ballPosition, Rectangle rectangle, Vector2 vector) {
+        boolean foundCloser = false;
+        Vector2 bl, br, tr, tl;
+        Rectangle rect = rectangle;
+        bl = new Vector2(rect.x, rect.y);
+        br = new Vector2(rect.x + rect.getWidth(), rect.y);
+        tr = new Vector2(rect.x + rect.getWidth(), rect.y + rect.getHeight());
+        tl = new Vector2(rect.x, rect.y + rect.getHeight());
+        Gdx.app.log(TAG, "Testing Block: ( " + bl + " " + br + " " + tr + " " + tl + " )");
+
+        Array<Vector2> points = new Array<Vector2>();
+        for (int i=0; i<4; i++) points.add(new Vector2());
+
+        Intersector.nearestSegmentPoint(bl, br, ballPosition, points.get(0));
+        Intersector.nearestSegmentPoint(br, tr, ballPosition, points.get(1));
+        Intersector.nearestSegmentPoint(tr, tl, ballPosition, points.get(2));
+        Intersector.nearestSegmentPoint(tl, bl, ballPosition, points.get(3));
+
+        for (Vector2 pt: points) {
+            if (ballPosition.dst2(pt) < ballPosition.dst2(vector)) {
+                vector.set(pt);
+                foundCloser = true;
+            }
+        }
+
+        return foundCloser;
     }
 
     /**

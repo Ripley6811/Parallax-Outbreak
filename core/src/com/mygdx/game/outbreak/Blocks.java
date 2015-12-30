@@ -26,12 +26,12 @@ public class Blocks {
         scrollPosition = 0.0f;
         worldWidth = (int)viewport.getWorldWidth();
 
-        int nCols = Levels.L1_COLS;
+        int nCols = Levels.L2_COLS;
         int rowWidth = (int)(nCols * (Constants.BLOCK_WIDTH + BLOCK_SPACING) - BLOCK_SPACING);
         int xOffset = (worldWidth - rowWidth) / 2;
         blocks = new Array<SingleBlock>();
-        for (int i = 0; i < Levels.L1.length; i++) {
-            int strength = Levels.L1[i];
+        for (int i = 0; i < Levels.L2.length; i++) {
+            int strength = Levels.L2[i];
             if (strength == 0) continue;
             int row = i / nCols;
             int col = i % nCols;
