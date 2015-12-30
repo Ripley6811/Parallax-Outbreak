@@ -67,6 +67,10 @@ public class SingleBall extends Constants {
             tl = new Vector2(rect.x, rect.y + rect.getHeight());
             Intersector.nearestSegmentPoint(tr, tl, futurePos, pointCollision);
 
+            // Paddle hit location range from -0.5 to 0.5
+            float paddlePoint = (pointCollision.x - tl.x) / (tr.x - tl.x) - 0.5f;
+            Gdx.app.log(TAG, "Paddle hit region: " + paddlePoint);
+
             // Resolve collision with point on segment
             // Normalized vector for mirroring velocity vector.
             normalizedRotationVector.set(futurePos).sub(pointCollision).rotate90(1).nor();
@@ -75,7 +79,10 @@ public class SingleBall extends Constants {
             newVelocity.sub(normalizedRotationVector.scl(newVelocity.dot(normalizedRotationVector)).scl(2f));
             Gdx.app.debug(TAG, "New vec: " + newVelocity);
 
-            //TODO: following is test. Improve this
+//            newVelocity.rotate(paddlePoint * -100f * BOUNCE_ANGLE_MULTIPLIER);
+            // TODO: Fix this so that any decrease will add to y velocity.
+            newVelocity.x = (paddlePoint + newVelocity.x) / 2f;
+            newVelocity.x += player.velocity * ABSORB_VELOCITY_MULTIPLIER;
             velocity.set(newVelocity);
         }
     }
@@ -121,7 +128,6 @@ public class SingleBall extends Constants {
             newVelocity.sub(normalizedRotationVector.scl(newVelocity.dot(normalizedRotationVector)).scl(2f));
             Gdx.app.debug(TAG, "New vec: " + newVelocity);
 
-            //TODO: following is test. Improve this
             velocity.set(newVelocity);
             hitBlock.hit();
         }

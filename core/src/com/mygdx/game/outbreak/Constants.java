@@ -21,9 +21,9 @@ public class Constants {
 
     /* PLAYER PADDLE */
     public static final float PLAYER_Y_POSITION = 5.0f;
-    public static final Color PLAYER_COLOR = Color.LIGHT_GRAY;
     public static final float PLAYER_WIDTH = 12.0f;
     public static final float PLAYER_HEIGHT = 2.0f;
+    public static final float BOUNCE_ANGLE_MULTIPLIER = 0.2f;
 
     /* VELOCITY & ACCELERATION */
     // Used in "normalizing" the device accelerometer data
@@ -35,7 +35,7 @@ public class Constants {
     // Multiply to velocity to slow down
     public static final float KINETIC_FRICTION = 0.9f;
     // Player maximum velocity
-    public static final float MAX_SCROLL_SPEED = 1.0f;
+    public static final float MAX_SCROLL_SPEED = 0.9f;
     public static final float KEYPRESS_ACCELERATION = 1.0f;
     // Adjust length of exhaust relative to player velocity
     public static final float EXHAUST_LENGTH_MULTIPLIER = 1.8f;
@@ -59,9 +59,11 @@ public class Constants {
     /* BALLS */
     public static final float BALL_RADIUS = 1.0f;
     public static final int BALL_SEGMENTS = 50;
-    public static final float BALL_MAX_VELOCITY = 1.0f;
-    public static final float BALL_MIN_VELOCITY = 0.5f;
+    public static final float BALL_MAX_VELOCITY = 0.8f;
+    public static final float BALL_MIN_VELOCITY = 0.6f;
     public static final float BALL_GRAVITY = 0.02f;
+    // Percentage of paddle velocity to add to ball
+    public static final float ABSORB_VELOCITY_MULTIPLIER = 0.2f;
     // Adjust ball launch velocity relative to player velocity
     public static final float BALL_LAUNCH_VELOCITY_X_MULTIPLIER = 0.5f;
     // Number of previous positions to display in trail
