@@ -72,71 +72,10 @@ public class Balls {
     }
 
     public void checkCollision(Player player) {
-        // TODO: Maybe remove adding platform velocity and just use placement.
-        // TODO: Fix this to be similar to block collision.
+        // TODO: Add platform velocity and placement into bounce.
         // TODO: Add collision effect between multiple balls.
-        boolean isHit = false;
-        boolean isCorner = false;
-        Rectangle rectangle = player.rectangle;
         for (SingleBall ball: balls) {
-            Vector2 displacement = new Vector2(0f, 0f);
-            Vector2 dispTotal = new Vector2(0f, 0f);
-            float a, b, c, d;
-            if (Intersector.overlaps(ball.circle, rectangle)) {
-                System.out.println("Start");
-                // Bottom test
-                a = Intersector.intersectSegmentCircleDisplace(
-                        rectangle.getPosition(new Vector2()),
-                        rectangle.getPosition(new Vector2()).add(rectangle.getWidth(), 0),
-                        ball.position, ball.circle.radius,
-                        displacement
-                );
-                dispTotal.add(displacement);
-                displacement.set(0f, 0f);
-                // Right side test
-                b = Intersector.intersectSegmentCircleDisplace(
-                        rectangle.getPosition(new Vector2()).add(rectangle.getWidth(), 0),
-                        rectangle.getPosition(new Vector2()).add(rectangle.getWidth(), rectangle.getHeight()),
-                        ball.position, ball.circle.radius,
-                        displacement
-                );
-                dispTotal.add(displacement);
-                displacement.set(0f, 0f);
-                // Top test
-                c = Intersector.intersectSegmentCircleDisplace(
-                        rectangle.getPosition(new Vector2()).add(rectangle.getWidth(), rectangle.getHeight()),
-                        rectangle.getPosition(new Vector2()).add(0, rectangle.getHeight()),
-                        ball.position, ball.circle.radius,
-                        displacement
-                );
-                dispTotal.add(displacement);
-                displacement.set(0f, 0f);
-                // Left side test
-                d = Intersector.intersectSegmentCircleDisplace(
-                        rectangle.getPosition(new Vector2()).add(0, rectangle.getHeight()),
-                        rectangle.getPosition(new Vector2()),
-                        ball.position, ball.circle.radius,
-                        displacement
-                );
-                dispTotal.add(displacement);
-                displacement.set(0f, 0f);
-
-                float dist = Math.min(Math.min(a, b), Math.min(c, d));
-                System.out.println("a,b,c,d: " + a + "," + b + "," + c + "," + d);
-                System.out.println("End: (" + dispTotal.x + "," + dispTotal.y + ")" + dist);
-                if (Math.abs(dispTotal.y) > 0) {
-                    ball.velocity.y *= -1f;
-                    ball.position.y += 2 * dist * dispTotal.y;
-                    isHit = true;
-                    // Adds platform velocity to ball hit.
-                    ball.velocity.x += (player.velocity - ball.velocity.x) * 0.1f;
-                }
-                if (Math.abs(dispTotal.x) > 0) {
-                    ball.velocity.x *= -1f;
-                    ball.position.x += 2 * dist * dispTotal.x;
-                    isHit = true;
-                }
-            }
+            ball.checkCollision(player);
         }
     }
 
@@ -144,25 +83,12 @@ public class Balls {
      * Checks for overlap of each ball on the rectangle parameter and adjusts
      * the balls movement in response to a hit.
      *
-     * @param rectangle The rectangle object to test.
-     * @param velocity Horizontal velocity of rectangle object.
-     * @return True if a hit occurred, otherwise false.
+     * @param blocks blocks array
      */
-
-    /**
-     * Checks for overlap of each ball on the rectangle parameter and adjusts
-     * the balls movement in response to a hit.
-     *
-     * @param blocks
-     * @return
-     */
-    public boolean checkCollision(Array<SingleBlock> blocks) {
-        boolean isHit = false;
-
+    public void checkCollision(Array<SingleBlock> blocks) {
         for (SingleBall ball: balls) {
             ball.checkCollision(blocks);
         }
-        return isHit;
     }
 
     public void setVelocity(int ball_number, float newVx, float newVy) {

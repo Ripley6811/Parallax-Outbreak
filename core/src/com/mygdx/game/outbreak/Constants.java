@@ -41,7 +41,7 @@ public class Constants {
     public static final float EXHAUST_LENGTH_MULTIPLIER = 1.8f;
 
     /* STARS */
-    public static final float STAR_RADIUS = 0.25f;
+    public static final float STAR_RADIUS = 0.16f;
     // Starscape width relative to world size.
     public static final float STARSCAPE_WIDTH_MULTIPLIER = 3.0f;
     // Starscape speed relative to player speed.

@@ -44,6 +44,42 @@ public class SingleBall extends Constants {
 
     }
 
+    public void checkCollision (Player player) {
+        Vector2 futurePos = new Vector2(position.x + velocity.x, position.y + velocity.y);
+        Circle ballCopy = new Circle(futurePos, circle.radius);
+        Rectangle rect = player.rectangle;
+
+        if (Intersector.overlaps(ballCopy, rect)) {
+            Gdx.app.debug(TAG, "Ball collided with paddle.");
+
+            Vector2 tr, tl; // Top-right and top-left corner of paddle
+            Vector2 pointCollision = new Vector2();
+
+            // Rewind to point of collision
+            do {
+                ballCopy.x -= velocity.x * COLLISION_DETECTION_PRECISION;
+                ballCopy.y -= velocity.y * COLLISION_DETECTION_PRECISION;
+            } while (Intersector.overlaps(ballCopy, rect));
+
+            // Only test collision across paddle top
+            futurePos.set(ballCopy.x, ballCopy.y);
+            tr = new Vector2(rect.x + rect.getWidth(), rect.y + rect.getHeight());
+            tl = new Vector2(rect.x, rect.y + rect.getHeight());
+            Intersector.nearestSegmentPoint(tr, tl, futurePos, pointCollision);
+
+            // Resolve collision with point on segment
+            // Normalized vector for mirroring velocity vector.
+            normalizedRotationVector.set(futurePos).sub(pointCollision).rotate90(1).nor();
+            Gdx.app.debug(TAG, "Rotation vector: " + normalizedRotationVector);
+            Vector2 newVelocity = new Vector2(-velocity.x, -velocity.y);
+            newVelocity.sub(normalizedRotationVector.scl(newVelocity.dot(normalizedRotationVector)).scl(2f));
+            Gdx.app.debug(TAG, "New vec: " + newVelocity);
+
+            //TODO: following is test. Improve this
+            velocity.set(newVelocity);
+        }
+    }
+
     public void checkCollision (Array<SingleBlock> blocks) {
         // TODO: Blocks overhanging left side do not collide with ball
         Vector2 futurePos = new Vector2(position.x + velocity.x, position.y + velocity.y);
@@ -80,10 +116,10 @@ public class SingleBall extends Constants {
             // Resolve collision with point on segment
             // Normalized vector for mirroring velocity vector.
             normalizedRotationVector.set(bCenter).sub(pointCollision).rotate90(1).nor();
-            Gdx.app.log(TAG, "Rotation vector: " + normalizedRotationVector);
+            Gdx.app.debug(TAG, "Rotation vector: " + normalizedRotationVector);
             Vector2 newVelocity = new Vector2(-velocity.x, -velocity.y);
             newVelocity.sub(normalizedRotationVector.scl(newVelocity.dot(normalizedRotationVector)).scl(2f));
-            System.out.println("New vec: " +  newVelocity);
+            Gdx.app.debug(TAG, "New vec: " + newVelocity);
 
             //TODO: following is test. Improve this
             velocity.set(newVelocity);
