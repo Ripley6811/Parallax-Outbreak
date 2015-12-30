@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.sun.corba.se.impl.orbutil.closure.Constant;
 
 /**
  * Created by Jay on 12/18/2015.
@@ -40,15 +41,17 @@ public class GameScreen  extends InputAdapter implements Screen {
         scrollPosition = Constants.WORLD_SIZE;
         scrollVelocity = 0.0f;
         scrollAcceleration = 0.0f;
+        actionViewport = new FitViewport(
+                Constants.WORLD_SIZE, Constants.WORLD_SIZE);
+        actionViewport.apply(true);
+
+        renderer = new ShapeRenderer();
+        renderer.setAutoShapeType(true);
+        renderer.setProjectionMatrix(actionViewport.getCamera().combined);
     }
 
     @Override
     public void show() {
-        actionViewport = new FitViewport(
-                Constants.WORLD_SIZE, Constants.WORLD_SIZE);
-
-        renderer = new ShapeRenderer();
-        renderer.setAutoShapeType(true);
 
         starScape = new StarScape(actionViewport);
         debrisLayer = new DebrisLayer(actionViewport);
@@ -91,8 +94,6 @@ public class GameScreen  extends InputAdapter implements Screen {
     }
 
     public void updateScroll(float delta) {
-        // Slow down
-        scrollVelocity *= 0.8;
         // Accelerometer input
         scrollAcceleration = -3.0f * Gdx.input.getAccelerometerY() /
                 Constants.GRAVITATIONAL_ACCELERATION;
@@ -103,10 +104,14 @@ public class GameScreen  extends InputAdapter implements Screen {
             scrollAcceleration = -Constants.KEYPRESS_ACCELERATION;
         }
 
+        // Slow down if not accelerating
+        if (Math.abs(scrollAcceleration) < Constants.STATIC_FRICTION) {
+            scrollVelocity *= Constants.KINETIC_FRICTION;
+        }
+
         // Adjust velocity
         scrollVelocity += Constants.ACCELERATION_MULTIPLIER * (
-                Math.abs(scrollAcceleration)
-                        > Constants.STATIC_FRICTION ?
+                Math.abs(scrollAcceleration) > Constants.STATIC_FRICTION ?
                         scrollAcceleration : 0);
         // Max velocity
         if (Math.abs(scrollVelocity) > Constants.MAX_SCROLL_SPEED) {
@@ -144,7 +149,6 @@ public class GameScreen  extends InputAdapter implements Screen {
 
     @Override
     public void render(float delta) {
-        actionViewport.apply(true);
 
         updateScroll(delta);
 
@@ -163,7 +167,6 @@ public class GameScreen  extends InputAdapter implements Screen {
         Gdx.gl.glClearColor(BG_COLOR.r, BG_COLOR.g, BG_COLOR.b, 1);
         Gdx.gl20.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        renderer.setProjectionMatrix(actionViewport.getCamera().combined);
 
 
         starScape.render(renderer);

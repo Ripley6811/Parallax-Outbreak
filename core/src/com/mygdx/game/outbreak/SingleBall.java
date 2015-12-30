@@ -15,6 +15,8 @@ import com.badlogic.gdx.utils.Array;
  * Created by Ripley on 12/28/2015.
  */
 public class SingleBall extends Constants {
+    private static final String TAG = SingleBall.class.getName();
+
     Circle circle;
     Vector2 position;
     Vector2 velocity;
@@ -26,7 +28,7 @@ public class SingleBall extends Constants {
 
     Array<SingleBlock> collisions;
     boolean willCollide = false;
-    Vector2 reflectVector = new Vector2();
+    Vector2 normalizedRotationVector = new Vector2();
 
     public SingleBall(float x, float y) {
         circle = new Circle(x, y, BALL_RADIUS);
@@ -57,8 +59,8 @@ public class SingleBall extends Constants {
             }
         }
 
-        System.out.println(collisions.size);
         if (collisions.size > 0) {
+            Gdx.app.log(TAG, "Number of collisions: " + collisions.size);
             // Backtrack to find position just before collision
             do {
                 ballCopy.x -= velocity.x * COLLISION_DETECTION_PRECISION;
@@ -79,6 +81,7 @@ public class SingleBall extends Constants {
                 br = new Vector2(rect.x + rect.getWidth(), rect.y);
                 tr = new Vector2(rect.x + rect.getWidth(), rect.y + rect.getHeight());
                 tl = new Vector2(rect.x, rect.y + rect.getHeight());
+                Gdx.app.log(TAG, "Testing Block: ( " + bl + " " + br + " " + tr + " " + tl + " )");
 
                 Vector2 a = new Vector2();
                 Vector2 b = new Vector2();
@@ -89,11 +92,6 @@ public class SingleBall extends Constants {
                 Intersector.nearestSegmentPoint(tr, tl, bCenter, c);
                 Intersector.nearestSegmentPoint(tl, bl, bCenter, d);
 
-                System.out.println(" ");
-                System.out.println(bl + " " + br);
-                System.out.println(a + ", " + b + ", " + c);
-                System.out.println(br.x == b.x);
-                System.out.println(br.y == b.y);
 
                 float diffA = bCenter.dst2(a);
                 float diffB = bCenter.dst2(b);
@@ -126,19 +124,15 @@ public class SingleBall extends Constants {
             }
 
             // Resolve collision with point on segment
-            // Normalized collision vector from ball center to contact point.
-            reflectVector.set(bCenter).sub(pointCollision).rotate90(1).nor();
-            System.out.println("Norm: " + reflectVector);
-            Vector2 reverseVelocity = new Vector2(-velocity.x, -velocity.y);
-//            velNorm.nor();
-
-//            System.out.println("arccos: " + Math.acos(velNorm.dot(collisionVector)));
-//            Vector2 perpVector = new Vector2(-reflectVector.y, reflectVector.x);
-            reverseVelocity.sub(reflectVector.scl(reverseVelocity.dot(reflectVector)).scl(2f));
-            System.out.println("New vec: " +  reverseVelocity);
+            // Normalized vector for mirroring velocity vector.
+            normalizedRotationVector.set(bCenter).sub(pointCollision).rotate90(1).nor();
+            Gdx.app.log(TAG, "Rotation vector: " + normalizedRotationVector);
+            Vector2 newVelocity = new Vector2(-velocity.x, -velocity.y);
+            newVelocity.sub(normalizedRotationVector.scl(newVelocity.dot(normalizedRotationVector)).scl(2f));
+            System.out.println("New vec: " +  newVelocity);
 
             //TODO: following is test. Improve this
-            velocity.set(reverseVelocity);
+            velocity.set(newVelocity);
             hitBlock.strength -= 1;
         }
 
@@ -160,9 +154,12 @@ public class SingleBall extends Constants {
     }
 
     public void update (float deltaTime, float scrollVelocity) {
+        if (isDead) return;
+
         if (!onPlayer) {
             position.add(velocity);
             position.x += scrollVelocity;
+            velocity.y -= BALL_GRAVITY * deltaTime;
             trail.insert(0, new Vector2(-velocity.x, -velocity.y));
             if (position.y + BALL_RADIUS > WORLD_SIZE - HUD_HEIGHT) {
                 velocity.y = -velocity.y;
@@ -170,7 +167,7 @@ public class SingleBall extends Constants {
                 trail.get(0).y = 0f;
             }
         }
-        velocity.clamp(BALL_MAX_VELOCITY / 2, BALL_MAX_VELOCITY);
+        velocity.clamp(BALL_MIN_VELOCITY, BALL_MAX_VELOCITY);
 
         // Drop oldest trail vector.
         if (trail.size > BALL_TRAIL_LENGTH) {
@@ -185,7 +182,8 @@ public class SingleBall extends Constants {
         }
 
         // Set as dead if ball falls below world.
-        if (position.y < 0) {
+        if (position.y < -20) {
+            Gdx.app.debug(TAG, "Ball died: " + position);
             isDead = true;
         }
 

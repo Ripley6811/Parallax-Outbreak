@@ -1,5 +1,6 @@
 package com.mygdx.game.outbreak;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Intersector;
@@ -12,12 +13,12 @@ import com.badlogic.gdx.utils.viewport.Viewport;
  * Created by Ripley on 12/28/2015.
  */
 public class Balls {
+    private static final String TAG = Balls.class.getName();
 
     Viewport viewport;
     float scrollVelocity;
     int worldWidth;
 
-    int MAX_NUMBER_BALLS = 5;
     int nBalls;
     Array<SingleBall> balls;
 
@@ -25,18 +26,19 @@ public class Balls {
         this.viewport = viewport;
         nBalls = 1;
         balls = new Array<SingleBall>(0);
-        balls.add(new SingleBall(10, 10));
         init();
     }
 
     public void init() {
         scrollVelocity = 0.0f;
         worldWidth = (int)viewport.getWorldWidth();
-
     }
 
     public void update(float delta, float scrollVelocity, Vector2 playerPosition){
         this.scrollVelocity = scrollVelocity;
+        if (allDead()) {
+            resetBalls();
+        }
 
         for (SingleBall ball: balls) {
             if (ball.onPlayer) {
@@ -49,12 +51,27 @@ public class Balls {
         }
     }
 
+    public boolean allDead() {
+        Gdx.app.debug(TAG, "Number of Balls: " + balls.size);
+        for (SingleBall ball: balls) {
+            if (!ball.isDead) return false;
+        }
+        Gdx.app.debug(TAG, "Balls all dead!!!!!");
+        return true;
+    }
+
+    public void resetBalls() {
+        balls.clear();
+        balls.add(new SingleBall(10, 10));
+    }
+
     public void setFree(float velocity) {
         balls.get(0).setFree(velocity);
     }
 
     public void checkCollision(Player player) {
         // TODO: Fix this to be similar to block collision.
+        // TODO: Add collision effect between multiple balls.
         boolean isHit = false;
         boolean isCorner = false;
         Rectangle rectangle = player.rectangle;

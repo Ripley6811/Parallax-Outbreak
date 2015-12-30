@@ -3,6 +3,9 @@ package com.mygdx.game.outbreak;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
@@ -21,16 +24,19 @@ public class Player extends Constants {
     float velocity;
     float MAX_DISPLACEMENT = 2.0f;
 
+    SpriteBatch batch;
+    Texture paddle;
+
     Viewport viewport;
 
     int deaths;
-
-    float accelerometerInput;
 
     public Player(Viewport viewport) {
         this.viewport = viewport;
         velocity = 0.0f;
         deaths = 0;
+        paddle = new Texture(createPlayerPixmap());
+        batch = new SpriteBatch();
         init();
     }
 
@@ -45,6 +51,8 @@ public class Player extends Constants {
                 home.y
         );
         rectangle = new Rectangle(position.x, position.y, PLAYER_WIDTH, PLAYER_HEIGHT);
+
+        batch.setProjectionMatrix(viewport.getCamera().combined);
     }
 
     public void update(float delta, float scrollVelocity) {
@@ -78,19 +86,22 @@ public class Player extends Constants {
         Gdx.gl.glDisable(GL20.GL_BLEND);
 
         // Draw player paddle
-        renderer.begin(ShapeType.Filled);
-        renderer.identity();
-        renderer.translate(position.x, position.y, 0);
-        renderer.rect(0,
-                0,
-                PLAYER_WIDTH, PLAYER_HEIGHT / 2,
-                Color.LIGHT_GRAY, Color.LIGHT_GRAY,
-                Color.DARK_GRAY, Color.DARK_GRAY);
-        renderer.rect(0,
-                PLAYER_HEIGHT / 2,
-                PLAYER_WIDTH, PLAYER_HEIGHT / 2,
-                Color.DARK_GRAY, Color.DARK_GRAY,
-                Color.LIGHT_GRAY, Color.LIGHT_GRAY);
-        renderer.end();
+        batch.begin();
+        batch.draw(paddle, position.x, position.y, PLAYER_WIDTH, PLAYER_HEIGHT);
+        batch.end();
+    }
+
+    private Pixmap createPlayerPixmap() {
+        int W = 512;
+        int H = 64;
+        // NOTE: Coordinate origin for Pixmap is top-left.
+        Pixmap pixmap = new Pixmap(W, H, Pixmap.Format.RGBA8888);
+        pixmap.setColor(Color.LIGHT_GRAY);
+        pixmap.fill();
+        pixmap.setColor(0,0,0,0.05f);
+        for (int i = 0; i < H / 2; i++) {
+            pixmap.fillRectangle(i, i, W-2*i, H-2*i);
+        }
+        return pixmap;
     }
 }
