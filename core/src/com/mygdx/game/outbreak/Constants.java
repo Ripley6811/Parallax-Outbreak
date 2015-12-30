@@ -51,12 +51,7 @@ public class Constants {
     /* BLOCKS */
     public static final float BLOCK_WIDTH = 5.0f;
     public static final float BLOCK_HEIGHT = 3.0f;
-    public static final Color[] BLOCK_COLOR_1 = {
-            Color.CLEAR, Color.BLUE, Color.ORANGE, Color.GREEN, Color.FIREBRICK
-    };
-    public static final Color[] BLOCK_COLOR_2 = {
-            Color.CLEAR, Color.ORANGE, Color.GREEN, Color.FIREBRICK, Color.BLUE
-    };
+    public static final float BLOCK_SPACING = 0.2f;
 
     /* LEVEL RANDOM SEEDS */
     public static final long SEED_LVL_1 = 12345L;
@@ -66,7 +61,7 @@ public class Constants {
     public static final int BALL_SEGMENTS = 50;
     public static final float BALL_MAX_VELOCITY = 1.0f;
     public static final float BALL_MIN_VELOCITY = 0.5f;
-    public static final float BALL_GRAVITY = 0.04f;
+    public static final float BALL_GRAVITY = 0.02f;
     // Adjust ball launch velocity relative to player velocity
     public static final float BALL_LAUNCH_VELOCITY_X_MULTIPLIER = 0.5f;
     // Number of previous positions to display in trail

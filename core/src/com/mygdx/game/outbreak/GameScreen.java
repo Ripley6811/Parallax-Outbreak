@@ -134,12 +134,10 @@ public class GameScreen  extends InputAdapter implements Screen {
     }
 
     public void checkCollisions() {
-        // TODO: Check collision with player and adjust x-velocity
-        // TODO: Hand off to Balls class.
-        // TODO: Paddle collision handle differently because where it hits affects trajectory
+        // Check collision with player
         balls.checkCollision(player);
 
-        // TODO: Check collision with all remaining blocks
+        // Check collision with all blocks
         balls.checkCollision(blocks.blocks);
     }
 

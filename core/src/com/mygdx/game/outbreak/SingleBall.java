@@ -89,7 +89,7 @@ public class SingleBall extends Constants {
         // TODO: may speed up if check distance from block center first.
         collisions.clear(); // Empty previous results.
         for (SingleBlock block: blocks) {
-            if (block.strength > 0) {
+            if (block.getStrength() > 0) {
                 if (Intersector.overlaps(ballCopy, block.rectangle)) {
                     collisions.add(block);
                 }
@@ -123,7 +123,7 @@ public class SingleBall extends Constants {
 
             //TODO: following is test. Improve this
             velocity.set(newVelocity);
-            hitBlock.strength -= 1;
+            hitBlock.hit();
         }
 
 
