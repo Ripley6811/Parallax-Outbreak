@@ -92,7 +92,7 @@ public class Player extends Constants {
     }
 
     private Pixmap createPlayerPixmap() {
-        int W = 512;
+        int W = 256;
         int H = 64;
         // NOTE: Coordinate origin for Pixmap is top-left.
         Pixmap pixmap = new Pixmap(W, H, Pixmap.Format.RGBA8888);
