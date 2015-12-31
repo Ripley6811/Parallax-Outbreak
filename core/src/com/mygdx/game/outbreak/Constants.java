@@ -18,6 +18,7 @@ public class Constants {
     public static final float WORLD_SIZE = 100.0f;
     public static final Color BACKGROUND_COLOR = Color.BLACK;
     public static final float HUD_HEIGHT = 7f;
+    public static final float FONT_SCALE = 1f;
 
     /* PLAYER PADDLE */
     public static final float PLAYER_Y_POSITION = 5.0f;
@@ -29,7 +30,7 @@ public class Constants {
     // Used in "normalizing" the device accelerometer data
     public static final float GRAVITATIONAL_ACCELERATION = 9.8f;
     // Adjust player rate of acceleration
-    public static final float ACCELERATION_MULTIPLIER = 0.1f;
+    public static final float ACCELERATION_MULTIPLIER = 4f;
     // Used to prevent movement when user tries to hold device level
     public static final float STATIC_FRICTION = 0.2f;
     // Multiply to velocity to slow down
@@ -45,7 +46,8 @@ public class Constants {
     // Starscape width relative to world size.
     public static final float STARSCAPE_WIDTH_MULTIPLIER = 3.0f;
     // Starscape speed relative to player speed.
-    public static final float STARSCAPE_SPEED_MULTIPLIER = 0.1f;
+    public static final float STARSCAPE_SPEED_MULTIPLIER = 4f;
+    public static final float DEBRIS_SCROLL_MULTIPLIER = 60f;
     public static final int STARSCAPE_NUMBER_OF_STARS = 300;
 
     /* BLOCKS */

@@ -3,6 +3,7 @@ package com.mygdx.game.outbreak;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -40,7 +41,7 @@ public class StarScape {
 
     public void update(float deltaTime, float scrollVelocity) {
         // Update star position based on player velocity.
-        starScrollPosition += scrollVelocity * Constants.STARSCAPE_SPEED_MULTIPLIER;
+        starScrollPosition += deltaTime * scrollVelocity * Constants.STARSCAPE_SPEED_MULTIPLIER;
         // Keep star field as a high positive value.
         if (starScrollPosition < starScapeWidth) {
             starScrollPosition += starScapeWidth;
@@ -54,9 +55,14 @@ public class StarScape {
         renderer.begin(ShapeRenderer.ShapeType.Filled);
         renderer.identity();
         for (Vector2 star : stars){
-            renderer.setColor(1,1,1,0.5f);
+            renderer.setColor(1,1,1,0.2f);
             renderer.circle((star.x + starScrollPosition) % starScapeWidth,
-                            star.y, Constants.STAR_RADIUS);
+                    star.y, Constants.STAR_RADIUS, 10);
+            renderer.setColor(1,1,1,0.06f);
+            for (float i=0; i<1f; i+=0.2f) {
+                renderer.circle((star.x + starScrollPosition) % starScapeWidth,
+                        star.y, Constants.STAR_RADIUS + (float)Math.pow((double)i, 4.0), 10);
+            }
         }
         renderer.end();
         Gdx.gl.glDisable(GL20.GL_BLEND);

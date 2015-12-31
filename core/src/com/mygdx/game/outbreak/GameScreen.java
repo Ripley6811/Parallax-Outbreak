@@ -8,20 +8,25 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+
 
 /**
  * Created by Jay on 12/18/2015.
  */
 public class GameScreen  extends InputAdapter implements Screen {
+    private static final String TAG = GameScreen.class.getName();
+
     // TODO: Add score and lives at top
     OutbreakGame game;
 
     ShapeRenderer renderer;
     FitViewport actionViewport;
     SpriteBatch batch;
+    SpriteBatch fontRenderer;
     Texture scoreboard;
     private BitmapFont font;
 
@@ -41,7 +46,13 @@ public class GameScreen  extends InputAdapter implements Screen {
     public GameScreen(OutbreakGame game) {
         this.game = game;
         batch = new SpriteBatch();
+        fontRenderer = new SpriteBatch();
         scoreboard = new Texture(createScoreboardPixmap());
+        font = new BitmapFont();
+        font.setColor(Color.YELLOW);
+        font.getData().setScale(Constants.FONT_SCALE);
+        font.getRegion().getTexture().setFilter(
+                Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         init();
     }
 
@@ -57,6 +68,7 @@ public class GameScreen  extends InputAdapter implements Screen {
         renderer.setAutoShapeType(true);
         renderer.setProjectionMatrix(actionViewport.getCamera().combined);
         batch.setProjectionMatrix(actionViewport.getCamera().combined);
+        Gdx.app.log(TAG, "Default batch projection matrix for font rendering:\n" + fontRenderer.getProjectionMatrix());
     }
 
     @Override
@@ -100,6 +112,8 @@ public class GameScreen  extends InputAdapter implements Screen {
     @Override
     public void dispose() {
         renderer.dispose();
+        batch.dispose();
+        font.dispose();
     }
 
     public void updateScroll(float delta) {
@@ -119,7 +133,7 @@ public class GameScreen  extends InputAdapter implements Screen {
         }
 
         // Adjust velocity
-        scrollVelocity += Constants.ACCELERATION_MULTIPLIER * (
+        scrollVelocity += delta * Constants.ACCELERATION_MULTIPLIER * (
                 Math.abs(scrollAcceleration) > Constants.STATIC_FRICTION ?
                         scrollAcceleration : 0);
         // Max velocity
@@ -139,7 +153,7 @@ public class GameScreen  extends InputAdapter implements Screen {
 
     public void checkCollisions() {
         // Check collision with player
-        balls.checkCollision(player);
+        score -= balls.checkCollision(player);
 
         // Check collision with all blocks
         score += balls.checkCollision(blocks.blocks);
@@ -184,6 +198,10 @@ public class GameScreen  extends InputAdapter implements Screen {
         batch.draw(scoreboard, 0, Constants.WORLD_SIZE - Constants.HUD_HEIGHT,
                 Constants.WORLD_SIZE, Constants.HUD_HEIGHT);
         batch.end();
+
+        fontRenderer.begin(); // 500 x 650
+        font.draw(fontRenderer, "SCORE: " + score, 10f, 470f);
+        fontRenderer.end();
     }
 
     private Pixmap createScoreboardPixmap() {
