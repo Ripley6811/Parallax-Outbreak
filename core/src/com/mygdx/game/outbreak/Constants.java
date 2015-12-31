@@ -22,8 +22,8 @@ public class Constants {
     /* PLAYER PADDLE */
     public static final float PLAYER_Y_POSITION = 5.0f;
     public static final float PLAYER_WIDTH = 12.0f;
-    public static final float PLAYER_HEIGHT = 2.0f;
-    public static final float BOUNCE_ANGLE_MULTIPLIER = 0.2f;
+    public static final float PLAYER_HEIGHT = 1.5f;
+    public static final int INITIAL_LIVES = 6;
 
     /* VELOCITY & ACCELERATION */
     // Used in "normalizing" the device accelerometer data
@@ -62,8 +62,6 @@ public class Constants {
     public static final float BALL_MAX_VELOCITY = 0.8f;
     public static final float BALL_MIN_VELOCITY = 0.6f;
     public static final float BALL_GRAVITY = 0.02f;
-    // Percentage of paddle velocity to add to ball
-    public static final float ABSORB_VELOCITY_MULTIPLIER = 0.2f;
     // Adjust ball launch velocity relative to player velocity
     public static final float BALL_LAUNCH_VELOCITY_X_MULTIPLIER = 0.5f;
     // Number of previous positions to display in trail
@@ -73,4 +71,7 @@ public class Constants {
     /* COLLISION */
     // Precision (percent of velocity) in backtracking to the exact point of collision.
     public static final float COLLISION_DETECTION_PRECISION = 0.10f;
+    public static final float ABSORB_PADDLE_ANGLE = 0.5f; // Alpha blending
+    // Percentage of paddle velocity to add to ball
+    public static final float ABSORB_VELOCITY_MULTIPLIER = 0.2f;
 }

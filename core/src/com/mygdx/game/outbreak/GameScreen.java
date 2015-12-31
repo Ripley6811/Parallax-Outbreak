@@ -23,6 +23,7 @@ public class GameScreen  extends InputAdapter implements Screen {
     FitViewport actionViewport;
     SpriteBatch batch;
     Texture scoreboard;
+    private BitmapFont font;
 
     float scrollPosition;
     float scrollVelocity;
@@ -33,6 +34,9 @@ public class GameScreen  extends InputAdapter implements Screen {
     Blocks blocks;
     Player player;
     Balls balls;
+
+    int lives = Constants.INITIAL_LIVES;
+    int score = 0;
 
     public GameScreen(OutbreakGame game) {
         this.game = game;
@@ -138,7 +142,7 @@ public class GameScreen  extends InputAdapter implements Screen {
         balls.checkCollision(player);
 
         // Check collision with all blocks
-        balls.checkCollision(blocks.blocks);
+        score += balls.checkCollision(blocks.blocks);
     }
 
     @Override
@@ -155,7 +159,7 @@ public class GameScreen  extends InputAdapter implements Screen {
 
         updateScroll(delta);
 
-        // TODO: collision works but check the math and angles again. Test game a lot.
+        // TODO: Test game a lot to see if collisions look correct.
         checkCollisions();
 
         starScape.update(delta, scrollVelocity);

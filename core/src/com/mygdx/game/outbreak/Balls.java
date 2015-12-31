@@ -71,12 +71,13 @@ public class Balls {
         }
     }
 
-    public void checkCollision(Player player) {
-        // TODO: Add platform velocity and placement into bounce.
+    public int checkCollision(Player player) {
         // TODO: Add collision effect between multiple balls.
+        int collisionCount = 0;
         for (SingleBall ball: balls) {
-            ball.checkCollision(player);
+            if (ball.checkCollision(player)) collisionCount += 1;
         }
+        return collisionCount;
     }
 
     /**
@@ -85,10 +86,12 @@ public class Balls {
      *
      * @param blocks blocks array
      */
-    public void checkCollision(Array<SingleBlock> blocks) {
+    public int checkCollision(Array<SingleBlock> blocks) {
+        int collisionCount = 0;
         for (SingleBall ball: balls) {
-            ball.checkCollision(blocks);
+            if (ball.checkCollision(blocks)) collisionCount += 1;
         }
+        return collisionCount;
     }
 
     public void setVelocity(int ball_number, float newVx, float newVy) {

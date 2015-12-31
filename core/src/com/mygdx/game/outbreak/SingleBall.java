@@ -44,7 +44,7 @@ public class SingleBall extends Constants {
 
     }
 
-    public void checkCollision (Player player) {
+    public boolean checkCollision (Player player) {
         Vector2 futurePos = new Vector2(position.x + velocity.x, position.y + velocity.y);
         Circle ballCopy = new Circle(futurePos, circle.radius);
         Rectangle rect = player.rectangle;
@@ -67,9 +67,9 @@ public class SingleBall extends Constants {
             tl = new Vector2(rect.x, rect.y + rect.getHeight());
             Intersector.nearestSegmentPoint(tr, tl, futurePos, pointCollision);
 
-            // Paddle hit location range from -0.5 to 0.5
-            float paddlePoint = (pointCollision.x - tl.x) / (tr.x - tl.x) - 0.5f;
-            Gdx.app.log(TAG, "Paddle hit region: " + paddlePoint);
+            // Paddle hit location range from 140 (left-end) to 40 (used as degrees for re-orientating ball)
+            float reorientateAngle = paddleStrikeToDegrees(tl, tr, pointCollision);
+            Gdx.app.log(TAG, "Paddle hit region: " + reorientateAngle);
 
             // Resolve collision with point on segment
             // Normalized vector for mirroring velocity vector.
@@ -81,14 +81,40 @@ public class SingleBall extends Constants {
 
 //            newVelocity.rotate(paddlePoint * -100f * BOUNCE_ANGLE_MULTIPLIER);
             // TODO: Fix this so that any decrease will add to y velocity.
-            newVelocity.x = (paddlePoint + newVelocity.x) / 2f;
+//            newVelocity.x = (paddlePoint + newVelocity.x) / 2f;
+            newVelocity.setAngle(newVelocity.angle() * (1f - ABSORB_PADDLE_ANGLE)
+                                + reorientateAngle * ABSORB_PADDLE_ANGLE);
             newVelocity.x += player.velocity * ABSORB_VELOCITY_MULTIPLIER;
+            Gdx.app.log(TAG, "Incoming angle: " + velocity.angle());
             velocity.set(newVelocity);
+            Gdx.app.log(TAG, "Outgoing angle: " + velocity.angle());
+            return true;
         }
+        return false;
     }
 
-    public void checkCollision (Array<SingleBlock> blocks) {
-        // TODO: Blocks overhanging left side do not collide with ball
+    /**
+     * Convert the strike point along paddle to a degree for re-orientating the
+     * ball's heading.
+     * @param segStart Vector2 for paddle top-left corner
+     * @param segEnd Vector2 for paddle top-right corner
+     * @param hitPosition Vector2 of strike point
+     * @return a float value of the desired heading
+     */
+    private float paddleStrikeToDegrees (Vector2 segStart, Vector2 segEnd, Vector2 hitPosition) {
+        // Convert x-axis position to percentage [0.0, 1.0] along segment.
+        float positionAlongSegment = (hitPosition.x - segStart.x) / (segEnd.x - segStart.x);
+        // Convert to desired range [140.0, 40.0] degrees.
+        return Math.abs(100f * positionAlongSegment - 140f);
+    }
+
+    /**
+     * Checks collision of ball with any block. Changes ball velocity vector
+     * and reduces block strength if hit occurs.
+     * @param blocks array of blocks to test
+     * @return true if hit occurred.
+     */
+    public boolean checkCollision (Array<SingleBlock> blocks) {
         Vector2 futurePos = new Vector2(position.x + velocity.x, position.y + velocity.y);
         Circle ballCopy = new Circle(futurePos, circle.radius);
 
@@ -99,6 +125,12 @@ public class SingleBall extends Constants {
             if (block.getStrength() > 0) {
                 if (Intersector.overlaps(ballCopy, block.rectangle)) {
                     collisions.add(block);
+                } else if (block.rectangle.x + BLOCK_WIDTH > WORLD_SIZE) {
+                    // This checks if blocks that wrap around to left side are hit.
+                    block.rectangle.x -= WORLD_SIZE;
+                    if (Intersector.overlaps(ballCopy, block.rectangle)) {
+                        collisions.add(block);
+                    }
                 }
             }
         }
@@ -130,9 +162,9 @@ public class SingleBall extends Constants {
 
             velocity.set(newVelocity);
             hitBlock.hit();
+            return true;
         }
-
-
+        return false;
     }
 
     /**
