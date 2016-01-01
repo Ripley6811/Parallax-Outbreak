@@ -20,27 +20,27 @@ Functionality
 TODO: The desktop backend of the game can be built and run using Gradle without crashing, errors, or long load times.
 - [x] Game Architecture
 TODO: The Game is structured using appropriate libGDX features including a subclass of `Game` that delegates to an implementation of `Screen`. The state of the game is regularly updated and rendered.
-- Gameplay Screens
+- [ ] Gameplay Screens
 TODO: The game opens with a difficulty select screen.  When a difficulty is selected, the game begins.  If the player runs out of lives, a Game Over screen is displayed, along with the score.
-- Rendering
+- [ ] Rendering
 TODO: Game uses ShapeRenderer or reasonable alternative to draw objects each frame.  Objects move in a smooth and continuous manner.
 
 Gameplay
-Controls
+- [ ] Controls
 TODO: Game has user controls for desktop and mobile platforms. The app or README file contains instructions.
-Object Interaction
+- [ ] Object Interaction
 TODO: The ball can collide with the paddle and with blocks, bouncing appropriately as described in the project description.  When hit by the ball, blocks break.
-Object regeneration
+- [ ] Object regeneration
 TODO: Block regenerate using the rules described in the project description document.
-Score & Lives
+- [ ] Score & Lives
 TODO: A score count is displayed that increases when a block is broken.  The number of remaining lives is displayed, which decreases every time the ball falls beyond the bottom of the screen.
-Difficulty
+- [ ] Difficulty
 TODO: There are multiple difficulty levels, which change the speed of the ball and the rate at which blocks regenerate.
 
 Code Style
-Object Oriented Java
+- [ ] Object Oriented Java
 TODO: Game code exhibits strong object oriented design principles, including proper use of inheritance, interfaces, and access modifiers.
-Game Constants
+- [ ] Game Constants
 TODO: Important values such as sprite names, dimensions, and gameplay constants are centrally organized. Hard-coded values are avoided.
-Code Readability
+- [ ] Code Readability
 TODO: Code is neatly formatted and structured in a way that is simple and easy to understand.
