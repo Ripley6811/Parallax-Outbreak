@@ -16,13 +16,13 @@ Nebulas painted in Photoshop using the "Scattered Flowers Mums" brush in the "Sp
 
 
 Functionality
-Build & Run
-[ ] TODO: The desktop backend of the game can be built and run using Gradle without crashing, errors, or long load times.
-Game Architecture
-[x] TODO: The Game is structured using appropriate libGDX features including a subclass of `Game` that delegates to an implementation of `Screen`. The state of the game is regularly updated and rendered.
-Gameplay Screens
+- [ ] Build & Run
+TODO: The desktop backend of the game can be built and run using Gradle without crashing, errors, or long load times.
+- [x] Game Architecture
+TODO: The Game is structured using appropriate libGDX features including a subclass of `Game` that delegates to an implementation of `Screen`. The state of the game is regularly updated and rendered.
+- Gameplay Screens
 TODO: The game opens with a difficulty select screen.  When a difficulty is selected, the game begins.  If the player runs out of lives, a Game Over screen is displayed, along with the score.
-Rendering
+- Rendering
 TODO: Game uses ShapeRenderer or reasonable alternative to draw objects each frame.  Objects move in a smooth and continuous manner.
 
 Gameplay
