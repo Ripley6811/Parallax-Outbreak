@@ -54,6 +54,7 @@ public class Constants {
     public static final float BLOCK_WIDTH = 5.0f;
     public static final float BLOCK_HEIGHT = 3.0f;
     public static final float BLOCK_SPACING = 0.2f;
+    public static final int POINTS_PER_BLOCK = 2;
 
     /* LEVEL RANDOM SEEDS */
     public static final long SEED_LVL_1 = 12345L;
@@ -69,6 +70,7 @@ public class Constants {
     // Number of previous positions to display in trail
     public static final float BALL_TRAIL_LENGTH = 20;
     public static final int MAX_NUMBER_BALLS = 10;
+    public static final int STREAK_BALL_DOUBLER = 50;
 
     /* COLLISION */
     // Precision (percent of velocity) in backtracking to the exact point of collision.

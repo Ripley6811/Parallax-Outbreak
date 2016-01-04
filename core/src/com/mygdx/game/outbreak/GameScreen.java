@@ -42,6 +42,7 @@ public class GameScreen  extends InputAdapter implements Screen {
 
     int lives = Constants.INITIAL_LIVES;
     int score = 0;
+    int streak = 0;
 
     public GameScreen(OutbreakGame game) {
         this.game = game;
@@ -156,7 +157,9 @@ public class GameScreen  extends InputAdapter implements Screen {
         score -= balls.checkCollision(player);
 
         // Check collision with all blocks
-        score += balls.checkCollision(blocks.blocks);
+        int hits = balls.checkCollision(blocks.blocks);
+        score += hits * Constants.POINTS_PER_BLOCK;
+        streak += hits;
     }
 
     @Override
@@ -180,7 +183,8 @@ public class GameScreen  extends InputAdapter implements Screen {
         debrisLayer.update(delta, scrollVelocity);
         blocks.update(delta, scrollPosition);
         player.update(delta, scrollVelocity);
-        balls.update(delta, scrollVelocity, player.position);
+        boolean ballDied = balls.update(delta, scrollVelocity, player.position);
+        if (ballDied) streak = 0;
 
         // Background color fill
         Color BG_COLOR = Constants.BACKGROUND_COLOR;
@@ -201,6 +205,7 @@ public class GameScreen  extends InputAdapter implements Screen {
 
         fontRenderer.begin(); // 500 x 650
         font.draw(fontRenderer, "SCORE: " + score, 10f, 470f);
+        font.draw(fontRenderer, "STREAK: " + streak, 100f, 470f);
         fontRenderer.end();
     }
 

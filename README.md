@@ -5,6 +5,9 @@ Breakout-style game built with LibGDX
 Photoshop: Used a 5x15 inch canvas with 128 pixels per inch for the nebula backdrop.
 Nebulas painted in Photoshop using the "Scattered Flowers Mums" brush in the "Special Effect Brushes" set.
 
+##Gameplay
+
+How to play the game.
 
 ##References
 
@@ -14,7 +17,9 @@ Nebulas painted in Photoshop using the "Scattered Flowers Mums" brush in the "Sp
 - [How to display fonts - **www.gamefromscratch.com**](http://www.gamefromscratch.com/post/2013/09/26/LibGDX-Tutorial-2-Hello-World.aspx)
 - [How to scale BitmapFont - **stackoverflow.com**](http://stackoverflow.com/questions/29814995/java-libgdx-bitmapfont-setscale-method-not-working)
 
-TODO: Complete the following tasks.
+
+##TODO: Complete the following tasks.
+
 Functionality
 - [x] Build & Run:
     The desktop backend of the game can be built and run using Gradle without

@@ -34,11 +34,19 @@ public class Balls {
         worldWidth = (int)viewport.getWorldWidth();
     }
 
-    public void update(float delta, float scrollVelocity, Vector2 playerPosition){
+    /**
+     * Updates the position of all balls in play and returns true if any ball is lost.
+     * @param delta time since last render
+     * @param scrollVelocity horizontal scroll velocity
+     * @param playerPosition Vector2 of player position
+     * @return true if any ball is lost
+     */
+    public boolean update(float delta, float scrollVelocity, Vector2 playerPosition){
         this.scrollVelocity = scrollVelocity;
         if (allDead()) {
             resetBalls();
         }
+        boolean ballDied = false;
 
         for (SingleBall ball: balls) {
             if (ball.onPlayer) {
@@ -47,8 +55,11 @@ public class Balls {
                         playerPosition.y + Constants.PLAYER_HEIGHT + Constants.BALL_RADIUS
                 );
             }
-            ball.update(delta, scrollVelocity);
+            if (ball.update(delta, scrollVelocity)) {
+                ballDied = true;
+            }
         }
+        return ballDied;
     }
 
     public boolean allDead() {

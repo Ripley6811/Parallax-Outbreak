@@ -217,8 +217,10 @@ public class SingleBall extends Constants {
         return false; // No overlaps.
     }
 
-    public void update (float deltaTime, float scrollVelocity) {
-        if (isDead) return;
+    public boolean update (float deltaTime, float scrollVelocity) {
+        if (isDead) return false;
+
+        boolean died = false;
 
         if (!onPlayer) {
             position.add(velocity);
@@ -249,6 +251,7 @@ public class SingleBall extends Constants {
         if (position.y < -20) {
             Gdx.app.debug(TAG, "Ball died: " + position);
             isDead = true;
+            died = true;
         }
 
         // Update circle
@@ -257,6 +260,8 @@ public class SingleBall extends Constants {
         // Alter ball glow radius.
         time += deltaTime * 4f;
         ball_glow_radius = (Math.abs(MathUtils.sin(time))) * 0.5f;
+
+        return died;
     }
 
     /**
