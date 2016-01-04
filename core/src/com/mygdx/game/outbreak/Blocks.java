@@ -37,12 +37,12 @@ public class Blocks extends Constants {
         worldWidth = (int)viewport.getWorldWidth();
         batch.setProjectionMatrix(viewport.getCamera().combined);
 
-        int nCols = Levels.L2_COLS;
+        int nCols = Levels.L3_COLS;
         int rowWidth = (int)(nCols * (BLOCK_WIDTH + BLOCK_SPACING) - BLOCK_SPACING);
         int xOffset = (worldWidth - rowWidth) / 2;
         blocks = new Array<SingleBlock>();
-        for (int i = 0; i < Levels.L2.length; i++) {
-            int strength = Levels.L2[i];
+        for (int i = 0; i < Levels.L3.length; i++) {
+            int strength = Levels.L3[i];
             if (strength == 0) continue;
             int row = i / nCols;
             int col = i % nCols;
