@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
@@ -20,7 +21,6 @@ public class Blocks extends Constants {
     float VERTICAL_OFFSET = WORLD_SIZE - HUD_HEIGHT - BLOCK_HEIGHT - BLOCK_SPACING;
     Array<SingleBlock> blocks;
     Array<Texture> blockTextures;
-    SpriteBatch batch;
 
     public Blocks(Viewport viewport) {
         this.viewport = viewport;
@@ -28,14 +28,12 @@ public class Blocks extends Constants {
         for (int i=0; i<=4; i++) {
             blockTextures.add(new Texture(createBlock(i)));
         }
-        batch = new SpriteBatch();
         init();
     }
 
     public void init() {
         scrollPosition = 0.0f;
         worldWidth = (int)viewport.getWorldWidth();
-        batch.setProjectionMatrix(viewport.getCamera().combined);
 
         int nCols = Levels.L3_COLS;
         int rowWidth = (int)(nCols * (BLOCK_WIDTH + BLOCK_SPACING) - BLOCK_SPACING);
@@ -57,7 +55,7 @@ public class Blocks extends Constants {
 
     }
 
-    public void render(ShapeRenderer renderer) {
+    public void render(SpriteBatch batch) {
         batch.begin();
         for (SingleBlock block : blocks){
             float xShifted = (block.x + scrollPosition) % WORLD_SIZE;

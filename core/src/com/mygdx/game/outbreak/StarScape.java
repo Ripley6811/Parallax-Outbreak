@@ -1,7 +1,11 @@
 package com.mygdx.game.outbreak;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
@@ -20,6 +24,7 @@ public class StarScape {
     int starScapeWidth;
 
     Array<Vector2> stars;
+    Texture starImage = new Texture(createStar());
 
     public StarScape(Viewport viewport) {
         this.viewport = viewport;
@@ -48,23 +53,34 @@ public class StarScape {
         }
     }
 
-    public void render(ShapeRenderer renderer) {
-        // Draws each star in "stars" array.
-        Gdx.gl.glEnable(GL20.GL_BLEND);
-        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-        renderer.begin(ShapeRenderer.ShapeType.Filled);
-        renderer.identity();
+    public void render(SpriteBatch batch) {
+        batch.begin();
         for (Vector2 star : stars){
-            renderer.setColor(1,1,1,0.2f);
-            renderer.circle((star.x + starScrollPosition) % starScapeWidth,
-                    star.y, Constants.STAR_RADIUS, 10);
-            renderer.setColor(1,1,1,0.06f);
-            for (float i=0; i<1f; i+=0.2f) {
-                renderer.circle((star.x + starScrollPosition) % starScapeWidth,
-                        star.y, Constants.STAR_RADIUS + (float)Math.pow((double)i, 4.0), 10);
-            }
+            batch.draw(starImage,
+                    (star.x + starScrollPosition) % starScapeWidth, star.y,
+                    2, 2);
         }
-        renderer.end();
-        Gdx.gl.glDisable(GL20.GL_BLEND);
+        batch.end();
+    }
+
+
+    public Pixmap createStar() {
+        int SIZE = 128;  // Square canvas
+        int R = SIZE / 2;  // Radius of circle on canvas
+
+        Pixmap pixmap = new Pixmap(SIZE, SIZE, Pixmap.Format.RGBA8888);
+        // NOTE: fillCircle blending is a known bug. Turn off temporarily.
+        Pixmap.setBlending(Pixmap.Blending.None);
+        // Star outer glow
+        for (float i=1f; i>0f; i-=0.1f) {
+            pixmap.setColor(1, 1, 1, 1f - i);
+            pixmap.fillCircle(R, R, (int) (R * Math.pow((double) i, 4.0)));
+        }
+        // Strong center white color
+        pixmap.setColor(1, 1, 1, 1f);
+        pixmap.fillCircle(R, R, 5);
+
+        Pixmap.setBlending(Pixmap.Blending.SourceOver);
+        return pixmap;
     }
 }

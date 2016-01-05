@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
 
@@ -25,8 +26,8 @@ public class GameScreen  extends InputAdapter implements Screen {
 
     ShapeRenderer renderer;
     FitViewport actionViewport;
-    SpriteBatch batch;
-    SpriteBatch fontRenderer;
+    SpriteBatch gameBatch;
+    SpriteBatch hudBatch;
     Texture scoreboard;
     private BitmapFont font;
 
@@ -46,8 +47,8 @@ public class GameScreen  extends InputAdapter implements Screen {
 
     public GameScreen(OutbreakGame game) {
         this.game = game;
-        batch = new SpriteBatch();
-        fontRenderer = new SpriteBatch();
+        gameBatch = new SpriteBatch();
+        hudBatch = new SpriteBatch();
         scoreboard = new Texture(createScoreboardPixmap());
         font = new BitmapFont();
         font.setColor(Color.YELLOW);
@@ -68,8 +69,8 @@ public class GameScreen  extends InputAdapter implements Screen {
         renderer = new ShapeRenderer();
         renderer.setAutoShapeType(true);
         renderer.setProjectionMatrix(actionViewport.getCamera().combined);
-        batch.setProjectionMatrix(actionViewport.getCamera().combined);
-        Gdx.app.log(TAG, "Default batch projection matrix for font rendering:\n" + fontRenderer.getProjectionMatrix());
+        gameBatch.setProjectionMatrix(actionViewport.getCamera().combined);
+        Gdx.app.log(TAG, "Default SpriteBatch projection matrix for font rendering:\n" + hudBatch.getProjectionMatrix());
     }
 
     @Override
@@ -113,7 +114,7 @@ public class GameScreen  extends InputAdapter implements Screen {
     @Override
     public void dispose() {
         renderer.dispose();
-        batch.dispose();
+        gameBatch.dispose();
         font.dispose();
     }
 
@@ -191,22 +192,29 @@ public class GameScreen  extends InputAdapter implements Screen {
         Gdx.gl.glClearColor(BG_COLOR.r, BG_COLOR.g, BG_COLOR.b, 1);
         Gdx.gl20.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        starScape.render(renderer);
-        debrisLayer.render(renderer);
-        blocks.render(renderer);
+//        double r = -Math.PI/10;
+//        float[] mArray = {(float)Math.cos(r), (float)-Math.sin(r), 0, 0,
+//                (float)(Math.sin(r)), (float)Math.cos(r), 0, 0,
+//                          0, 0, 1, 0,
+//                          0, 0, 0, 1};
+//        gameBatch.setTransformMatrix(new Matrix4(mArray));
+
+        starScape.render(gameBatch);
+        debrisLayer.render(gameBatch);
+        blocks.render(gameBatch);
         player.render(renderer);
         balls.render(renderer);
 
         // Draw top scoreboard area
-        batch.begin();
-        batch.draw(scoreboard, 0, Constants.WORLD_SIZE - Constants.HUD_HEIGHT,
+        gameBatch.begin();
+        gameBatch.draw(scoreboard, 0, Constants.WORLD_SIZE - Constants.HUD_HEIGHT,
                 Constants.WORLD_SIZE, Constants.HUD_HEIGHT);
-        batch.end();
+        gameBatch.end();
 
-        fontRenderer.begin(); // 500 x 650
-        font.draw(fontRenderer, "SCORE: " + score, 10f, 470f);
-        font.draw(fontRenderer, "STREAK: " + streak, 100f, 470f);
-        fontRenderer.end();
+        hudBatch.begin(); // 500 x 650
+        font.draw(hudBatch, "SCORE: " + score, 10f, 470f);
+        font.draw(hudBatch, "STREAK: " + streak + " hits", 100f, 470f);
+        hudBatch.end();
     }
 
     private Pixmap createScoreboardPixmap() {
