@@ -8,6 +8,7 @@ public class OutbreakGame extends Game {
 	@Override
 	public void create () {
 		Gdx.app.setLogLevel(Constants.LOG_LEVEL);
-		setScreen(new GameScreen(this));
+//		setScreen(new GameScreen(this));
+		setScreen(new OptionsScreen(this));
 	}
 }

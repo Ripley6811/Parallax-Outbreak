@@ -15,6 +15,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 public class Blocks extends Constants {
 
     Viewport viewport;
+    SpriteBatch batch;
     float scrollPosition;
     int worldWidth;
 
@@ -24,11 +25,12 @@ public class Blocks extends Constants {
 
     public Blocks(Viewport viewport) {
         this.viewport = viewport;
+        batch = new SpriteBatch();
         blockTextures = new Array<Texture>();
         for (int i=0; i<=4; i++) {
             blockTextures.add(new Texture(createBlock(i)));
         }
-        init();
+//        init();
     }
 
     public void init() {
@@ -50,12 +52,36 @@ public class Blocks extends Constants {
         }
     }
 
+    public void init(String screenName) {
+        if (screenName != "OptionsScreen") return;
+
+        scrollPosition = 0.0f;
+        worldWidth = (int)viewport.getWorldWidth();
+
+        int nCols = Levels.L0_COLS;
+        int rowWidth = (int)(nCols * (BLOCK_WIDTH + BLOCK_SPACING) - BLOCK_SPACING);
+        int xOffset = (worldWidth - rowWidth) / 2;
+        blocks = new Array<SingleBlock>();
+        for (int i = 0; i < Levels.L0.length; i++) {
+            int strength = Levels.L0[i];
+            if (strength == 0) continue;
+            int row = i / nCols;
+            int col = i % nCols;
+            float x = col * (BLOCK_WIDTH + BLOCK_SPACING);
+            float y = PLAYER_Y_POSITION - row * (BLOCK_HEIGHT + BLOCK_SPACING) + 4.5f * (BLOCK_HEIGHT + BLOCK_SPACING);
+            blocks.add(new SingleBlock(viewport, x+xOffset, y, strength));
+        }
+    }
+
     public void update (float deltaTime, float scrollPosition) {
         this.scrollPosition = scrollPosition;
 
     }
 
-    public void render(SpriteBatch batch) {
+    public void render(ShapeRenderer renderer) {
+        batch.setProjectionMatrix(renderer.getProjectionMatrix());
+        batch.setTransformMatrix(renderer.getTransformMatrix());
+
         batch.begin();
         for (SingleBlock block : blocks){
             float xShifted = (block.x + scrollPosition) % WORLD_SIZE;

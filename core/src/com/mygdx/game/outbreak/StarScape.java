@@ -1,13 +1,9 @@
 package com.mygdx.game.outbreak;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -20,6 +16,7 @@ import java.util.Random;
 public class StarScape {
 
     Viewport viewport;
+    SpriteBatch batch;
     float starScrollPosition; // horizontal displacement
     int starScapeWidth;
 
@@ -32,6 +29,7 @@ public class StarScape {
     }
 
     public void init() {
+        batch = new SpriteBatch();
         int N_STARS = Constants.STARSCAPE_NUMBER_OF_STARS;
         starScrollPosition = 0.0f;
         stars = new Array<Vector2>(N_STARS);
@@ -53,7 +51,10 @@ public class StarScape {
         }
     }
 
-    public void render(SpriteBatch batch) {
+    public void render(ShapeRenderer renderer) {
+        batch.setProjectionMatrix(renderer.getProjectionMatrix());
+        batch.setTransformMatrix(renderer.getTransformMatrix());
+
         batch.begin();
         for (Vector2 star : stars){
             batch.draw(starImage,

@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 /**
@@ -14,6 +15,7 @@ public class DebrisLayer {
     // TODO: Change to individual nebula images and randomize position.
     // TODO: New nebula images may need opacity decreased.
     Viewport viewport;
+    SpriteBatch batch;
     float debrisScrollPosition; // horizontal displacement
     int debrisViewWidth, debrisViewHeight;
     Texture texture;
@@ -22,6 +24,7 @@ public class DebrisLayer {
 
     public DebrisLayer(Viewport viewport) {
         this.viewport = viewport;
+        batch = new SpriteBatch();
         texture = new Texture(Gdx.files.internal("nebula1.png"));
         debrisViewWidth = texture.getWidth();
         debrisViewHeight = texture.getHeight();
@@ -45,7 +48,10 @@ public class DebrisLayer {
         }
     }
 
-    public void render(SpriteBatch batch) {
+    public void render(ShapeRenderer renderer) {
+        batch.setProjectionMatrix(renderer.getProjectionMatrix());
+        batch.setTransformMatrix(renderer.getTransformMatrix());
+
         Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 

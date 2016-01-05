@@ -3,6 +3,7 @@ package com.mygdx.game.outbreak;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Intersector;
@@ -283,6 +284,7 @@ public class SingleBall extends Constants {
     }
 
     public void render(ShapeRenderer renderer) {
+
         float adjustedXPos = position.x % WORLD_SIZE;
 
         // Enable alpha blending.
@@ -291,7 +293,6 @@ public class SingleBall extends Constants {
 
         // Draw ball trail.
         renderer.begin(ShapeRenderer.ShapeType.Filled);
-        renderer.identity();
         renderer.translate(adjustedXPos, position.y, 0);
         Vector2 trailTotal = new Vector2(0,0);
         float trailRadius = BALL_RADIUS;
@@ -314,16 +315,12 @@ public class SingleBall extends Constants {
 
         // Draw ball.
         renderer.begin(ShapeRenderer.ShapeType.Filled);
-        renderer.identity();
-        renderer.translate(adjustedXPos, position.y, 0);
         renderer.setColor(Color.LIGHT_GRAY);
         renderer.circle(0, 0, BALL_RADIUS, BALL_SEGMENTS);
         renderer.end();
 
         // Add ball inner gradient and outer glow.
         renderer.begin(ShapeRenderer.ShapeType.Line);
-        renderer.identity();
-        renderer.translate(adjustedXPos, position.y, 0);
         for (float r=BALL_RADIUS; r > 0f; r -= 0.1) {
             renderer.setColor(new Color(1f,1f,1f,r));
             renderer.circle(0, 0, r, BALL_SEGMENTS);
@@ -332,6 +329,7 @@ public class SingleBall extends Constants {
             renderer.setColor(new Color(1f,1f,1f, ball_glow_radius -r));
             renderer.circle(0, 0, BALL_RADIUS+r, BALL_SEGMENTS);
         }
+        renderer.translate(-adjustedXPos, -position.y, 0);
         renderer.end();
         Gdx.gl.glDisable(GL20.GL_BLEND);
     }

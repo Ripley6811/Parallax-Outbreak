@@ -24,19 +24,19 @@ public class Player extends Constants {
     float velocity;
     float MAX_DISPLACEMENT = 2.0f;
 
-    SpriteBatch batch;
     Texture paddle;
 
     Viewport viewport;
+    SpriteBatch batch;
 
     int deaths;
 
     public Player(Viewport viewport) {
         this.viewport = viewport;
+        batch = new SpriteBatch();
         velocity = 0.0f;
         deaths = 0;
         paddle = new Texture(createPlayerPixmap());
-        batch = new SpriteBatch();
         init();
     }
 
@@ -51,8 +51,20 @@ public class Player extends Constants {
                 home.y
         );
         rectangle = new Rectangle(position.x, position.y, PLAYER_WIDTH, PLAYER_HEIGHT);
+    }
 
-        batch.setProjectionMatrix(viewport.getCamera().combined);
+    public void init(String screenName) {
+        if (screenName != "OptionsScreen") init();
+        // Centered starting position.
+        home = new Vector2(
+                viewport.getWorldWidth() / 2 - PLAYER_WIDTH / 2,
+                PLAYER_Y_POSITION * 2
+        );
+        position = new Vector2(
+                home.x,
+                home.y
+        );
+        rectangle = new Rectangle(position.x, position.y, PLAYER_WIDTH, PLAYER_HEIGHT);
     }
 
     public void update(float delta, float scrollVelocity) {
@@ -68,24 +80,29 @@ public class Player extends Constants {
         if (Math.abs(velocity) > STATIC_FRICTION) {
             Random random = new Random();
             renderer.begin(ShapeType.Line);
-            renderer.identity();
             renderer.translate(position.x, position.y, 0);
             float offset = (velocity < 0 ? PLAYER_WIDTH - 1 : 1);
             for (float i = -0.9f; i < 1.0f; i += 0.1) {
                 // Calculate endpoints along a hemisphere.
                 float x2 = (float) Math.sqrt(1 - i * i);
                 float multiplier = (0.8f + 0.2f*random.nextFloat()) * Math.abs(velocity) * EXHAUST_LENGTH_MULTIPLIER;
-                renderer.line(offset, PLAYER_HEIGHT / 2,
+                renderer.line(
+                        offset,
+                        PLAYER_HEIGHT / 2,
                         offset + x2 * 2f * (velocity < 0 ? 1 : -1) * multiplier,
                         PLAYER_HEIGHT / 2 + i * multiplier,
                         Color.RED,
-                        new Color(1, random.nextFloat(), 0, random.nextFloat()));
+                        new Color(1, random.nextFloat(), 0, random.nextFloat())
+                );
             }
+            renderer.translate(-position.x, -position.y, 0);
             renderer.end();
         }
         Gdx.gl.glDisable(GL20.GL_BLEND);
 
         // Draw player paddle
+        batch.setProjectionMatrix(renderer.getProjectionMatrix());
+        batch.setTransformMatrix(renderer.getTransformMatrix());
         batch.begin();
         batch.draw(paddle, position.x, position.y, PLAYER_WIDTH, PLAYER_HEIGHT);
         batch.end();
