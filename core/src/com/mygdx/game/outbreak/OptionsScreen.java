@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
 /**
@@ -141,7 +142,6 @@ public class OptionsScreen extends InputAdapter implements Screen {
     }
 
     public void updateScroll(float delta) {
-
         // Update position based on velocity
         scrollPosition += scrollVelocity;
 
@@ -151,21 +151,11 @@ public class OptionsScreen extends InputAdapter implements Screen {
         }
     }
 
-    public void checkCollisions() {
-        // Check collision with player
-        score -= balls.checkCollision(player);
-
-        // Check collision with all blocks
-        int hits = balls.checkCollision(blocks.blocks);
-        score += hits * Constants.POINTS_PER_BLOCK;
-        streak += hits;
-    }
-
     @Override
     public boolean keyDown(int keycode) {
         // TODO: Also add touch ball launching for Android
-        if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-            balls.setFree(player.velocity);
+        if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
+            game.gotoGameScreen();
         }
         return super.keyDown(keycode);
     }
@@ -199,9 +189,12 @@ public class OptionsScreen extends InputAdapter implements Screen {
         renderer.end();
         Gdx.gl.glDisable(GL20.GL_BLEND);
 
-        fontRenderer.begin(); // 500 x 650
-        font.draw(fontRenderer, "SCORE: " + score, 10f, 470f);
-        font.draw(fontRenderer, "STREAK: " + streak + " hits", 100f, 470f);
+        fontRenderer.begin(); // 650 x 500
+        font.getData().setScale(2.5f);
+        font.draw(fontRenderer, Constants.GAME_TITLE, 0f, 420f, 650f, Align.center, false);
+        font.getData().setScale(1.5f);
+        String instructions = Constants.GAME_INSTRUCTIONS;
+        font.draw(fontRenderer, instructions, 75f, 350f, 500f, Align.center, true);
         fontRenderer.end();
     }
 

@@ -18,11 +18,12 @@ import java.util.Random;
  * Created by Jay on 12/18/2015.
  */
 public class Player extends Constants {
+    private static final String TAG = Player.class.getName();
+
     Rectangle rectangle;
     Vector2 home; // Starting position
     Vector2 position; // Actual position with displacement
     float velocity;
-    float MAX_DISPLACEMENT = 2.0f;
 
     Texture paddle;
 
@@ -32,6 +33,7 @@ public class Player extends Constants {
     int deaths;
 
     public Player(Viewport viewport) {
+        Gdx.app.debug(TAG, "Player(Viewport)");
         this.viewport = viewport;
         batch = new SpriteBatch();
         velocity = 0.0f;
@@ -41,6 +43,7 @@ public class Player extends Constants {
     }
 
     public void init() {
+        Gdx.app.debug(TAG, "init()");
         // Centered starting position.
         home = new Vector2(
                 viewport.getWorldWidth() / 2 - PLAYER_WIDTH / 2,
@@ -54,7 +57,8 @@ public class Player extends Constants {
     }
 
     public void init(String screenName) {
-        if (screenName != "OptionsScreen") init();
+        Gdx.app.debug(TAG, "init(String)");
+        if (!screenName.equals("OptionsScreen")) init();
         // Centered starting position.
         home = new Vector2(
                 viewport.getWorldWidth() / 2 - PLAYER_WIDTH / 2,

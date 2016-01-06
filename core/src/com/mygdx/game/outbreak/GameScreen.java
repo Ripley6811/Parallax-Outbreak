@@ -41,7 +41,6 @@ public class GameScreen extends InputAdapter implements Screen {
     Player player;
     Balls balls;
 
-    int lives = Constants.INITIAL_LIVES;
     int score = 0;
     int streak = 0;
 
@@ -82,6 +81,12 @@ public class GameScreen extends InputAdapter implements Screen {
         player = new Player(actionViewport);
         balls = new Balls(actionViewport);
 
+        starScape.init();
+        debrisLayer.init();
+        blocks.init();
+        player.init();
+        balls.init();
+
         Gdx.input.setInputProcessor(this);
     }
 
@@ -103,12 +108,6 @@ public class GameScreen extends InputAdapter implements Screen {
     @Override
     public void resize(int width, int height) {
         actionViewport.update(width, height, true);
-
-        starScape.init();
-        debrisLayer.init();
-        blocks.init();
-        player.init();
-        balls.init();
     }
 
     @Override

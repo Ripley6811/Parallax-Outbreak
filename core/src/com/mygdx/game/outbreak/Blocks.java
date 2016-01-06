@@ -1,11 +1,11 @@
 package com.mygdx.game.outbreak;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
@@ -13,6 +13,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
  * Created by Jay on 12/23/2015.
  */
 public class Blocks extends Constants {
+    private static final String TAG = Blocks.class.getName();
 
     Viewport viewport;
     SpriteBatch batch;
@@ -53,7 +54,8 @@ public class Blocks extends Constants {
     }
 
     public void init(String screenName) {
-        if (screenName != "OptionsScreen") return;
+        Gdx.app.debug(TAG, "init(String)");
+        if (!screenName.equals("OptionsScreen")) return;
 
         scrollPosition = 0.0f;
         worldWidth = (int)viewport.getWorldWidth();

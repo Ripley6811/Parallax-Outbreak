@@ -11,10 +11,12 @@ public class Constants {
     // Application logging levels from lowest to highest. Choose one.
 //    public static final int LOG_LEVEL = Application.LOG_NONE;
 //    public static final int LOG_LEVEL = Application.LOG_ERROR;
-    public static final int LOG_LEVEL = Application.LOG_INFO;
-//    public static final int LOG_LEVEL = Application.LOG_DEBUG;
+//    public static final int LOG_LEVEL = Application.LOG_INFO;
+    public static final int LOG_LEVEL = Application.LOG_DEBUG;
 
     /* WORLD & HUD */
+    public static final String GAME_TITLE = "PARALLAX-OUTBREAK";
+    public static final String GAME_INSTRUCTIONS = "Hello and welcome to my first arcade game. I hope you enjoy the ride.\nHit space to start a new game.";
     public static final float WORLD_SIZE = 100.0f;
     public static final Color BACKGROUND_COLOR = Color.BLACK;
     public static final float HUD_HEIGHT = 7f;
@@ -42,7 +44,6 @@ public class Constants {
     public static final float EXHAUST_LENGTH_MULTIPLIER = 1.8f;
 
     /* STARS */
-    public static final float STAR_RADIUS = 0.16f;
     // Starscape width relative to world size.
     public static final float STARSCAPE_WIDTH_MULTIPLIER = 3.0f;
     // Starscape speed relative to player speed.

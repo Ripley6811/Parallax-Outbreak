@@ -14,6 +14,7 @@ import java.util.Random;
  * Created by Jay on 12/21/2015.
  */
 public class StarScape {
+    private static final String TAG = StarScape.class.getName();
 
     Viewport viewport;
     SpriteBatch batch;

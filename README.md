@@ -16,6 +16,7 @@ How to play the game.
 - LibGDX Class Reference - **libgdx.badlogicgames.com**
 - [How to display fonts - **www.gamefromscratch.com**](http://www.gamefromscratch.com/post/2013/09/26/LibGDX-Tutorial-2-Hello-World.aspx)
 - [How to scale BitmapFont - **stackoverflow.com**](http://stackoverflow.com/questions/29814995/java-libgdx-bitmapfont-setscale-method-not-working)
+- [How to compare strings in Java - **stackoverflow.com**](http://stackoverflow.com/questions/513832/how-do-i-compare-strings-in-java)
 
 
 ##TODO: Complete the following tasks.
