@@ -39,36 +39,39 @@ public class Player extends Constants {
         velocity = 0.0f;
         deaths = 0;
         paddle = new Texture(createPlayerPixmap());
-        init();
+        home = new Vector2();
+        position = new Vector2();
+        rectangle = new Rectangle();
     }
 
     public void init() {
         Gdx.app.debug(TAG, "init()");
         // Centered starting position.
-        home = new Vector2(
+        home.set(
                 viewport.getWorldWidth() / 2 - PLAYER_WIDTH / 2,
                 PLAYER_Y_POSITION
         );
-        position = new Vector2(
+        position.set(
                 home.x,
                 home.y
         );
-        rectangle = new Rectangle(position.x, position.y, PLAYER_WIDTH, PLAYER_HEIGHT);
+        rectangle.set(position.x, position.y, PLAYER_WIDTH, PLAYER_HEIGHT);
     }
 
     public void init(String screenName) {
         Gdx.app.debug(TAG, "init(String)");
         if (!screenName.equals("OptionsScreen")) init();
         // Centered starting position.
-        home = new Vector2(
+        home.set(
                 viewport.getWorldWidth() / 2 - PLAYER_WIDTH / 2,
                 PLAYER_Y_POSITION * 2
         );
-        position = new Vector2(
+        position.set(
                 home.x,
                 home.y
         );
-        rectangle = new Rectangle(position.x, position.y, PLAYER_WIDTH, PLAYER_HEIGHT);
+        rectangle.set(position.x, position.y, PLAYER_WIDTH, PLAYER_HEIGHT);
+        Gdx.app.debug(TAG, "init(String) DONE");
     }
 
     public void update(float delta, float scrollVelocity) {

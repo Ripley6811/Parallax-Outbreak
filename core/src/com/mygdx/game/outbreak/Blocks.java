@@ -25,6 +25,7 @@ public class Blocks extends Constants {
     Array<Texture> blockTextures;
 
     public Blocks(Viewport viewport) {
+        Gdx.app.debug(TAG, "Blocks(Viewport)");
         this.viewport = viewport;
         batch = new SpriteBatch();
         blockTextures = new Array<Texture>();
@@ -35,6 +36,7 @@ public class Blocks extends Constants {
     }
 
     public void init() {
+        Gdx.app.debug(TAG, "init()");
         scrollPosition = 0.0f;
         worldWidth = (int)viewport.getWorldWidth();
 

@@ -48,10 +48,6 @@ public class OptionsScreen extends InputAdapter implements Screen {
     Player player;
     Balls balls;
 
-    int lives = Constants.INITIAL_LIVES;
-    int score = 0;
-    int streak = 0;
-
     public OptionsScreen(OutbreakGame game) {
         this.game = game;
         gameBatch = new SpriteBatch();
@@ -105,12 +101,18 @@ public class OptionsScreen extends InputAdapter implements Screen {
         player = new Player(actionViewport);
         balls = new Balls(actionViewport);
 
+        starScape.init();
+        debrisLayer.init();
+        blocks.init("OptionsScreen");
+        player.init("OptionsScreen");
+        balls.init();
+
         Gdx.input.setInputProcessor(this);
     }
 
     @Override
     public void hide() {
-        renderer.dispose();
+
     }
 
     @Override
@@ -126,12 +128,6 @@ public class OptionsScreen extends InputAdapter implements Screen {
     @Override
     public void resize(int width, int height) {
         actionViewport.update(width, height, true);
-
-        starScape.init();
-        debrisLayer.init();
-        blocks.init("OptionsScreen");
-        player.init("OptionsScreen");
-        balls.init();
     }
 
     @Override

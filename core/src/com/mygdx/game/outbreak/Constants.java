@@ -16,7 +16,7 @@ public class Constants {
 
     /* WORLD & HUD */
     public static final String GAME_TITLE = "PARALLAX-OUTBREAK";
-    public static final String GAME_INSTRUCTIONS = "Hello and welcome to my first arcade game. I hope you enjoy the ride.\nHit space to start a new game.";
+    public static final String GAME_INSTRUCTIONS = "Hello and welcome to my awesome game. I hope you enjoy the ride.\nHit space to start a new game.";
     public static final float WORLD_SIZE = 100.0f;
     public static final Color BACKGROUND_COLOR = Color.BLACK;
     public static final float HUD_HEIGHT = 7f;

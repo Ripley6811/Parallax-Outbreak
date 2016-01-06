@@ -60,11 +60,9 @@ public class Balls {
     }
 
     public boolean allDead() {
-        Gdx.app.debug(TAG, "Number of Balls: " + balls.size);
         for (SingleBall ball: balls) {
             if (!ball.isDead) return false;
         }
-        Gdx.app.debug(TAG, "Balls all dead!!!!!");
         return true;
     }
 

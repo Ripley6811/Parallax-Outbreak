@@ -45,6 +45,7 @@ public class GameScreen extends InputAdapter implements Screen {
     int streak = 0;
 
     public GameScreen(OutbreakGame game) {
+        Gdx.app.debug(TAG, "GameScreen(OutbreakGame)");
         this.game = game;
         gameBatch = new SpriteBatch();
         fontRenderer = new SpriteBatch();
@@ -58,6 +59,7 @@ public class GameScreen extends InputAdapter implements Screen {
     }
 
     public void init() {
+        Gdx.app.debug(TAG, "init()");
         scrollPosition = Constants.WORLD_SIZE;
         scrollVelocity = 0.0f;
         scrollAcceleration = 0.0f;
@@ -74,6 +76,10 @@ public class GameScreen extends InputAdapter implements Screen {
 
     @Override
     public void show() {
+        Gdx.app.debug(TAG, "show()");
+        scrollPosition = Constants.WORLD_SIZE;
+        scrollVelocity = 0.0f;
+        scrollAcceleration = 0.0f;
 
         starScape = new StarScape(actionViewport);
         debrisLayer = new DebrisLayer(actionViewport);
@@ -92,7 +98,7 @@ public class GameScreen extends InputAdapter implements Screen {
 
     @Override
     public void hide() {
-        renderer.dispose();
+
     }
 
     @Override
@@ -112,6 +118,7 @@ public class GameScreen extends InputAdapter implements Screen {
 
     @Override
     public void dispose() {
+        Gdx.app.debug(TAG, "dispose()");
         renderer.dispose();
         gameBatch.dispose();
         font.dispose();
@@ -164,16 +171,20 @@ public class GameScreen extends InputAdapter implements Screen {
 
     @Override
     public boolean keyDown(int keycode) {
+        Gdx.app.log(TAG, "keyDown(" + keycode + ") - " + super.keyDown(keycode));
         // TODO: Also add touch ball launching for Android
         if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
             balls.setFree(player.velocity);
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
+            game.gotoOptionsScreen();
         }
         return super.keyDown(keycode);
     }
 
     @Override
     public void render(float delta) {
-
+        Gdx.app.debug(TAG, "render(float)");
         updateScroll(delta);
 
         // TODO: Test game a lot to see if collisions look correct.
