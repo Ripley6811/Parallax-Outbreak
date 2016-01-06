@@ -67,6 +67,12 @@ public class GameScreen extends InputAdapter implements Screen {
                 Constants.WORLD_SIZE, Constants.WORLD_SIZE);
         actionViewport.apply(true);
 
+        starScape = new StarScape(actionViewport);
+        debrisLayer = new DebrisLayer(actionViewport);
+        blocks = new Blocks(actionViewport);
+        player = new Player(actionViewport);
+        balls = new Balls(actionViewport);
+
         renderer = new ShapeRenderer();
         renderer.setAutoShapeType(true);
         renderer.setProjectionMatrix(actionViewport.getCamera().combined);
@@ -80,12 +86,6 @@ public class GameScreen extends InputAdapter implements Screen {
         scrollPosition = Constants.WORLD_SIZE;
         scrollVelocity = 0.0f;
         scrollAcceleration = 0.0f;
-
-        starScape = new StarScape(actionViewport);
-        debrisLayer = new DebrisLayer(actionViewport);
-        blocks = new Blocks(actionViewport);
-        player = new Player(actionViewport);
-        balls = new Balls(actionViewport);
 
         starScape.init();
         debrisLayer.init();
@@ -184,7 +184,6 @@ public class GameScreen extends InputAdapter implements Screen {
 
     @Override
     public void render(float delta) {
-        Gdx.app.debug(TAG, "render(float)");
         updateScroll(delta);
 
         // TODO: Test game a lot to see if collisions look correct.

@@ -23,12 +23,12 @@ public class Balls {
         this.viewport = viewport;
         nBalls = 1;
         balls = new Array<SingleBall>(0);
-        init();
     }
 
     public void init() {
         scrollVelocity = 0.0f;
         worldWidth = (int)viewport.getWorldWidth();
+        resetBalls();
     }
 
     /**
@@ -100,11 +100,11 @@ public class Balls {
         return collisionCount;
     }
 
-    public void setVelocity(int ball_number, float newVx, float newVy) {
-        if (ball_number < nBalls) {
-            balls.get(ball_number).velocity.set(newVx, newVy);
-        }
-    }
+//    public void setVelocity(int ball_number, float newVx, float newVy) {
+//        if (ball_number < nBalls) {
+//            balls.get(ball_number).velocity.set(newVx, newVy);
+//        }
+//    }
 
     public void render(ShapeRenderer renderer){
         for (int i=0; i < nBalls; i++){

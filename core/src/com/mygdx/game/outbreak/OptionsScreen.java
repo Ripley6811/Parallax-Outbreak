@@ -69,6 +69,12 @@ public class OptionsScreen extends InputAdapter implements Screen {
                 Constants.WORLD_SIZE, Constants.WORLD_SIZE);
         actionViewport.apply(true);
 
+        starScape = new StarScape(actionViewport);
+        debrisLayer = new DebrisLayer(actionViewport);
+        blocks = new Blocks(actionViewport);
+        player = new Player(actionViewport);
+        balls = new Balls(actionViewport);
+
         renderer = new ShapeRenderer();
         renderer.setAutoShapeType(true);
         renderer.setProjectionMatrix(actionViewport.getCamera().combined);
@@ -94,12 +100,6 @@ public class OptionsScreen extends InputAdapter implements Screen {
 
     @Override
     public void show() {
-
-        starScape = new StarScape(actionViewport);
-        debrisLayer = new DebrisLayer(actionViewport);
-        blocks = new Blocks(actionViewport);
-        player = new Player(actionViewport);
-        balls = new Balls(actionViewport);
 
         starScape.init();
         debrisLayer.init();
@@ -180,7 +180,7 @@ public class OptionsScreen extends InputAdapter implements Screen {
         Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         renderer.begin(ShapeRenderer.ShapeType.Filled);
-        renderer.setColor(0f, 0f, 0f, 0.5f);
+        renderer.setColor(0f, 0f, 0f, 0.3f);
         renderer.rect(0f, 0f, Constants.WORLD_SIZE, Constants.WORLD_SIZE);
         renderer.end();
         Gdx.gl.glDisable(GL20.GL_BLEND);
