@@ -28,8 +28,10 @@ public class Blocks extends Constants {
     Array<SingleBlock> blocks;
     Array<Texture> blockTextures;
 
+    int[] LEVEL_LAYOUT;
+
     public Blocks(OutbreakGame game, Viewport viewport) {
-        Gdx.app.debug(TAG, "Blocks(Viewport)");
+        Gdx.app.debug(TAG, "Blocks(OutbreakGame, Viewport)");
         this.game = game;
         this.viewport = viewport;
         batch = new SpriteBatch();
@@ -37,20 +39,19 @@ public class Blocks extends Constants {
         for (int i=0; i<=4; i++) {
             blockTextures.add(new Texture(createBlock(i)));
         }
-//        init();
     }
 
-    public void init() {
-        Gdx.app.debug(TAG, "init()");
+    public void init(int level) {
+        Gdx.app.debug(TAG, "init(int)");
         scrollPosition = 0.0f;
         worldWidth = (int)viewport.getWorldWidth();
-
-        int nCols = Levels.L3_COLS;
+        LEVEL_LAYOUT = Levels.LEVEL_LAYOUTS[level];
+        int nCols = Levels.LEVEL_WIDTH;
         int rowWidth = (int)(nCols * (BLOCK_WIDTH + BLOCK_SPACING) - BLOCK_SPACING);
         int xOffset = (worldWidth - rowWidth) / 2;
         blocks = new Array<SingleBlock>();
-        for (int i = 0; i < Levels.L3.length; i++) {
-            int strength = Levels.L3[i];
+        for (int i = 0; i < LEVEL_LAYOUT.length; i++) {
+            int strength = LEVEL_LAYOUT[i];
             int row = i / nCols;
             int col = i % nCols;
             float x = col * (BLOCK_WIDTH + BLOCK_SPACING);
@@ -66,12 +67,12 @@ public class Blocks extends Constants {
         scrollPosition = 0.0f;
         worldWidth = (int)viewport.getWorldWidth();
 
-        int nCols = Levels.L0_COLS;
+        int nCols = Levels.LEVEL_WIDTH;
         int rowWidth = (int)(nCols * (BLOCK_WIDTH + BLOCK_SPACING) - BLOCK_SPACING);
         int xOffset = (worldWidth - rowWidth) / 2;
         blocks = new Array<SingleBlock>();
-        for (int i = 0; i < Levels.L0.length; i++) {
-            int strength = Levels.L0[i];
+        for (int i = 0; i < Levels.SPLASH.length; i++) {
+            int strength = Levels.SPLASH[i];
             int row = i / nCols;
             int col = i % nCols;
             float x = col * (BLOCK_WIDTH + BLOCK_SPACING);
@@ -89,12 +90,19 @@ public class Blocks extends Constants {
             }
         }
         this.scrollPosition = scrollPosition;
+    }
 
+    public boolean allBlocksDestroyed() {
+        Gdx.app.log(TAG, "Blocks array size: " + blocks.size);
+        for (SingleBlock block: blocks) {
+            if (block.getStrength() > 0) return false;
+        }
+        return true;
     }
 
     public void regenerateBlock() {
         Random random = new Random();
-        int i = random.nextInt(Levels.L3.length);
+        int i = random.nextInt(LEVEL_LAYOUT.length);
         int currStrength = blocks.get(i).getStrength();
         if (currStrength < BLOCK_MAX_STRENGTH) {
             blocks.get(i).setStrength(currStrength + 1);

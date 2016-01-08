@@ -102,7 +102,7 @@ public class Balls {
             if (!ball.isDead) {
                 if (numberAlive < Constants.MAX_NUMBER_BALLS) {
                     SingleBall newBall = new SingleBall(ball.position.x, ball.position.y);
-                    newBall.init(game.difficulty);
+                    newBall.init(game.getDifficulty());
                     newBall.onPlayer = false;
                     newBall.velocity = new Vector2(ball.velocity);
                     ball.velocity.rotate(-Constants.BALL_SPLIT_ANGLE / 2f);

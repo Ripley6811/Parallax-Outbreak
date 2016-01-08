@@ -8,7 +8,9 @@ public class OutbreakGame extends Game {
 
 	OptionsScreen optionsScreen;
 	GameScreen gameScreen;
-	int difficulty = 0;
+	EndScreen endScreen;
+	private int difficulty = 0;
+	private int lastScore = 0;
 	boolean blocksRegenerate = false;
 
 	@Override
@@ -16,6 +18,7 @@ public class OutbreakGame extends Game {
 		Gdx.app.setLogLevel(Constants.LOG_LEVEL);
 		optionsScreen = new OptionsScreen(this);
 		gameScreen = new GameScreen(this);
+		endScreen = new EndScreen(this);
 		setScreen(optionsScreen);
 	}
 
@@ -27,6 +30,11 @@ public class OutbreakGame extends Game {
 	public void gotoGameScreen() {
 		Gdx.app.log(TAG, "Switching to game screen");
 		setScreen(gameScreen);
+	}
+
+	public void gotoEndScreen() {
+		Gdx.app.log(TAG, "Switching to end screen");
+		setScreen(endScreen);
 	}
 
 	public void setDifficulty(int difficulty) {
@@ -43,5 +51,13 @@ public class OutbreakGame extends Game {
 
 	public void setRegenerate(boolean onOff) {
 		this.blocksRegenerate = onOff;
+	}
+
+	public void setLastScore(int score) {
+		this.lastScore = score;
+	}
+
+	public int getLastScore() {
+		return this.lastScore;
 	}
 }

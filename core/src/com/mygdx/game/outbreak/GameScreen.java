@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
 
@@ -20,7 +21,6 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 public class GameScreen extends InputAdapter implements Screen {
     private static final String TAG = GameScreen.class.getName();
 
-    // TODO: Add score and lives at top
     OutbreakGame game;
 
     ShapeRenderer renderer;
@@ -48,6 +48,9 @@ public class GameScreen extends InputAdapter implements Screen {
     public GameScreen(OutbreakGame game) {
         Gdx.app.debug(TAG, "GameScreen(OutbreakGame)");
         this.game = game;
+        actionViewport = new FitViewport(
+                Constants.WORLD_SIZE, Constants.WORLD_SIZE);
+        actionViewport.apply(true);
         gameBatch = new SpriteBatch();
         fontRenderer = new SpriteBatch();
         scoreboard = new Texture(createScoreboardPixmap());
@@ -56,6 +59,17 @@ public class GameScreen extends InputAdapter implements Screen {
         font.getData().setScale(Constants.FONT_SCALE);
         font.getRegion().getTexture().setFilter(
                 Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+
+        streak = Constants.BALL_STREAK_DOUBLER[game.getDifficulty()];
+        lives = Constants.INITIAL_LIVES;
+        level = 0;
+        score = 0;
+
+        starScape = new StarScape(actionViewport);
+        debrisLayer = new DebrisLayer(actionViewport);
+        blocks = new Blocks(game, actionViewport);
+        player = new Player(actionViewport);
+        balls = new Balls(game, actionViewport);
         init();
     }
 
@@ -64,21 +78,18 @@ public class GameScreen extends InputAdapter implements Screen {
         scrollPosition = Constants.WORLD_SIZE;
         scrollVelocity = 0.0f;
         scrollAcceleration = 0.0f;
-        actionViewport = new FitViewport(
-                Constants.WORLD_SIZE, Constants.WORLD_SIZE);
-        actionViewport.apply(true);
-
-        starScape = new StarScape(actionViewport);
-        debrisLayer = new DebrisLayer(actionViewport);
-        blocks = new Blocks(game, actionViewport);
-        player = new Player(actionViewport);
-        balls = new Balls(game, actionViewport);
 
         renderer = new ShapeRenderer();
         renderer.setAutoShapeType(true);
         renderer.setProjectionMatrix(actionViewport.getCamera().combined);
         gameBatch.setProjectionMatrix(actionViewport.getCamera().combined);
         Gdx.app.log(TAG, "Default SpriteBatch projection matrix for font rendering:\n" + fontRenderer.getProjectionMatrix());
+
+        starScape.init();
+        debrisLayer.init();
+        blocks.init(level);
+        player.init();
+        balls.init();
     }
 
     @Override
@@ -88,14 +99,11 @@ public class GameScreen extends InputAdapter implements Screen {
         scrollVelocity = 0.0f;
         scrollAcceleration = 0.0f;
 
-        Gdx.app.log(TAG, "Difficulty selected: " + Constants.DIFFICULTY.get(game.difficulty));
-        streak = Constants.BALL_STREAK_DOUBLER[game.difficulty];
-        lives = Constants.INITIAL_LIVES;
-        level = 1;
-        score = 0;
+        Gdx.app.log(TAG, "Difficulty selected: " + Constants.DIFFICULTY.get(game.getDifficulty()));
+
         starScape.init();
         debrisLayer.init();
-        blocks.init();
+        blocks.init(level);
         player.init();
         balls.init();
 
@@ -104,7 +112,10 @@ public class GameScreen extends InputAdapter implements Screen {
 
     @Override
     public void hide() {
-
+        streak = Constants.BALL_STREAK_DOUBLER[game.getDifficulty()];
+        lives = Constants.INITIAL_LIVES;
+        level = 1;
+        score = 0;
     }
 
     @Override
@@ -177,8 +188,6 @@ public class GameScreen extends InputAdapter implements Screen {
 
     @Override
     public boolean keyDown(int keycode) {
-        Gdx.app.log(TAG, "keyDown(" + keycode + ") - " + super.keyDown(keycode));
-        // TODO: Also add touch ball launching for Android
         if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
             balls.setFree(player.velocity);
         }
@@ -189,10 +198,22 @@ public class GameScreen extends InputAdapter implements Screen {
     }
 
     @Override
+    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        balls.setFree(player.velocity);
+        return super.touchDown(screenX, screenY, pointer, button);
+    }
+
+    @Override
     public void render(float delta) {
+        if (blocks.allBlocksDestroyed()) {
+            Gdx.app.log(TAG, "All blocks destroyed. Loading next level");
+            level++;
+            init();
+            return;
+        }
+
         updateScroll(delta);
 
-        // TODO: Test game a lot to see if collisions look correct.
         checkCollisions();
 
         starScape.update(delta, scrollVelocity);
@@ -201,11 +222,14 @@ public class GameScreen extends InputAdapter implements Screen {
         player.update(delta, scrollVelocity);
         balls.update(delta, scrollVelocity, player.position);
         if (balls.allDead()) {
-            lives--;
-            streak = Constants.BALL_STREAK_DOUBLER[game.difficulty];
+            if (lives-- == 0) {
+                game.setLastScore(score);
+                game.gotoEndScreen();
+            }
+            streak = Constants.BALL_STREAK_DOUBLER[game.getDifficulty()];
             balls.resetBalls();
         } else if (streak <= 0) {
-            streak = Constants.BALL_STREAK_DOUBLER[game.difficulty];
+            streak = Constants.BALL_STREAK_DOUBLER[game.getDifficulty()];
             balls.splitBalls();
         }
 
