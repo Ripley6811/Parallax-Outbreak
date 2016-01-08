@@ -99,8 +99,11 @@ public class Button extends Rectangle {
         normalButton = new Texture(pixmap);
 
         // Outer-ring for mouseover button
-        pixmap.drawRectangle(0, 0, W, H);
-        pixmap.drawRectangle(1, 1, W-2, H-2);
+        pixmap.fillRectangle(0, 0, W, H);
+        pixmap.setColor(Color.BLACK);
+        pixmap.fillRectangle(4, 4, W - 8, H - 8);
+        pixmap.setColor(baseColor);
+        pixmap.fillRectangle(8, 8, W-16, H-16);
         highlightButton = new Texture(pixmap);
     }
 }

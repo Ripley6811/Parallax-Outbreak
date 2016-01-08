@@ -2,6 +2,7 @@ package com.mygdx.game.outbreak;
 
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.utils.Array;
 
 /**
  * Created by Jay on 12/18/2015.
@@ -16,11 +17,13 @@ public class Constants {
 
     /* WORLD & HUD */
     public static final String GAME_TITLE = "PARALLAX-OUTBREAK";
-    public static final String GAME_INSTRUCTIONS = "Hello and welcome to my awesome game. I hope you enjoy the ride.\nHit space to start a new game.";
+    public static final String GAME_INSTRUCTIONS = "Hello and welcome to my awesome game. I hope you enjoy the ride.\nSelect a difficulty to start playing.";
     public static final float WORLD_SIZE = 100.0f;
     public static final Color BACKGROUND_COLOR = Color.BLACK;
     public static final float HUD_HEIGHT = 7f;
     public static final float FONT_SCALE = 1f;
+    public static final String[] DIFFICULTY_NAMES = {"Easy", "Hard", "Insane!"};
+    public static final Array DIFFICULTY = new Array(DIFFICULTY_NAMES);
 
     /* PLAYER PADDLE */
     public static final float PLAYER_Y_POSITION = 5.0f;
@@ -81,7 +84,7 @@ public class Constants {
     public static final float ABSORB_VELOCITY_MULTIPLIER = 0.2f;
 
     /* BUTTONS */
-    public static final float BUTTON_WIDTH = 240f;
-    public static final float BUTTON_HEIGHT = 50f;
+    public static final float BUTTON_WIDTH = 200f;
+    public static final float BUTTON_HEIGHT = 40f;
     public static final Color BUTTON_COLOR = Color.YELLOW;
 }

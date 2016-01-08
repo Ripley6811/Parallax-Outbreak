@@ -86,9 +86,16 @@ public class OptionsScreen extends InputAdapter implements Screen {
         bgRenderer.translate(1f, -8f, 0);
 
         // Initialize buttons
-        buttons.add(new Button("Easy", (650 - Constants.BUTTON_WIDTH) / 2f, 10, Constants.BUTTON_WIDTH, Constants.BUTTON_HEIGHT));
-        buttons.add(new Button("Hard", (650 - Constants.BUTTON_WIDTH) / 2f, 62, Constants.BUTTON_WIDTH, Constants.BUTTON_HEIGHT));
-        buttons.add(new Button("Insane!", (650 - Constants.BUTTON_WIDTH) / 2f, 114, Constants.BUTTON_WIDTH, Constants.BUTTON_HEIGHT));
+        int buttonY = 10;
+        int buttonSpacing = 1;
+        for (String diff: Constants.DIFFICULTY_NAMES) {
+            buttons.add(
+                    new Button(diff,
+                            (650 - Constants.BUTTON_WIDTH) / 2f, buttonY,
+                            Constants.BUTTON_WIDTH, Constants.BUTTON_HEIGHT)
+            );
+            buttonY += buttonSpacing + Constants.BUTTON_HEIGHT;
+        }
     }
 
     @Override
@@ -155,6 +162,17 @@ public class OptionsScreen extends InputAdapter implements Screen {
             game.gotoGameScreen();
         }
         return super.keyDown(keycode);
+    }
+
+    @Override
+    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        for (Button b: buttons) {
+            if (b.isMouseover()) {
+                game.setDifficulty(b.getText());
+                game.gotoGameScreen();
+            }
+        }
+        return super.touchDown(screenX, screenY, pointer, button);
     }
 
     @Override

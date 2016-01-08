@@ -8,6 +8,7 @@ public class OutbreakGame extends Game {
 
 	OptionsScreen optionsScreen;
 	GameScreen gameScreen;
+	int difficulty;
 
 	@Override
 	public void create () {
@@ -25,5 +26,17 @@ public class OutbreakGame extends Game {
 	public void gotoGameScreen() {
 		Gdx.app.log(TAG, "Switching to game screen");
 		setScreen(gameScreen);
+	}
+
+	public void setDifficulty(int difficulty) {
+		this.difficulty = difficulty;
+	}
+
+	public void setDifficulty(String difficulty) {
+		this.difficulty = Constants.DIFFICULTY.indexOf(difficulty, false);
+	}
+
+	public int getDifficulty() {
+		return this.difficulty;
 	}
 }

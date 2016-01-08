@@ -87,6 +87,7 @@ public class GameScreen extends InputAdapter implements Screen {
         scrollVelocity = 0.0f;
         scrollAcceleration = 0.0f;
 
+        Gdx.app.log(TAG, "Difficulty selected: " + Constants.DIFFICULTY.get(game.difficulty));
         starScape.init();
         debrisLayer.init();
         blocks.init();
