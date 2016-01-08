@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
 /**
@@ -21,20 +22,11 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 public class OptionsScreen extends InputAdapter implements Screen {
     private static final String TAG = OptionsScreen.class.getName();
 
-    // TODO: Use existing images to create initial screen.
-    /**
-     * Rotate 20 degrees and have paddle flying towards right ascending and
-     * between blocks. Use stars and nebula images.
-      */
-
-
-    // TODO: Add score and lives at top
     OutbreakGame game;
 
-    ShapeRenderer renderer;
     FitViewport actionViewport;
-    SpriteBatch gameBatch;
-    SpriteBatch fontRenderer;
+    ShapeRenderer bgRenderer;  // Background renderer
+    SpriteBatch fgBatch; // Foreground batch renderer
     Texture scoreboard;
     private BitmapFont font;
 
@@ -48,10 +40,11 @@ public class OptionsScreen extends InputAdapter implements Screen {
     Player player;
     Balls balls;
 
+    Array<Button> buttons;
+
     public OptionsScreen(OutbreakGame game) {
         this.game = game;
-        gameBatch = new SpriteBatch();
-        fontRenderer = new SpriteBatch();
+        fgBatch = new SpriteBatch();
         scoreboard = new Texture(createScoreboardPixmap());
         font = new BitmapFont();
         font.setColor(Color.YELLOW);
@@ -74,28 +67,28 @@ public class OptionsScreen extends InputAdapter implements Screen {
         blocks = new Blocks(actionViewport);
         player = new Player(actionViewport);
         balls = new Balls(actionViewport);
+        buttons = new Array<Button>();
 
-        renderer = new ShapeRenderer();
-        renderer.setAutoShapeType(true);
-        renderer.setProjectionMatrix(actionViewport.getCamera().combined);
-        gameBatch.setProjectionMatrix(actionViewport.getCamera().combined);
-        Gdx.app.log(TAG, "Default SpriteBatch projection matrix for font rendering:\n" + fontRenderer.getProjectionMatrix());
+        // Set up background renderer
+        bgRenderer = new ShapeRenderer();
+        bgRenderer.setAutoShapeType(true);
+        bgRenderer.setProjectionMatrix(actionViewport.getCamera().combined);
 
-
-//        double r = -Math.PI/20.0;
-//        float[] mArray = {(float)Math.cos(r), (float)-Math.sin(r), 0, 0,
-//                (float)(Math.sin(r)), (float)Math.cos(r), 0, 0,
-//                0, 0, 1, 0,
-//                0, 0, 0, 1};
-//        renderer.setTransformMatrix(new Matrix4(mArray));
+        // Change projection matrix for background animation
         float WORLD_HALF = Constants.WORLD_SIZE / 2;
-        renderer.identity();
+        bgRenderer.identity();
         float scale = 4f;
-        Vector2 trans = new Vector2(scale*(-WORLD_HALF + Constants.PLAYER_WIDTH), -Constants.PLAYER_Y_POSITION - Constants.PLAYER_HEIGHT);
-        renderer.translate(trans.x, trans.y, 0);
-        renderer.rotate(0f, 0f, 1f, 10f);
-        renderer.scale(scale,scale,1f);
-        renderer.translate(1f, -8f, 0);
+        float tx = scale*(-WORLD_HALF + Constants.PLAYER_WIDTH);
+        float ty = -Constants.PLAYER_Y_POSITION - Constants.PLAYER_HEIGHT;
+        bgRenderer.translate(tx, ty, 0);
+        bgRenderer.rotate(0f, 0f, 1f, 10f);
+        bgRenderer.scale(scale, scale, 1f);
+        bgRenderer.translate(1f, -8f, 0);
+
+        // Initialize buttons
+        buttons.add(new Button("Easy", (650 - Constants.BUTTON_WIDTH) / 2f, 10, Constants.BUTTON_WIDTH, Constants.BUTTON_HEIGHT));
+        buttons.add(new Button("Hard", (650 - Constants.BUTTON_WIDTH) / 2f, 62, Constants.BUTTON_WIDTH, Constants.BUTTON_HEIGHT));
+        buttons.add(new Button("Insane!", (650 - Constants.BUTTON_WIDTH) / 2f, 114, Constants.BUTTON_WIDTH, Constants.BUTTON_HEIGHT));
     }
 
     @Override
@@ -132,8 +125,7 @@ public class OptionsScreen extends InputAdapter implements Screen {
 
     @Override
     public void dispose() {
-        renderer.dispose();
-        gameBatch.dispose();
+        bgRenderer.dispose();
         font.dispose();
     }
 
@@ -145,6 +137,15 @@ public class OptionsScreen extends InputAdapter implements Screen {
         if (scrollPosition < 0) {
             scrollPosition += Constants.WORLD_SIZE;
         }
+    }
+
+    @Override
+    public boolean mouseMoved(int screenX, int screenY) {
+        Vector2 pt = actionViewport.unproject(new Vector2(screenX, screenY));
+        // Scale the pt to "fgBatch" coordinate system.
+        pt.scl(6.5f, 5f);
+        for (Button b: buttons) b.mouseMoved(pt);
+        return super.mouseMoved(screenX, screenY);
     }
 
     @Override
@@ -171,27 +172,32 @@ public class OptionsScreen extends InputAdapter implements Screen {
         Gdx.gl.glClearColor(BG_COLOR.r, BG_COLOR.g, BG_COLOR.b, 1);
         Gdx.gl20.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        starScape.render(renderer);
-        debrisLayer.render(renderer);
-        blocks.render(renderer);
-        player.render(renderer);
-        balls.render(renderer);
+        starScape.render(bgRenderer);
+        debrisLayer.render(bgRenderer);
+        blocks.render(bgRenderer);
+        player.render(bgRenderer);
+        balls.render(bgRenderer);
 
         Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-        renderer.begin(ShapeRenderer.ShapeType.Filled);
-        renderer.setColor(0f, 0f, 0f, 0.3f);
-        renderer.rect(0f, 0f, Constants.WORLD_SIZE, Constants.WORLD_SIZE);
-        renderer.end();
+        bgRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        bgRenderer.setColor(0f, 0f, 0f, 0.3f);
+        bgRenderer.rect(0f, 0f, Constants.WORLD_SIZE, Constants.WORLD_SIZE);
+        bgRenderer.end();
         Gdx.gl.glDisable(GL20.GL_BLEND);
 
-        fontRenderer.begin(); // 650 x 500
+        fgBatch.begin(); // 650 x 500
         font.getData().setScale(2.5f);
-        font.draw(fontRenderer, Constants.GAME_TITLE, 0f, 420f, 650f, Align.center, false);
+        font.draw(fgBatch, Constants.GAME_TITLE,
+                0f, 420f, 650f, Align.center, false);
         font.getData().setScale(1.5f);
-        String instructions = Constants.GAME_INSTRUCTIONS;
-        font.draw(fontRenderer, instructions, 75f, 350f, 500f, Align.center, true);
-        fontRenderer.end();
+        font.draw(fgBatch, Constants.GAME_INSTRUCTIONS,
+                75f, 350f, 500f, Align.center, true);
+        fgBatch.end();
+
+        for (Button b: buttons) {
+            b.render(fgBatch);
+        }
     }
 
     private Pixmap createScoreboardPixmap() {

@@ -79,4 +79,9 @@ public class Constants {
     public static final float ABSORB_PADDLE_ANGLE = 0.5f; // Alpha blending
     // Percentage of paddle velocity to add to ball
     public static final float ABSORB_VELOCITY_MULTIPLIER = 0.2f;
+
+    /* BUTTONS */
+    public static final float BUTTON_WIDTH = 240f;
+    public static final float BUTTON_HEIGHT = 50f;
+    public static final Color BUTTON_COLOR = Color.YELLOW;
 }
