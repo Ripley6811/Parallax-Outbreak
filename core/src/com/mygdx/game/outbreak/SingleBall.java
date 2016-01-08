@@ -28,7 +28,6 @@ public class SingleBall extends Constants {
     Array<Vector2> trail;
 
     Array<SingleBlock> collisions;
-    boolean willCollide = false;
     Vector2 normalizedRotationVector = new Vector2();
 
     public SingleBall(float x, float y) {
