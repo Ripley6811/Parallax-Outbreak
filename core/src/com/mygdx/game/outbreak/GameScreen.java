@@ -51,6 +51,9 @@ public class GameScreen extends InputAdapter implements Screen {
         actionViewport = new FitViewport(
                 Constants.WORLD_SIZE, Constants.WORLD_SIZE);
         actionViewport.apply(true);
+        renderer = new ShapeRenderer();
+        renderer.setAutoShapeType(true);
+        renderer.setProjectionMatrix(actionViewport.getCamera().combined);
         gameBatch = new SpriteBatch();
         fontRenderer = new SpriteBatch();
         scoreboard = new Texture(createScoreboardPixmap());
@@ -79,9 +82,6 @@ public class GameScreen extends InputAdapter implements Screen {
         scrollVelocity = 0.0f;
         scrollAcceleration = 0.0f;
 
-        renderer = new ShapeRenderer();
-        renderer.setAutoShapeType(true);
-        renderer.setProjectionMatrix(actionViewport.getCamera().combined);
         gameBatch.setProjectionMatrix(actionViewport.getCamera().combined);
         Gdx.app.log(TAG, "Default SpriteBatch projection matrix for font rendering:\n" + fontRenderer.getProjectionMatrix());
 

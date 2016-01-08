@@ -135,12 +135,6 @@ public class Balls {
         return collisionCount;
     }
 
-//    public void setVelocity(int ball_number, float newVx, float newVy) {
-//        if (ball_number < nBalls) {
-//            balls.get(ball_number).velocity.set(newVx, newVy);
-//        }
-//    }
-
     public void render(ShapeRenderer renderer){
         for (SingleBall ball: balls) {
             if (!ball.isDead) {

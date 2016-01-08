@@ -93,7 +93,6 @@ public class Blocks extends Constants {
     }
 
     public boolean allBlocksDestroyed() {
-        Gdx.app.log(TAG, "Blocks array size: " + blocks.size);
         for (SingleBlock block: blocks) {
             if (block.getStrength() > 0) return false;
         }
