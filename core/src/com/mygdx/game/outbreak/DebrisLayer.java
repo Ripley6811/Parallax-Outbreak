@@ -25,7 +25,7 @@ public class DebrisLayer {
     public DebrisLayer(Viewport viewport) {
         this.viewport = viewport;
         batch = new SpriteBatch();
-        texture = new Texture(Gdx.files.internal("nebula1.png"));
+        texture = new Texture(Gdx.files.internal("nebula2.png"));
         debrisViewWidth = texture.getWidth();
         debrisViewHeight = texture.getHeight();
 
