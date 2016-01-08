@@ -69,7 +69,7 @@ public class Constants {
     public static final float BALL_RADIUS = 1.0f;
     public static final int BALL_SEGMENTS = 50;
     // Max velocity for various difficulty levels
-    public static final float[] BALL_MAX_VELOCITY = {0.7f, 0.8f, 0.9f};
+    public static final float[] BALL_MAX_VELOCITY = {0.7f, 0.8f, 0.95f};
     public static final float BALL_MIN_VELOCITY = 0.6f;
     public static final float BALL_GRAVITY = 0.02f;
     // Adjust ball launch velocity relative to player velocity
@@ -77,7 +77,7 @@ public class Constants {
     // Number of previous positions to display in trail
     public static final float BALL_TRAIL_LENGTH = 20;
     public static final int MAX_NUMBER_BALLS = 10;
-    public static final int[] BALL_STREAK_DOUBLER = {20, 35, 50};
+    public static final int[] BALL_STREAK_DOUBLER = {20, 30, 40};
     public static final float BALL_SPLIT_ANGLE = 6f;
 
     /* COLLISION */
