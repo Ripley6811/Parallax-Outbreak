@@ -41,7 +41,9 @@ public class GameScreen extends InputAdapter implements Screen {
     Balls balls;
 
     int score = 0;
-    int streak = 0;
+    int streak;
+    int lives;
+    int level;
 
     public GameScreen(OutbreakGame game) {
         Gdx.app.debug(TAG, "GameScreen(OutbreakGame)");
@@ -88,6 +90,9 @@ public class GameScreen extends InputAdapter implements Screen {
 
         Gdx.app.log(TAG, "Difficulty selected: " + Constants.DIFFICULTY.get(game.difficulty));
         streak = Constants.BALL_STREAK_DOUBLER[game.difficulty];
+        lives = Constants.INITIAL_LIVES;
+        level = 1;
+        score = 0;
         starScape.init();
         debrisLayer.init();
         blocks.init();
@@ -194,9 +199,11 @@ public class GameScreen extends InputAdapter implements Screen {
         debrisLayer.update(delta, scrollVelocity);
         blocks.update(delta, scrollPosition);
         player.update(delta, scrollVelocity);
-        boolean ballDied = balls.update(delta, scrollVelocity, player.position);
-        if (ballDied) {
+        balls.update(delta, scrollVelocity, player.position);
+        if (balls.allDead()) {
+            lives--;
             streak = Constants.BALL_STREAK_DOUBLER[game.difficulty];
+            balls.resetBalls();
         } else if (streak <= 0) {
             streak = Constants.BALL_STREAK_DOUBLER[game.difficulty];
             balls.splitBalls();
@@ -220,8 +227,10 @@ public class GameScreen extends InputAdapter implements Screen {
         gameBatch.end();
 
         fontRenderer.begin(); // 500 x 650
-        font.draw(fontRenderer, "SCORE: " + score, 10f, 470f);
-        font.draw(fontRenderer, "DOUBLING: " + streak + " more hits", 100f, 470f);
+        font.draw(fontRenderer, "LEVEL " + level, 10f, 470f);
+        font.draw(fontRenderer, "SCORE: " + score, 120f, 470f);
+        font.draw(fontRenderer, "BALL-SPLIT: " + streak + " more hits", 240f, 470f);
+        font.draw(fontRenderer, "LIVES: " + lives, 480f, 470f);
         fontRenderer.end();
     }
 

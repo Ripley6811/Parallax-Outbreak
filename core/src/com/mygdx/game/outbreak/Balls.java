@@ -40,9 +40,7 @@ public class Balls {
      */
     public boolean update(float delta, float scrollVelocity, Vector2 playerPosition){
         this.scrollVelocity = scrollVelocity;
-        if (allDead()) {
-            resetBalls();
-        }
+
         boolean ballDied = false;
 
         for (SingleBall ball: balls) {
