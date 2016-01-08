@@ -8,7 +8,8 @@ public class OutbreakGame extends Game {
 
 	OptionsScreen optionsScreen;
 	GameScreen gameScreen;
-	int difficulty;
+	int difficulty = 0;
+	boolean blocksRegenerate = false;
 
 	@Override
 	public void create () {
@@ -38,5 +39,9 @@ public class OutbreakGame extends Game {
 
 	public int getDifficulty() {
 		return this.difficulty;
+	}
+
+	public void setRegenerate(boolean onOff) {
+		this.blocksRegenerate = onOff;
 	}
 }

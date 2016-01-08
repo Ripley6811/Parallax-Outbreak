@@ -69,7 +69,7 @@ public class GameScreen extends InputAdapter implements Screen {
 
         starScape = new StarScape(actionViewport);
         debrisLayer = new DebrisLayer(actionViewport);
-        blocks = new Blocks(actionViewport);
+        blocks = new Blocks(game, actionViewport);
         player = new Player(actionViewport);
         balls = new Balls(game, actionViewport);
 

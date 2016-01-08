@@ -9,23 +9,28 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import java.util.Random;
+
 /**
  * Created by Jay on 12/23/2015.
  */
 public class Blocks extends Constants {
     private static final String TAG = Blocks.class.getName();
 
+    OutbreakGame game;
     Viewport viewport;
     SpriteBatch batch;
     float scrollPosition;
     int worldWidth;
+    float regenerateCountdown = Constants.BLOCK_REGENERATION_RATE;
 
     float VERTICAL_OFFSET = WORLD_SIZE - HUD_HEIGHT - BLOCK_HEIGHT - BLOCK_SPACING;
     Array<SingleBlock> blocks;
     Array<Texture> blockTextures;
 
-    public Blocks(Viewport viewport) {
+    public Blocks(OutbreakGame game, Viewport viewport) {
         Gdx.app.debug(TAG, "Blocks(Viewport)");
+        this.game = game;
         this.viewport = viewport;
         batch = new SpriteBatch();
         blockTextures = new Array<Texture>();
@@ -46,7 +51,6 @@ public class Blocks extends Constants {
         blocks = new Array<SingleBlock>();
         for (int i = 0; i < Levels.L3.length; i++) {
             int strength = Levels.L3[i];
-            if (strength == 0) continue;
             int row = i / nCols;
             int col = i % nCols;
             float x = col * (BLOCK_WIDTH + BLOCK_SPACING);
@@ -68,7 +72,6 @@ public class Blocks extends Constants {
         blocks = new Array<SingleBlock>();
         for (int i = 0; i < Levels.L0.length; i++) {
             int strength = Levels.L0[i];
-            if (strength == 0) continue;
             int row = i / nCols;
             int col = i % nCols;
             float x = col * (BLOCK_WIDTH + BLOCK_SPACING);
@@ -78,8 +81,27 @@ public class Blocks extends Constants {
     }
 
     public void update (float deltaTime, float scrollPosition) {
+        if (game.blocksRegenerate) {
+            regenerateCountdown -= deltaTime;
+            if (regenerateCountdown <= 0f) {
+                regenerateBlock();
+                regenerateCountdown = Constants.BLOCK_REGENERATION_RATE;
+            }
+        }
         this.scrollPosition = scrollPosition;
 
+    }
+
+    public void regenerateBlock() {
+        Random random = new Random();
+        int i = random.nextInt(Levels.L3.length);
+        int currStrength = blocks.get(i).getStrength();
+        if (currStrength < BLOCK_MAX_STRENGTH) {
+            blocks.get(i).setStrength(currStrength + 1);
+        } else {
+            // If block wasn't strengthen then shorten time to next regen.
+            regenerateCountdown /= 10f;
+        }
     }
 
     public void render(ShapeRenderer renderer) {

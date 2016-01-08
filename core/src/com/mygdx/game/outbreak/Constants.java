@@ -24,6 +24,7 @@ public class Constants {
     public static final float FONT_SCALE = 1f;
     public static final String[] DIFFICULTY_NAMES = {"Easy", "Hard", "Insane!"};
     public static final Array DIFFICULTY = new Array(DIFFICULTY_NAMES);
+    public static final float BLOCK_REGENERATION_RATE = 6f;
 
     /* PLAYER PADDLE */
     public static final float PLAYER_Y_POSITION = 5.0f;
@@ -58,6 +59,7 @@ public class Constants {
     public static final float BLOCK_WIDTH = 5.0f;
     public static final float BLOCK_HEIGHT = 3.0f;
     public static final float BLOCK_SPACING = 0.2f;
+    public static final int BLOCK_MAX_STRENGTH = 4;
     public static final int POINTS_PER_BLOCK = 2;
 
     /* LEVEL RANDOM SEEDS */
@@ -67,7 +69,7 @@ public class Constants {
     public static final float BALL_RADIUS = 1.0f;
     public static final int BALL_SEGMENTS = 50;
     // Max velocity for various difficulty levels
-    public static final float[] BALL_MAX_VELOCITY = {0.8f, 0.9f, 1f};
+    public static final float[] BALL_MAX_VELOCITY = {0.7f, 0.8f, 0.9f};
     public static final float BALL_MIN_VELOCITY = 0.6f;
     public static final float BALL_GRAVITY = 0.02f;
     // Adjust ball launch velocity relative to player velocity

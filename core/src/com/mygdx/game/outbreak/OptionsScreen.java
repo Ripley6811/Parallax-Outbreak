@@ -64,7 +64,7 @@ public class OptionsScreen extends InputAdapter implements Screen {
 
         starScape = new StarScape(actionViewport);
         debrisLayer = new DebrisLayer(actionViewport);
-        blocks = new Blocks(actionViewport);
+        blocks = new Blocks(game, actionViewport);
         player = new Player(actionViewport);
         balls = new Balls(game, actionViewport);
         buttons = new Array<Button>();
@@ -169,6 +169,11 @@ public class OptionsScreen extends InputAdapter implements Screen {
         for (Button b: buttons) {
             if (b.isMouseover()) {
                 game.setDifficulty(b.getText());
+                if (b.getText().equals(Constants.DIFFICULTY.peek())) {
+                    game.setRegenerate(true);
+                } else {
+                    game.setRegenerate(false);
+                }
                 game.gotoGameScreen();
             }
         }
