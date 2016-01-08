@@ -77,7 +77,8 @@ public class Constants {
     // Number of previous positions to display in trail
     public static final float BALL_TRAIL_LENGTH = 20;
     public static final int MAX_NUMBER_BALLS = 10;
-    public static final int STREAK_BALL_DOUBLER = 50;
+    public static final int[] BALL_STREAK_DOUBLER = {20, 35, 50};
+    public static final float BALL_SPLIT_ANGLE = 6f;
 
     /* COLLISION */
     // Precision (percent of velocity) in backtracking to the exact point of collision.

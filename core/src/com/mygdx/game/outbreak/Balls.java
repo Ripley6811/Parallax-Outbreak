@@ -17,13 +17,11 @@ public class Balls {
     float scrollVelocity;
     int worldWidth;
 
-    int nBalls;
     Array<SingleBall> balls;
 
     public Balls(OutbreakGame game, Viewport viewport) {
         this.game = game;
         this.viewport = viewport;
-        nBalls = 1;
         balls = new Array<SingleBall>(0);
     }
 
@@ -68,6 +66,14 @@ public class Balls {
         return true;
     }
 
+    public int numberAlive() {
+        int total = 0;
+        for (SingleBall ball: balls) {
+            if (!ball.isDead) total++;
+        }
+        return total;
+    }
+
     public void resetBalls() {
         balls.clear();
         SingleBall ball = new SingleBall(10, 10);
@@ -88,6 +94,33 @@ public class Balls {
             if (ball.checkCollision(player)) collisionCount += 1;
         }
         return collisionCount;
+    }
+
+    public void splitBalls() {
+        Gdx.app.log(TAG, "Splitting balls");
+        Array<SingleBall> newBalls = new Array<SingleBall>();
+        int numberAlive = numberAlive();
+        for (SingleBall ball: balls) {
+            if (!ball.isDead) {
+                if (numberAlive < Constants.MAX_NUMBER_BALLS) {
+                    SingleBall newBall = new SingleBall(ball.position.x, ball.position.y);
+                    newBall.init(game.difficulty);
+                    newBall.onPlayer = false;
+                    newBall.velocity = new Vector2(ball.velocity);
+                    ball.velocity.rotate(-Constants.BALL_SPLIT_ANGLE / 2f);
+                    newBall.velocity.rotate(Constants.BALL_SPLIT_ANGLE / 2f);
+                    newBalls.add(newBall);
+                    newBalls.add(ball);
+                    Gdx.app.log(TAG, "Made new ball: " + ball.velocity + " - " + newBall.velocity);
+                    numberAlive++;
+                } else {
+                    newBalls.add(ball);
+                }
+            }
+        }
+        balls.clear();
+        balls.addAll(newBalls);
+        Gdx.app.log(TAG, "Number of live balls: " + balls.size);
     }
 
     /**
@@ -111,8 +144,10 @@ public class Balls {
 //    }
 
     public void render(ShapeRenderer renderer){
-        for (int i=0; i < nBalls; i++){
-            balls.get(i).render(renderer);
+        for (SingleBall ball: balls) {
+            if (!ball.isDead) {
+                ball.render(renderer);
+            }
         }
     }
 }

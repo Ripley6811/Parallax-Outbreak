@@ -87,7 +87,7 @@ public class OptionsScreen extends InputAdapter implements Screen {
 
         // Initialize buttons
         int buttonY = 10;
-        int buttonSpacing = 1;
+        int buttonSpacing = 2;
         for (String diff: Constants.DIFFICULTY_NAMES) {
             buttons.add(
                     new Button(diff,

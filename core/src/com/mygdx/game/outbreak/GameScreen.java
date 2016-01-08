@@ -11,7 +11,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
 
@@ -88,6 +87,7 @@ public class GameScreen extends InputAdapter implements Screen {
         scrollAcceleration = 0.0f;
 
         Gdx.app.log(TAG, "Difficulty selected: " + Constants.DIFFICULTY.get(game.difficulty));
+        streak = Constants.BALL_STREAK_DOUBLER[game.difficulty];
         starScape.init();
         debrisLayer.init();
         blocks.init();
@@ -167,7 +167,7 @@ public class GameScreen extends InputAdapter implements Screen {
         // Check collision with all blocks
         int hits = balls.checkCollision(blocks.blocks);
         score += hits * Constants.POINTS_PER_BLOCK;
-        streak += hits;
+        streak -= hits;
     }
 
     @Override
@@ -195,7 +195,12 @@ public class GameScreen extends InputAdapter implements Screen {
         blocks.update(delta, scrollPosition);
         player.update(delta, scrollVelocity);
         boolean ballDied = balls.update(delta, scrollVelocity, player.position);
-        if (ballDied) streak = 0;
+        if (ballDied) {
+            streak = Constants.BALL_STREAK_DOUBLER[game.difficulty];
+        } else if (streak <= 0) {
+            streak = Constants.BALL_STREAK_DOUBLER[game.difficulty];
+            balls.splitBalls();
+        }
 
         // Background color fill
         Color BG_COLOR = Constants.BACKGROUND_COLOR;
@@ -216,7 +221,7 @@ public class GameScreen extends InputAdapter implements Screen {
 
         fontRenderer.begin(); // 500 x 650
         font.draw(fontRenderer, "SCORE: " + score, 10f, 470f);
-        font.draw(fontRenderer, "STREAK: " + streak + " hits", 100f, 470f);
+        font.draw(fontRenderer, "DOUBLING: " + streak + " more hits", 100f, 470f);
         fontRenderer.end();
     }
 
