@@ -12,6 +12,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 public class Balls {
     private static final String TAG = Balls.class.getName();
 
+    OutbreakGame game;
     Viewport viewport;
     float scrollVelocity;
     int worldWidth;
@@ -19,7 +20,8 @@ public class Balls {
     int nBalls;
     Array<SingleBall> balls;
 
-    public Balls(Viewport viewport) {
+    public Balls(OutbreakGame game, Viewport viewport) {
+        this.game = game;
         this.viewport = viewport;
         nBalls = 1;
         balls = new Array<SingleBall>(0);
@@ -68,7 +70,9 @@ public class Balls {
 
     public void resetBalls() {
         balls.clear();
-        balls.add(new SingleBall(10, 10));
+        SingleBall ball = new SingleBall(10, 10);
+        ball.init(game.getDifficulty());
+        balls.add(ball);
     }
 
     public void setFree(float velocity) {

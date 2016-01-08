@@ -71,7 +71,7 @@ public class GameScreen extends InputAdapter implements Screen {
         debrisLayer = new DebrisLayer(actionViewport);
         blocks = new Blocks(actionViewport);
         player = new Player(actionViewport);
-        balls = new Balls(actionViewport);
+        balls = new Balls(game, actionViewport);
 
         renderer = new ShapeRenderer();
         renderer.setAutoShapeType(true);

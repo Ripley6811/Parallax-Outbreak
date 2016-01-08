@@ -3,7 +3,6 @@ package com.mygdx.game.outbreak;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Intersector;
@@ -25,6 +24,7 @@ public class SingleBall extends Constants {
     boolean onPlayer = true;
     boolean isDead = false;
     float time;
+    float maxVelocity;
     Array<Vector2> trail;
 
     Array<SingleBlock> collisions;
@@ -37,11 +37,10 @@ public class SingleBall extends Constants {
         time = 0f;
         trail = new Array<Vector2>(0);
         collisions = new Array<SingleBlock>(0);
-        init();
     }
 
-    public void init() {
-
+    public void init(int difficulty) {
+        this.maxVelocity = Constants.BALL_MAX_VELOCITY[difficulty];
     }
 
     public boolean checkCollision (Player player) {
@@ -233,7 +232,7 @@ public class SingleBall extends Constants {
                 trail.get(0).y = 0f;
             }
         }
-        velocity.clamp(BALL_MIN_VELOCITY, BALL_MAX_VELOCITY);
+        velocity.clamp(BALL_MIN_VELOCITY, maxVelocity);
 
         // Drop oldest trail vector.
         if (trail.size > BALL_TRAIL_LENGTH) {
@@ -273,9 +272,9 @@ public class SingleBall extends Constants {
         onPlayer = false;
         velocity.set(
                 xVelocity * BALL_LAUNCH_VELOCITY_X_MULTIPLIER,
-                BALL_MAX_VELOCITY
+                maxVelocity
         );
-        velocity.clamp(BALL_MAX_VELOCITY / 2, BALL_MAX_VELOCITY);
+        velocity.clamp(maxVelocity / 2, maxVelocity);
     }
 
     public void setPosition(float newX, float newY) {

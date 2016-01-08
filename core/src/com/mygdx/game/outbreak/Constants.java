@@ -66,7 +66,8 @@ public class Constants {
     /* BALLS */
     public static final float BALL_RADIUS = 1.0f;
     public static final int BALL_SEGMENTS = 50;
-    public static final float BALL_MAX_VELOCITY = 0.8f;
+    // Max velocity for various difficulty levels
+    public static final float[] BALL_MAX_VELOCITY = {0.8f, 0.9f, 1f};
     public static final float BALL_MIN_VELOCITY = 0.6f;
     public static final float BALL_GRAVITY = 0.02f;
     // Adjust ball launch velocity relative to player velocity

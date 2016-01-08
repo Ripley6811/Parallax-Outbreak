@@ -66,7 +66,7 @@ public class OptionsScreen extends InputAdapter implements Screen {
         debrisLayer = new DebrisLayer(actionViewport);
         blocks = new Blocks(actionViewport);
         player = new Player(actionViewport);
-        balls = new Balls(actionViewport);
+        balls = new Balls(game, actionViewport);
         buttons = new Array<Button>();
 
         // Set up background renderer
