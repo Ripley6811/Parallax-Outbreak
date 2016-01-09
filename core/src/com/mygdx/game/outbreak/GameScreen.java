@@ -181,10 +181,10 @@ public class GameScreen extends InputAdapter implements Screen {
      */
     public void checkCollisions() {
         // Check collision with player
-        score -= balls.checkCollision(player);
-
+        int hits = balls.checkCollision(player);
+        score += hits * Constants.POINTS_PER_PADDLE_HIT;
         // Check collision with all blocks
-        int hits = balls.checkCollision(blocks.blocks);
+        hits = balls.checkCollision(blocks.blocks);
         score += hits * Constants.POINTS_PER_BLOCK;
         streak -= hits;
     }

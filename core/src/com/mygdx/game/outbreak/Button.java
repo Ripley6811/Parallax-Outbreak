@@ -24,18 +24,6 @@ public class Button extends Rectangle {
     private Color baseColor = Constants.BUTTON_COLOR;
     private BitmapFont font;
 
-    public Button(String text) {
-        super();
-        this.text = text;
-        this.init();
-    }
-
-    public Button(String text, Rectangle rect) {
-        super(rect);
-        this.text = text;
-        this.init();
-    }
-
     public Button(String text, float x, float y, float width, float height) {
         super(x, y, width, height);
         this.text = text;
@@ -77,6 +65,11 @@ public class Button extends Rectangle {
         generateButtonTextures();
     }
 
+    /**
+     * Checks if point overlaps button and sets mouseover boolean.
+     *
+     * @param pt The point to check
+     */
     public void mouseMoved(Vector2 pt) {
         if (Intersector.overlaps(new Circle(pt,1), this)) {
             mouseover = true;
@@ -89,6 +82,9 @@ public class Button extends Rectangle {
         return mouseover;
     }
 
+    /**
+     * Creates the two button textures. One for normal and one for highlighted.
+     */
     private void generateButtonTextures() {
         int W = (int)this.width;
         int H = (int)this.height;

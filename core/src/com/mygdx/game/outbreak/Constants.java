@@ -26,6 +26,8 @@ public class Constants {
     public static final Array DIFFICULTY = new Array(DIFFICULTY_NAMES);
     public static final float BLOCK_REGENERATION_RATE = 6f;
     public static final int START_LEVEL = 1;  // "0" for single block testing level.
+    public static final int POINTS_PER_PADDLE_HIT = 1;
+    public static final int POINTS_PER_BLOCK = 2;
 
     /* PLAYER PADDLE */
     public static final float PLAYER_Y_POSITION = 5.0f;
@@ -61,7 +63,6 @@ public class Constants {
     public static final float BLOCK_HEIGHT = 3.0f;
     public static final float BLOCK_SPACING = 0.2f;
     public static final int BLOCK_MAX_STRENGTH = 4;
-    public static final int POINTS_PER_BLOCK = 2;
 
     /* LEVEL RANDOM SEEDS */
     public static final long SEED_LVL_1 = 12345L;
@@ -79,7 +80,7 @@ public class Constants {
     // Number of previous positions to display in trail
     public static final float BALL_TRAIL_LENGTH = 20;
     public static final int MAX_NUMBER_BALLS = 10;
-    public static final int[] BALL_STREAK_DOUBLER = {16, 24, 32};
+    public static final int[] BALL_STREAK_DOUBLER = {12, 24, 36};
     public static final float BALL_SPLIT_ANGLE = 6f;
 
     /* COLLISION */
