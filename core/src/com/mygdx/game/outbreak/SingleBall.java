@@ -78,9 +78,6 @@ public class SingleBall extends Constants {
             newVelocity.sub(normalizedRotationVector.scl(newVelocity.dot(normalizedRotationVector)).scl(2f));
             Gdx.app.debug(TAG, "New vec: " + newVelocity);
 
-//            newVelocity.rotate(paddlePoint * -100f * BOUNCE_ANGLE_MULTIPLIER);
-            // TODO: Fix this so that any decrease will add to y velocity.
-//            newVelocity.x = (paddlePoint + newVelocity.x) / 2f;
             newVelocity.setAngle(newVelocity.angle() * (1f - ABSORB_PADDLE_ANGLE)
                                 + reorientateAngle * ABSORB_PADDLE_ANGLE);
             newVelocity.x += player.velocity * ABSORB_VELOCITY_MULTIPLIER;
@@ -118,7 +115,6 @@ public class SingleBall extends Constants {
         Circle ballCopy = new Circle(futurePos, circle.radius);
 
         // Find all future overlaps and put in array
-        // TODO: may speed up if check distance from block center first.
         collisions.clear(); // Empty previous results.
         for (SingleBlock block: blocks) {
             if (block.getStrength() > 0) {
@@ -264,7 +260,7 @@ public class SingleBall extends Constants {
     }
 
     /**
-     * Sets the ball free of the player paddle (no longer follows)
+     * Sets the ball free of the player paddle (no longer follows).
      *
      * @param xVelocity The horizontal velocity of player at release
      */

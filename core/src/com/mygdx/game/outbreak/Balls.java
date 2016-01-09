@@ -33,6 +33,7 @@ public class Balls {
 
     /**
      * Updates the position of all balls in play and returns true if any ball is lost.
+     *
      * @param delta time since last render
      * @param scrollVelocity horizontal scroll velocity
      * @param playerPosition Vector2 of player position
@@ -46,7 +47,7 @@ public class Balls {
         for (SingleBall ball: balls) {
             if (ball.onPlayer) {
                 ball.setPosition(
-                        playerPosition.x + Constants.PLAYER_WIDTH / 2,
+                        playerPosition.x + Constants.PLAYER_WIDTH / 2 + Constants.BALL_ON_PADDLE_OFFSET,
                         playerPosition.y + Constants.PLAYER_HEIGHT + Constants.BALL_RADIUS
                 );
             }
@@ -57,6 +58,11 @@ public class Balls {
         return ballDied;
     }
 
+    /**
+     * Checks if all balls have left play.
+     *
+     * @return true if all balls have left game area
+     */
     public boolean allDead() {
         for (SingleBall ball: balls) {
             if (!ball.isDead) return false;
@@ -64,6 +70,11 @@ public class Balls {
         return true;
     }
 
+    /**
+     * Returns the count of the number of live balls.
+     *
+     * @return integer number of live balls in play
+     */
     public int numberAlive() {
         int total = 0;
         for (SingleBall ball: balls) {
@@ -72,6 +83,9 @@ public class Balls {
         return total;
     }
 
+    /**
+     * Clears "balls" array and initializes a single ball.
+     */
     public void resetBalls() {
         balls.clear();
         SingleBall ball = new SingleBall(10, 10);
@@ -86,7 +100,6 @@ public class Balls {
     }
 
     public int checkCollision(Player player) {
-        // TODO: Add collision effect between multiple balls.
         int collisionCount = 0;
         for (SingleBall ball: balls) {
             if (ball.checkCollision(player)) collisionCount += 1;
@@ -94,6 +107,9 @@ public class Balls {
         return collisionCount;
     }
 
+    /**
+     * Doubles each live ball and adds them to "balls" array.
+     */
     public void splitBalls() {
         Gdx.app.log(TAG, "Splitting balls");
         Array<SingleBall> newBalls = new Array<SingleBall>();

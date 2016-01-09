@@ -12,8 +12,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
  */
 public class DebrisLayer {
     private static final String TAG = DebrisLayer.class.getName();
-    // TODO: Change to individual nebula images and randomize position.
-    // TODO: New nebula images may need opacity decreased.
+
     Viewport viewport;
     SpriteBatch batch;
     float debrisScrollPosition; // horizontal displacement
@@ -39,6 +38,12 @@ public class DebrisLayer {
         debrisScrollPosition = 0.0f;
     }
 
+    /**
+     * Updates the scroll position for drawing image.
+     *
+     * @param deltaTime
+     * @param scrollVelocity
+     */
     public void update(float deltaTime, float scrollVelocity) {
         // Update scroll position based on player velocity.
         debrisScrollPosition += scrollVelocity * deltaTime * Constants.DEBRIS_SCROLL_MULTIPLIER;

@@ -56,7 +56,7 @@ public class GameScreen extends InputAdapter implements Screen {
         renderer.setProjectionMatrix(actionViewport.getCamera().combined);
         gameBatch = new SpriteBatch();
         fontRenderer = new SpriteBatch();
-        scoreboard = new Texture(createScoreboardPixmap());
+        scoreboard = createScoreboardPixmap();
         font = new BitmapFont();
         font.setColor(Color.YELLOW);
         font.getData().setScale(Constants.FONT_SCALE);
@@ -65,7 +65,7 @@ public class GameScreen extends InputAdapter implements Screen {
 
         streak = Constants.BALL_STREAK_DOUBLER[game.getDifficulty()];
         lives = Constants.INITIAL_LIVES;
-        level = 0;
+        level = Constants.START_LEVEL;
         score = 0;
 
         starScape = new StarScape(actionViewport);
@@ -83,7 +83,6 @@ public class GameScreen extends InputAdapter implements Screen {
         scrollAcceleration = 0.0f;
 
         gameBatch.setProjectionMatrix(actionViewport.getCamera().combined);
-        Gdx.app.log(TAG, "Default SpriteBatch projection matrix for font rendering:\n" + fontRenderer.getProjectionMatrix());
 
         starScape.init();
         debrisLayer.init();
@@ -98,6 +97,10 @@ public class GameScreen extends InputAdapter implements Screen {
         scrollPosition = Constants.WORLD_SIZE;
         scrollVelocity = 0.0f;
         scrollAcceleration = 0.0f;
+        streak = Constants.BALL_STREAK_DOUBLER[game.getDifficulty()];
+        lives = Constants.INITIAL_LIVES;
+        level = Constants.START_LEVEL;
+        score = 0;
 
         Gdx.app.log(TAG, "Difficulty selected: " + Constants.DIFFICULTY.get(game.getDifficulty()));
 
@@ -112,10 +115,6 @@ public class GameScreen extends InputAdapter implements Screen {
 
     @Override
     public void hide() {
-        streak = Constants.BALL_STREAK_DOUBLER[game.getDifficulty()];
-        lives = Constants.INITIAL_LIVES;
-        level = 1;
-        score = 0;
     }
 
     @Override
@@ -176,6 +175,10 @@ public class GameScreen extends InputAdapter implements Screen {
         }
     }
 
+    /**
+     * Checks collisions with blocks and paddles and adjusts score based on
+     * number of hits.
+     */
     public void checkCollisions() {
         // Check collision with player
         score -= balls.checkCollision(player);
@@ -205,10 +208,17 @@ public class GameScreen extends InputAdapter implements Screen {
 
     @Override
     public void render(float delta) {
+        // Check if all blocks are gone and go to next level or end screen.
         if (blocks.allBlocksDestroyed()) {
             Gdx.app.log(TAG, "All blocks destroyed. Loading next level");
-            level++;
-            init();
+            if (level+1 < Levels.LEVEL_LAYOUTS.length) {
+                level++;
+                init();
+            } else {
+                game.setLivesRemaining(lives);
+                game.setLastScore(score);
+                game.gotoEndScreen();
+            }
             return;
         }
 
@@ -222,8 +232,10 @@ public class GameScreen extends InputAdapter implements Screen {
         player.update(delta, scrollVelocity);
         balls.update(delta, scrollVelocity, player.position);
         if (balls.allDead()) {
-            if (lives-- == 0) {
+            lives--;
+            if (lives < 0) {
                 game.setLastScore(score);
+                game.setLivesRemaining(lives);
                 game.gotoEndScreen();
             }
             streak = Constants.BALL_STREAK_DOUBLER[game.getDifficulty()];
@@ -258,7 +270,11 @@ public class GameScreen extends InputAdapter implements Screen {
         fontRenderer.end();
     }
 
-    private Pixmap createScoreboardPixmap() {
+    /**
+     * Creates the top scoreboard area. A gray gradient with orange edge.
+     * @return Texture for gray scoreboard
+     */
+    private Texture createScoreboardPixmap() {
         int W = 1;
         int H = 64;
         // NOTE: Coordinate origin for Pixmap is top-left.
@@ -273,6 +289,6 @@ public class GameScreen extends InputAdapter implements Screen {
         pixmap.drawLine(0, H - 7, 0, H - 2);
         pixmap.setColor(Color.YELLOW);
         pixmap.drawPixel(0, H - 5);
-        return pixmap;
+        return new Texture(pixmap);
     }
 }

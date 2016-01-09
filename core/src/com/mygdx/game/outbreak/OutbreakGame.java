@@ -11,6 +11,7 @@ public class OutbreakGame extends Game {
 	EndScreen endScreen;
 	private int difficulty = 0;
 	private int lastScore = 0;
+	private int livesRemaining = 0;
 	boolean blocksRegenerate = false;
 
 	@Override
@@ -60,4 +61,8 @@ public class OutbreakGame extends Game {
 	public int getLastScore() {
 		return this.lastScore;
 	}
+
+	public void setLivesRemaining(int lives) { this.livesRemaining = lives; }
+
+	public int getLivesRemaining() { return this.livesRemaining; }
 }

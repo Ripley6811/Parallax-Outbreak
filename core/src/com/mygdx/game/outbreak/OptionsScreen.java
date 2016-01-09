@@ -27,7 +27,7 @@ public class OptionsScreen extends InputAdapter implements Screen {
     FitViewport actionViewport;
     ShapeRenderer bgRenderer;  // Background renderer
     SpriteBatch fgBatch; // Foreground batch renderer
-    Texture scoreboard;
+//    Texture scoreboard;
     private BitmapFont font;
 
     float scrollPosition;
@@ -45,7 +45,7 @@ public class OptionsScreen extends InputAdapter implements Screen {
     public OptionsScreen(OutbreakGame game) {
         this.game = game;
         fgBatch = new SpriteBatch();
-        scoreboard = new Texture(createScoreboardPixmap());
+//        scoreboard = new Texture(createScoreboardPixmap());
         font = new BitmapFont();
         font.setColor(Color.YELLOW);
         font.getData().setScale(Constants.FONT_SCALE);
@@ -100,7 +100,7 @@ public class OptionsScreen extends InputAdapter implements Screen {
 
     @Override
     public void show() {
-
+        game.setRegenerate(false);
         starScape.init();
         debrisLayer.init();
         blocks.init("OptionsScreen");
@@ -157,10 +157,6 @@ public class OptionsScreen extends InputAdapter implements Screen {
 
     @Override
     public boolean keyDown(int keycode) {
-        // TODO: Also add touch ball launching for Android
-        if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
-            game.gotoGameScreen();
-        }
         return super.keyDown(keycode);
     }
 
@@ -223,21 +219,21 @@ public class OptionsScreen extends InputAdapter implements Screen {
         }
     }
 
-    private Pixmap createScoreboardPixmap() {
-        int W = 1;
-        int H = 64;
-        // NOTE: Coordinate origin for Pixmap is top-left.
-        Pixmap pixmap = new Pixmap(W, H, Pixmap.Format.RGBA8888);
-        pixmap.setColor(Color.LIGHT_GRAY);
-        pixmap.fill();
-        pixmap.setColor(0,0,0,0.02f);
-        for (int i = 0; i < H; i++) {
-            pixmap.drawLine(0, 0, 0, i);
-        }
-        pixmap.setColor(Color.ORANGE);
-        pixmap.drawLine(0, H - 7, 0, H - 2);
-        pixmap.setColor(Color.YELLOW);
-        pixmap.drawPixel(0, H - 5);
-        return pixmap;
-    }
+//    private Pixmap createScoreboardPixmap() {
+//        int W = 1;
+//        int H = 64;
+//        // NOTE: Coordinate origin for Pixmap is top-left.
+//        Pixmap pixmap = new Pixmap(W, H, Pixmap.Format.RGBA8888);
+//        pixmap.setColor(Color.LIGHT_GRAY);
+//        pixmap.fill();
+//        pixmap.setColor(0,0,0,0.02f);
+//        for (int i = 0; i < H; i++) {
+//            pixmap.drawLine(0, 0, 0, i);
+//        }
+//        pixmap.setColor(Color.ORANGE);
+//        pixmap.drawLine(0, H - 7, 0, H - 2);
+//        pixmap.setColor(Color.YELLOW);
+//        pixmap.drawPixel(0, H - 5);
+//        return pixmap;
+//    }
 }

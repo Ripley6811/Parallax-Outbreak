@@ -10,10 +10,10 @@ import com.badlogic.gdx.utils.Array;
 public class Constants {
     /* LOGGING LEVELS */
     // Application logging levels from lowest to highest. Choose one.
-//    public static final int LOG_LEVEL = Application.LOG_NONE;
+    public static final int LOG_LEVEL = Application.LOG_NONE;
 //    public static final int LOG_LEVEL = Application.LOG_ERROR;
 //    public static final int LOG_LEVEL = Application.LOG_INFO;
-    public static final int LOG_LEVEL = Application.LOG_DEBUG;
+//    public static final int LOG_LEVEL = Application.LOG_DEBUG;
 
     /* WORLD & HUD */
     public static final String GAME_TITLE = "PARALLAX-OUTBREAK";
@@ -25,12 +25,13 @@ public class Constants {
     public static final String[] DIFFICULTY_NAMES = {"Easy", "Hard", "Insane!"};
     public static final Array DIFFICULTY = new Array(DIFFICULTY_NAMES);
     public static final float BLOCK_REGENERATION_RATE = 6f;
+    public static final int START_LEVEL = 1;  // "0" for single block testing level.
 
     /* PLAYER PADDLE */
     public static final float PLAYER_Y_POSITION = 5.0f;
     public static final float PLAYER_WIDTH = 12.0f;
     public static final float PLAYER_HEIGHT = 1.5f;
-    public static final int INITIAL_LIVES = 6;
+    public static final int INITIAL_LIVES = 5;
 
     /* VELOCITY & ACCELERATION */
     // Used in "normalizing" the device accelerometer data
@@ -66,6 +67,7 @@ public class Constants {
     public static final long SEED_LVL_1 = 12345L;
 
     /* BALLS */
+    public static final float BALL_ON_PADDLE_OFFSET = 0.001f;
     public static final float BALL_RADIUS = 1.0f;
     public static final int BALL_SEGMENTS = 50;
     // Max velocity for various difficulty levels
@@ -77,7 +79,7 @@ public class Constants {
     // Number of previous positions to display in trail
     public static final float BALL_TRAIL_LENGTH = 20;
     public static final int MAX_NUMBER_BALLS = 10;
-    public static final int[] BALL_STREAK_DOUBLER = {20, 30, 40};
+    public static final int[] BALL_STREAK_DOUBLER = {16, 24, 32};
     public static final float BALL_SPLIT_ANGLE = 6f;
 
     /* COLLISION */
