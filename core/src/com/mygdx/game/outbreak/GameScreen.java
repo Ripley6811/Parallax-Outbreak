@@ -11,7 +11,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
 
@@ -185,7 +184,7 @@ public class GameScreen extends InputAdapter implements Screen {
         score += hits * Constants.POINTS_PER_PADDLE_HIT;
         // Check collision with all blocks
         hits = balls.checkCollision(blocks.blocks);
-        score += hits * Constants.POINTS_PER_BLOCK;
+        score += hits * Constants.POINTS_PER_BLOCK_HIT;
         streak -= hits;
     }
 

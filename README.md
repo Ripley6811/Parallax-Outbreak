@@ -12,11 +12,11 @@ or Pixmap classes.
 
 ##Gameplay
 
-There are three modes of gameplay; "Easy", "Hard" and "Insane!". Ball max speed
+There are three modes of game-play; "Easy", "Hard" and "Insane!". Ball max speed
 increases with each difficulty level and the number of hits required before balls double
 also increases with difficulty. "Insane!" also has blocks regenerating every few seconds.
 
-**Desktop**: Use arrow keys to move the paddle and launch the ball.
+**Desktop**: Use arrow keys to move the paddle and "UP" to launch the ball.
 
 **Android**: Touch the screen to launch the ball and angle the device downward
 in the direction you want the paddle to move.

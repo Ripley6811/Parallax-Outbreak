@@ -23,11 +23,11 @@ public class Constants {
     public static final float HUD_HEIGHT = 7f;
     public static final float FONT_SCALE = 1f;
     public static final String[] DIFFICULTY_NAMES = {"Easy", "Hard", "Insane!"};
-    public static final Array DIFFICULTY = new Array(DIFFICULTY_NAMES);
+    public static final Array<String> DIFFICULTY = new Array<String>(DIFFICULTY_NAMES);
     public static final float BLOCK_REGENERATION_RATE = 6f;
     public static final int START_LEVEL = 1;  // "0" for single block testing level.
     public static final int POINTS_PER_PADDLE_HIT = 1;
-    public static final int POINTS_PER_BLOCK = 2;
+    public static final int POINTS_PER_BLOCK_HIT = 2;
 
     /* PLAYER PADDLE */
     public static final float PLAYER_Y_POSITION = 5.0f;
