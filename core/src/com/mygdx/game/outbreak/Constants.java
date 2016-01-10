@@ -10,9 +10,9 @@ import com.badlogic.gdx.utils.Array;
 public class Constants {
     /* LOGGING LEVELS */
     // Application logging levels from lowest to highest. Choose one.
-//    public static final int LOG_LEVEL = Application.LOG_NONE;
+    public static final int LOG_LEVEL = Application.LOG_NONE;
 //    public static final int LOG_LEVEL = Application.LOG_ERROR;
-    public static final int LOG_LEVEL = Application.LOG_INFO;
+//    public static final int LOG_LEVEL = Application.LOG_INFO;
 //    public static final int LOG_LEVEL = Application.LOG_DEBUG;
 
     /* WORLD & HUD */
@@ -26,7 +26,7 @@ public class Constants {
     public static final String[] DIFFICULTY_NAMES = {"Easy", "Hard", "Insane!"};
     public static final Array<String> DIFFICULTY = new Array<String>(DIFFICULTY_NAMES);
     public static final int START_LEVEL = 1;  // "0" for single block testing level.
-    public static final int POINTS_PER_PADDLE_HIT = 1;
+    public static final int POINTS_PER_PADDLE_HIT = -1;
     public static final int POINTS_PER_BLOCK_HIT = 2;
 
     /* PLAYER PADDLE */

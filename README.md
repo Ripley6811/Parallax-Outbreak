@@ -19,12 +19,14 @@ and edited with [Audacity 2.1.1](http://audacityteam.org/).
 
 There are three modes of game-play; "Easy", "Hard" and "Insane!". Ball max speed
 increases with each difficulty level and the number of hits required before balls double
-also increases with difficulty. "Insane!" also has blocks regenerating every few seconds.
+also increases with difficulty. "Insane!" also has *blocks regenerating* every few seconds.
 
 **Desktop**: Use arrow keys to move the paddle and "UP" to launch the ball.
 
 **Android**: Touch the screen to launch the ball and angle the device downward
 in the direction you want the paddle to move.
+
+2 points for every block hit and negative 1 point for each paddle hit.
 
 When the game ends, tap or click on screen to return to the options menu.
 
