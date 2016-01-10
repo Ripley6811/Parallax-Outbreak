@@ -26,9 +26,18 @@ also increases with difficulty. "Insane!" also has *blocks regenerating* every f
 **Android**: Touch the screen to launch the ball and angle the device downward
 in the direction you want the paddle to move.
 
+When the "Ball-Split" counter reaches zero, all balls on screen will split in two,
+up to a maximum of 10 balls in play.
+
 2 points for every block hit and negative 1 point for each paddle hit.
 
 When the game ends, tap or click on screen to return to the options menu.
+
+*Tip:* For maximum damage, try to get a ball in a good position above a set of
+blocks before a ball-split event.
+
+*Tip:* No need to chase balls, wait for them to wrap around and enter the screen
+from the other side.
 
 ##References
 
