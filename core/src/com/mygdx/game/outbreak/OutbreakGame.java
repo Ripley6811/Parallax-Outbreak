@@ -13,10 +13,15 @@ public class OutbreakGame extends Game {
 	private int lastScore = 0;
 	private int livesRemaining = 0;
 	boolean blocksRegenerate = false;
+	int deviceWidth;
+	int deviceHeight;
 
 	@Override
 	public void create () {
 		Gdx.app.setLogLevel(Constants.LOG_LEVEL);
+		deviceWidth = Gdx.graphics.getWidth();
+		deviceHeight = Gdx.graphics.getHeight();
+		Gdx.app.log(TAG, "Device size: " + deviceWidth + " x " + deviceHeight);
 		optionsScreen = new OptionsScreen(this);
 		gameScreen = new GameScreen(this);
 		endScreen = new EndScreen(this);

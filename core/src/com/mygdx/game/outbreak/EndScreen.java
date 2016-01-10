@@ -1,6 +1,7 @@
 package com.mygdx.game.outbreak;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
@@ -21,6 +22,7 @@ public class EndScreen extends InputAdapter implements Screen {
 
     SpriteBatch fgBatch;
     FitViewport actionViewport;
+    FitViewport textViewport;
     private BitmapFont font;
 
     public EndScreen(OutbreakGame game) {
@@ -29,18 +31,38 @@ public class EndScreen extends InputAdapter implements Screen {
         actionViewport = new FitViewport(
                 Constants.WORLD_SIZE, Constants.WORLD_SIZE);
         actionViewport.apply(true);
+        textViewport = new FitViewport(
+                Constants.TEXT_VIEWPORT_SIZE[0],
+                Constants.TEXT_VIEWPORT_SIZE[1]
+        );
+        textViewport.apply(true);
         fgBatch = new SpriteBatch();
+        fgBatch.setProjectionMatrix(textViewport.getCamera().combined);
         font = new BitmapFont();
         font.setColor(Color.YELLOW);
         font.getData().setScale(Constants.FONT_SCALE);
         font.getRegion().getTexture().setFilter(
                 Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+
+        Gdx.input.setInputProcessor(this);
+        Gdx.input.setCatchBackKey(true);
     }
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         game.gotoOptionsScreen();
         return super.touchDown(screenX, screenY, pointer, button);
+    }
+
+    @Override
+    public boolean keyDown(int keycode) {
+        if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
+            game.gotoOptionsScreen();
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.BACK)) {
+            game.gotoOptionsScreen();
+        }
+        return super.keyDown(keycode);
     }
 
     @Override
@@ -55,6 +77,7 @@ public class EndScreen extends InputAdapter implements Screen {
 
     @Override
     public void resize(int width, int height) {
+        textViewport.update(width, height, true);
         actionViewport.update(width, height, true);
     }
 

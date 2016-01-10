@@ -24,6 +24,7 @@ public class GameScreen extends InputAdapter implements Screen {
 
     ShapeRenderer renderer;
     FitViewport actionViewport;
+    FitViewport textViewport;
     SpriteBatch gameBatch;
     SpriteBatch fontRenderer;
     Texture scoreboard;
@@ -50,11 +51,19 @@ public class GameScreen extends InputAdapter implements Screen {
         actionViewport = new FitViewport(
                 Constants.WORLD_SIZE, Constants.WORLD_SIZE);
         actionViewport.apply(true);
+
+        textViewport = new FitViewport(
+                Constants.TEXT_VIEWPORT_SIZE[0],
+                Constants.TEXT_VIEWPORT_SIZE[1]
+        );
+        textViewport.apply(true);
+        fontRenderer = new SpriteBatch();
+        fontRenderer.setProjectionMatrix(textViewport.getCamera().combined);
+
         renderer = new ShapeRenderer();
         renderer.setAutoShapeType(true);
         renderer.setProjectionMatrix(actionViewport.getCamera().combined);
         gameBatch = new SpriteBatch();
-        fontRenderer = new SpriteBatch();
         scoreboard = createScoreboardPixmap();
         font = new BitmapFont();
         font.setColor(Color.YELLOW);
@@ -110,6 +119,7 @@ public class GameScreen extends InputAdapter implements Screen {
         balls.init();
 
         Gdx.input.setInputProcessor(this);
+        Gdx.input.setCatchBackKey(true);
     }
 
     @Override
@@ -128,6 +138,7 @@ public class GameScreen extends InputAdapter implements Screen {
 
     @Override
     public void resize(int width, int height) {
+        textViewport.update(width, height, true);
         actionViewport.update(width, height, true);
     }
 
@@ -140,9 +151,16 @@ public class GameScreen extends InputAdapter implements Screen {
     }
 
     public void updateScroll(float delta) {
+        float maxSpeed = Constants.MAX_SCROLL_SPEED;
+        float accelInput = Gdx.input.getAccelerometerY();
+        scrollAcceleration = 0f;
         // Accelerometer input
-        scrollAcceleration = -3.0f * Gdx.input.getAccelerometerY() /
-                Constants.GRAVITATIONAL_ACCELERATION;
+        if (accelInput != 0.0f) {
+            maxSpeed = Math.min(Math.abs(accelInput) * 5f /
+                    Constants.GRAVITATIONAL_ACCELERATION, 2f*Constants.MAX_SCROLL_SPEED);
+            scrollAcceleration = -3.0f * accelInput /
+                    Constants.GRAVITATIONAL_ACCELERATION;
+        }
         // Key input
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
             scrollAcceleration = Constants.KEYPRESS_ACCELERATION;
@@ -160,9 +178,9 @@ public class GameScreen extends InputAdapter implements Screen {
                 Math.abs(scrollAcceleration) > Constants.STATIC_FRICTION ?
                         scrollAcceleration : 0);
         // Max velocity
-        if (Math.abs(scrollVelocity) > Constants.MAX_SCROLL_SPEED) {
+        if (Math.abs(scrollVelocity) > maxSpeed) {
             scrollVelocity = Math.signum(scrollVelocity)
-                    * Constants.MAX_SCROLL_SPEED;
+                    * maxSpeed;
         }
 
         // Update position based on velocity
@@ -194,6 +212,9 @@ public class GameScreen extends InputAdapter implements Screen {
             balls.setFree(player.velocity);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
+            game.gotoOptionsScreen();
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.BACK)) {
             game.gotoOptionsScreen();
         }
         return super.keyDown(keycode);

@@ -25,6 +25,7 @@ public class OptionsScreen extends InputAdapter implements Screen {
     OutbreakGame game;
 
     FitViewport actionViewport;
+    FitViewport textViewport;
     ShapeRenderer bgRenderer;  // Background renderer
     SpriteBatch fgBatch; // Foreground batch renderer
 //    Texture scoreboard;
@@ -62,6 +63,12 @@ public class OptionsScreen extends InputAdapter implements Screen {
                 Constants.WORLD_SIZE, Constants.WORLD_SIZE);
         actionViewport.apply(true);
 
+        textViewport = new FitViewport(
+                Constants.TEXT_VIEWPORT_SIZE[0],
+                Constants.TEXT_VIEWPORT_SIZE[1]
+        );
+        textViewport.apply(true);
+
         starScape = new StarScape(actionViewport);
         debrisLayer = new DebrisLayer(actionViewport);
         blocks = new Blocks(game, actionViewport);
@@ -84,6 +91,8 @@ public class OptionsScreen extends InputAdapter implements Screen {
         bgRenderer.rotate(0f, 0f, 1f, 10f);
         bgRenderer.scale(scale, scale, 1f);
         bgRenderer.translate(1f, -8f, 0);
+
+        fgBatch.setProjectionMatrix(textViewport.getCamera().combined);
 
         // Initialize buttons
         int buttonY = 10;
@@ -127,6 +136,7 @@ public class OptionsScreen extends InputAdapter implements Screen {
 
     @Override
     public void resize(int width, int height) {
+        textViewport.update(width, height, true);
         actionViewport.update(width, height, true);
     }
 
@@ -148,9 +158,9 @@ public class OptionsScreen extends InputAdapter implements Screen {
 
     @Override
     public boolean mouseMoved(int screenX, int screenY) {
-        Vector2 pt = actionViewport.unproject(new Vector2(screenX, screenY));
-        // Scale the pt to "fgBatch" coordinate system.
-        pt.scl(6.5f, 5f);
+        Vector2 pt = textViewport.unproject(new Vector2(screenX, screenY));
+        Gdx.app.log(TAG, "Touch/Click: " + screenX + ", " + screenY);
+        Gdx.app.log(TAG, "Unprojected pt: " + pt);
         for (Button b: buttons) b.mouseMoved(pt);
         return super.mouseMoved(screenX, screenY);
     }
@@ -162,6 +172,7 @@ public class OptionsScreen extends InputAdapter implements Screen {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        mouseMoved(screenX, screenY);
         for (Button b: buttons) {
             if (b.isMouseover()) {
                 game.setDifficulty(b.getText());
@@ -218,22 +229,4 @@ public class OptionsScreen extends InputAdapter implements Screen {
             b.render(fgBatch);
         }
     }
-
-//    private Pixmap createScoreboardPixmap() {
-//        int W = 1;
-//        int H = 64;
-//        // NOTE: Coordinate origin for Pixmap is top-left.
-//        Pixmap pixmap = new Pixmap(W, H, Pixmap.Format.RGBA8888);
-//        pixmap.setColor(Color.LIGHT_GRAY);
-//        pixmap.fill();
-//        pixmap.setColor(0,0,0,0.02f);
-//        for (int i = 0; i < H; i++) {
-//            pixmap.drawLine(0, 0, 0, i);
-//        }
-//        pixmap.setColor(Color.ORANGE);
-//        pixmap.drawLine(0, H - 7, 0, H - 2);
-//        pixmap.setColor(Color.YELLOW);
-//        pixmap.drawPixel(0, H - 5);
-//        return pixmap;
-//    }
 }

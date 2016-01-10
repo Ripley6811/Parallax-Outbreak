@@ -10,21 +10,21 @@ import com.badlogic.gdx.utils.Array;
 public class Constants {
     /* LOGGING LEVELS */
     // Application logging levels from lowest to highest. Choose one.
-    public static final int LOG_LEVEL = Application.LOG_NONE;
+//    public static final int LOG_LEVEL = Application.LOG_NONE;
 //    public static final int LOG_LEVEL = Application.LOG_ERROR;
-//    public static final int LOG_LEVEL = Application.LOG_INFO;
+    public static final int LOG_LEVEL = Application.LOG_INFO;
 //    public static final int LOG_LEVEL = Application.LOG_DEBUG;
 
     /* WORLD & HUD */
     public static final String GAME_TITLE = "PARALLAX-OUTBREAK";
     public static final String GAME_INSTRUCTIONS = "Hello and welcome to my awesome game. I hope you enjoy the ride.\nSelect a difficulty to start playing.";
     public static final float WORLD_SIZE = 100.0f;
+    public static final int[] TEXT_VIEWPORT_SIZE = {640, 480};
     public static final Color BACKGROUND_COLOR = Color.BLACK;
     public static final float HUD_HEIGHT = 7f;
     public static final float FONT_SCALE = 1f;
     public static final String[] DIFFICULTY_NAMES = {"Easy", "Hard", "Insane!"};
     public static final Array<String> DIFFICULTY = new Array<String>(DIFFICULTY_NAMES);
-    public static final float BLOCK_REGENERATION_RATE = 6f;
     public static final int START_LEVEL = 1;  // "0" for single block testing level.
     public static final int POINTS_PER_PADDLE_HIT = 1;
     public static final int POINTS_PER_BLOCK_HIT = 2;
@@ -41,9 +41,9 @@ public class Constants {
     // Adjust player rate of acceleration
     public static final float ACCELERATION_MULTIPLIER = 4f;
     // Used to prevent movement when user tries to hold device level
-    public static final float STATIC_FRICTION = 0.2f;
+    public static final float STATIC_FRICTION = 0.08f;
     // Multiply to velocity to slow down
-    public static final float KINETIC_FRICTION = 0.9f;
+    public static final float KINETIC_FRICTION = 0.85f;
     // Player maximum velocity
     public static final float MAX_SCROLL_SPEED = 0.9f;
     public static final float KEYPRESS_ACCELERATION = 1.0f;
@@ -63,6 +63,7 @@ public class Constants {
     public static final float BLOCK_HEIGHT = 3.0f;
     public static final float BLOCK_SPACING = 0.2f;
     public static final int BLOCK_MAX_STRENGTH = 4;
+    public static final float BLOCK_REGENERATION_RATE = 6f;
 
     /* LEVEL RANDOM SEEDS */
     public static final long SEED_LVL_1 = 12345L;
@@ -72,8 +73,8 @@ public class Constants {
     public static final float BALL_RADIUS = 1.0f;
     public static final int BALL_SEGMENTS = 50;
     // Max velocity for various difficulty levels
-    public static final float[] BALL_MAX_VELOCITY = {0.7f, 0.8f, 0.95f};
-    public static final float BALL_MIN_VELOCITY = 0.6f;
+    public static final float[] BALL_MAX_VELOCITY = {0.65f, 0.75f, 0.85f};
+    public static final float BALL_MIN_VELOCITY = 0.5f;
     public static final float BALL_GRAVITY = 0.02f;
     // Adjust ball launch velocity relative to player velocity
     public static final float BALL_LAUNCH_VELOCITY_X_MULTIPLIER = 0.5f;
