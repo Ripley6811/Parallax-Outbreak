@@ -99,19 +99,31 @@ public class Balls {
         }
     }
 
+    /**
+     * Checks for collision of balls with paddle.
+     * Plays audio for paddle hit.
+     *
+     * @param player
+     * @return Integer for number of balls hitting paddle
+     */
     public int checkCollision(Player player) {
         int collisionCount = 0;
         for (SingleBall ball: balls) {
-            if (ball.checkCollision(player)) collisionCount += 1;
+            if (ball.checkCollision(player)) {
+                collisionCount += 1;
+                Audio.PADDLE.play();
+            }
         }
         return collisionCount;
     }
 
     /**
      * Doubles each live ball and adds them to "balls" array.
+     * Plays audio for split.
      */
     public void splitBalls() {
         Gdx.app.log(TAG, "Splitting balls");
+        Audio.SPLIT.play();
         Array<SingleBall> newBalls = new Array<SingleBall>();
         int numberAlive = numberAlive();
         for (SingleBall ball: balls) {

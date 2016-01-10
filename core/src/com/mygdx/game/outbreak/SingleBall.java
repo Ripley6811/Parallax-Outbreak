@@ -43,6 +43,12 @@ public class SingleBall extends Constants {
         this.maxVelocity = Constants.BALL_MAX_VELOCITY[difficulty];
     }
 
+    /**
+     * Checks for collision with player paddle
+     *
+     * @param player Player object
+     * @return true if paddle hit
+     */
     public boolean checkCollision (Player player) {
         Vector2 futurePos = new Vector2(position.x + velocity.x, position.y + velocity.y);
         Circle ballCopy = new Circle(futurePos, circle.radius);
@@ -92,6 +98,7 @@ public class SingleBall extends Constants {
     /**
      * Convert the strike point along paddle to a degree for re-orientating the
      * ball's heading.
+     *
      * @param segStart Vector2 for paddle top-left corner
      * @param segEnd Vector2 for paddle top-right corner
      * @param hitPosition Vector2 of strike point
@@ -107,6 +114,7 @@ public class SingleBall extends Constants {
     /**
      * Checks collision of ball with any block. Changes ball velocity vector
      * and reduces block strength if hit occurs.
+     *
      * @param blocks array of blocks to test
      * @return true if hit occurred.
      */
@@ -212,6 +220,14 @@ public class SingleBall extends Constants {
         return false; // No overlaps.
     }
 
+    /**
+     * Updates the position of a ball, keeping it within boundaries.
+     * Plays audio for bounce of ceiling.
+     *
+     * @param deltaTime
+     * @param scrollVelocity
+     * @return True if ball dies during update.
+     */
     public boolean update (float deltaTime, float scrollVelocity) {
         if (isDead) return false;
 
@@ -226,6 +242,7 @@ public class SingleBall extends Constants {
                 velocity.y = -velocity.y;
                 position.y += velocity.y;
                 trail.get(0).y = 0f;
+                Audio.PADDLE.play();
             }
         }
         velocity.clamp(BALL_MIN_VELOCITY, maxVelocity);

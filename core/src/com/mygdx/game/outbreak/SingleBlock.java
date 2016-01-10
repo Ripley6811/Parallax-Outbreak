@@ -13,8 +13,6 @@ public class SingleBlock extends Constants{
     float x;
     float y;
     private int strength;
-    int colSpan;
-    String type;
 
     public SingleBlock(Viewport viewport, float x, float y, int strength) {
         this.viewport = viewport;
@@ -30,8 +28,12 @@ public class SingleBlock extends Constants{
 
     }
 
+    /**
+     * Decreases the block strength and plays audio for collision.
+     */
     public void hit() {
         strength -= 1;
+        Audio.BLIP[strength].play();
     }
 
     public int getStrength() {

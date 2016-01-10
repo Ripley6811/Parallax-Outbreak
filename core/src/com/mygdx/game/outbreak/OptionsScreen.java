@@ -1,12 +1,10 @@
 package com.mygdx.game.outbreak;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -28,7 +26,6 @@ public class OptionsScreen extends InputAdapter implements Screen {
     FitViewport textViewport;
     ShapeRenderer bgRenderer;  // Background renderer
     SpriteBatch fgBatch; // Foreground batch renderer
-//    Texture scoreboard;
     private BitmapFont font;
 
     float scrollPosition;
@@ -46,7 +43,6 @@ public class OptionsScreen extends InputAdapter implements Screen {
     public OptionsScreen(OutbreakGame game) {
         this.game = game;
         fgBatch = new SpriteBatch();
-//        scoreboard = new Texture(createScoreboardPixmap());
         font = new BitmapFont();
         font.setColor(Color.YELLOW);
         font.getData().setScale(Constants.FONT_SCALE);
@@ -117,6 +113,10 @@ public class OptionsScreen extends InputAdapter implements Screen {
         balls.init();
 
         Gdx.input.setInputProcessor(this);
+
+        // Play intro music clip.
+        Audio.INTRO.setLooping(true);
+        Audio.INTRO.play();
     }
 
     @Override
@@ -182,6 +182,7 @@ public class OptionsScreen extends InputAdapter implements Screen {
                     game.setRegenerate(false);
                 }
                 game.gotoGameScreen();
+                Audio.INTRO.stop();
             }
         }
         return super.touchDown(screenX, screenY, pointer, button);
