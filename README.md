@@ -30,6 +30,7 @@ When the game ends, tap or click on screen to return to the options menu.
 
 ##References
 
+- Udacity's *2D Game Development with LibGDX* course - **www.udacity.com**
 - How to use logging - **Learning LibGDX Game Development** Chapters 2-3.
 - How to use Pixmap - **Learning LibGDX Game Development** Ch. 3, Pg. 99.
 - LibGDX Class Reference - **libgdx.badlogicgames.com**
