@@ -117,17 +117,19 @@ public class Blocks extends Constants {
 
         batch.begin();
         for (SingleBlock block : blocks){
-            float xShifted = (block.x + scrollPosition) % WORLD_SIZE;
-            block.rectangle.setX(xShifted);
+            if (block.getStrength() > 0) {
+                float xShifted = (block.x + scrollPosition) % WORLD_SIZE;
+                block.rectangle.setX(xShifted);
 
-            // Draw block
-            batch.draw(blockTextures.get(block.getStrength()),
-                    xShifted, block.y, BLOCK_WIDTH, BLOCK_HEIGHT);
-            // Draw again to ensure block visible on both ends of screen
-            float xLeft = xShifted - WORLD_SIZE;
-            if (xLeft < 0 && xLeft >= -BLOCK_WIDTH) {
+                // Draw block
                 batch.draw(blockTextures.get(block.getStrength()),
-                        xLeft, block.y, BLOCK_WIDTH, BLOCK_HEIGHT);
+                        xShifted, block.y, BLOCK_WIDTH, BLOCK_HEIGHT);
+                // Draw again to ensure block visible on both ends of screen
+                float xLeft = xShifted - WORLD_SIZE;
+                if (xLeft < 0 && xLeft >= -BLOCK_WIDTH) {
+                    batch.draw(blockTextures.get(block.getStrength()),
+                            xLeft, block.y, BLOCK_WIDTH, BLOCK_HEIGHT);
+                }
             }
         }
         batch.end();
