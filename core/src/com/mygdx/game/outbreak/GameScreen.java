@@ -1,5 +1,6 @@
 package com.mygdx.game.outbreak;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
@@ -81,6 +82,10 @@ public class GameScreen extends InputAdapter implements Screen {
         blocks = new Blocks(game, actionViewport);
         player = new Player(actionViewport);
         balls = new Balls(game, actionViewport);
+
+        if (Gdx.app.getType() == Application.ApplicationType.WebGL) {
+            Audio.forceHtmlSoundCache();
+        }
         init();
     }
 
@@ -102,6 +107,7 @@ public class GameScreen extends InputAdapter implements Screen {
     @Override
     public void show() {
         Gdx.app.debug(TAG, "show()");
+
         scrollPosition = Constants.WORLD_SIZE;
         scrollVelocity = 0.0f;
         scrollAcceleration = 0.0f;
