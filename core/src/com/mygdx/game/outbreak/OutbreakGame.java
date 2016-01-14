@@ -9,7 +9,7 @@ public class OutbreakGame extends Game {
 	OptionsScreen optionsScreen;
 	GameScreen gameScreen;
 	EndScreen endScreen;
-	private int difficulty = 0;
+	private Constants.Difficulty difficulty;
 	private int lastScore = 0;
 	private int livesRemaining = 0;
 	boolean blocksRegenerate = false;
@@ -21,6 +21,7 @@ public class OutbreakGame extends Game {
 		Gdx.app.setLogLevel(Constants.LOG_LEVEL);
 		deviceWidth = Gdx.graphics.getWidth();
 		deviceHeight = Gdx.graphics.getHeight();
+		difficulty = Constants.Difficulty.EASY;
 		Gdx.app.log(TAG, "Device size: " + deviceWidth + " x " + deviceHeight);
 		optionsScreen = new OptionsScreen(this);
 		gameScreen = new GameScreen(this);
@@ -43,15 +44,11 @@ public class OutbreakGame extends Game {
 		setScreen(endScreen);
 	}
 
-	public void setDifficulty(int difficulty) {
+	public void setDifficulty(Constants.Difficulty difficulty) {
 		this.difficulty = difficulty;
 	}
 
-	public void setDifficulty(String difficulty) {
-		this.difficulty = Constants.DIFFICULTY.indexOf(difficulty, false);
-	}
-
-	public int getDifficulty() {
+	public Constants.Difficulty getDifficulty() {
 		return this.difficulty;
 	}
 

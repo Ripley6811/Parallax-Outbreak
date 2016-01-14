@@ -93,9 +93,9 @@ public class OptionsScreen extends InputAdapter implements Screen {
         // Initialize buttons
         int buttonY = 10;
         int buttonSpacing = 2;
-        for (String diff: Constants.DIFFICULTY_NAMES) {
+        for (Constants.Difficulty diff: Constants.Difficulty.values()) {
             buttons.add(
-                    new Button(diff,
+                    new Button(diff.name(),
                             (650 - Constants.BUTTON_WIDTH) / 2f, buttonY,
                             Constants.BUTTON_WIDTH, Constants.BUTTON_HEIGHT)
             );
@@ -175,12 +175,16 @@ public class OptionsScreen extends InputAdapter implements Screen {
         mouseMoved(screenX, screenY);
         for (Button b: buttons) {
             if (b.isMouseover()) {
-                game.setDifficulty(b.getText());
-                if (b.getText().equals(Constants.DIFFICULTY.peek())) {
-                    game.setRegenerate(true);
-                } else {
-                    game.setRegenerate(false);
+                switch (Constants.Difficulty.valueOf(b.getText())) {
+                    case EASY:
+                    case HARD:
+                        game.setRegenerate(false);
+                        break;
+                    case INSANE:
+                        game.setRegenerate(true);
+                        break;
                 }
+                game.setDifficulty(Constants.Difficulty.valueOf(b.getText()));
                 game.gotoGameScreen();
                 Audio.INTRO.stop();
             }

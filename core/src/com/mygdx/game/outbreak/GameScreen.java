@@ -72,7 +72,6 @@ public class GameScreen extends InputAdapter implements Screen {
         font.getRegion().getTexture().setFilter(
                 Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 
-        streak = Constants.BALL_STREAK_DOUBLER[game.getDifficulty()];
         lives = Constants.INITIAL_LIVES;
         level = Constants.START_LEVEL;
         score = 0;
@@ -94,6 +93,7 @@ public class GameScreen extends InputAdapter implements Screen {
         scrollPosition = Constants.WORLD_SIZE;
         scrollVelocity = 0.0f;
         scrollAcceleration = 0.0f;
+        streak = Constants.BALL_STREAK_DOUBLER(game.getDifficulty());
 
         gameBatch.setProjectionMatrix(actionViewport.getCamera().combined);
 
@@ -111,12 +111,12 @@ public class GameScreen extends InputAdapter implements Screen {
         scrollPosition = Constants.WORLD_SIZE;
         scrollVelocity = 0.0f;
         scrollAcceleration = 0.0f;
-        streak = Constants.BALL_STREAK_DOUBLER[game.getDifficulty()];
+        streak = Constants.BALL_STREAK_DOUBLER(game.getDifficulty());
         lives = Constants.INITIAL_LIVES;
         level = Constants.START_LEVEL;
         score = 0;
 
-        Gdx.app.log(TAG, "Difficulty selected: " + Constants.DIFFICULTY.get(game.getDifficulty()));
+        Gdx.app.log(TAG, "Difficulty selected: " + game.getDifficulty());
 
         starScape.init();
         debrisLayer.init();
@@ -264,10 +264,10 @@ public class GameScreen extends InputAdapter implements Screen {
                 game.setLivesRemaining(lives);
                 game.gotoEndScreen();
             }
-            streak = Constants.BALL_STREAK_DOUBLER[game.getDifficulty()];
+            streak = Constants.BALL_STREAK_DOUBLER(game.getDifficulty());
             balls.resetBalls();
         } else if (streak <= 0) {
-            streak = Constants.BALL_STREAK_DOUBLER[game.getDifficulty()];
+            streak = Constants.BALL_STREAK_DOUBLER(game.getDifficulty());
             balls.splitBalls();
         }
 

@@ -23,8 +23,7 @@ public class Constants {
     public static final Color BACKGROUND_COLOR = Color.BLACK;
     public static final float HUD_HEIGHT = 7f;
     public static final float FONT_SCALE = 1f;
-    public static final String[] DIFFICULTY_NAMES = {"Easy", "Hard", "Insane!"};
-    public static final Array<String> DIFFICULTY = new Array<String>(DIFFICULTY_NAMES);
+    public enum Difficulty {EASY, HARD, INSANE};
     public static final int START_LEVEL = 1;  // "0" for single block testing level.
     public static final int POINTS_PER_PADDLE_HIT = -1;
     public static final int POINTS_PER_BLOCK_HIT = 2;
@@ -73,7 +72,17 @@ public class Constants {
     public static final float BALL_RADIUS = 1.0f;
     public static final int BALL_SEGMENTS = 50;
     // Max velocity for various difficulty levels
-    public static final float[] BALL_MAX_VELOCITY = {0.65f, 0.75f, 0.85f};
+    public static float BALL_MAX_VELOCITY(Difficulty diff) {
+        switch (diff) {
+            case EASY:
+                return 0.65f;
+            case HARD:
+                return 0.75f;
+            case INSANE:
+                return 0.85f;
+        }
+        return 0f;
+    }
     public static final float BALL_MIN_VELOCITY = 0.5f;
     public static final float BALL_GRAVITY = 0.02f;
     // Adjust ball launch velocity relative to player velocity
@@ -81,7 +90,17 @@ public class Constants {
     // Number of previous positions to display in trail
     public static final float BALL_TRAIL_LENGTH = 20;
     public static final int MAX_NUMBER_BALLS = 10;
-    public static final int[] BALL_STREAK_DOUBLER = {12, 24, 36};
+    public static int BALL_STREAK_DOUBLER(Difficulty diff) {
+        switch (diff) {
+            case EASY:
+                return 12;
+            case HARD:
+                return 24;
+            case INSANE:
+                return 36;
+        }
+        return 0;
+    }
     public static final float BALL_SPLIT_ANGLE = 6f;
 
     /* COLLISION */

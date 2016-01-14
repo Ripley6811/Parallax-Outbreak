@@ -39,8 +39,8 @@ public class SingleBall {
         collisions = new Array<SingleBlock>(0);
     }
 
-    public void init(int difficulty) {
-        this.maxVelocity = Constants.BALL_MAX_VELOCITY[difficulty];
+    public void init(Constants.Difficulty difficulty) {
+        this.maxVelocity = Constants.BALL_MAX_VELOCITY(difficulty);
     }
 
     /**
