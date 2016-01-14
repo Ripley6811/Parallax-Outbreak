@@ -7,7 +7,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 /**
  * Created by Jay on 12/23/2015.
  */
-public class SingleBlock extends Constants{
+public class SingleBlock {
     Viewport viewport;
     Rectangle rectangle;
     float x;
@@ -16,7 +16,7 @@ public class SingleBlock extends Constants{
 
     public SingleBlock(Viewport viewport, float x, float y, int strength) {
         this.viewport = viewport;
-        rectangle = new Rectangle(x, y, BLOCK_WIDTH, BLOCK_HEIGHT);
+        rectangle = new Rectangle(x, y, Constants.BLOCK_WIDTH, Constants.BLOCK_HEIGHT);
         this.x = x;
         this.y = y;
         // Strength determines how many hits it can take and the color.

@@ -14,7 +14,7 @@ import java.util.Random;
 /**
  * Created by Jay on 12/23/2015.
  */
-public class Blocks extends Constants {
+public class Blocks {
     private static final String TAG = Blocks.class.getName();
 
     OutbreakGame game;
@@ -24,7 +24,7 @@ public class Blocks extends Constants {
     int worldWidth;
     float regenerateCountdown = Constants.BLOCK_REGENERATION_RATE;
 
-    float VERTICAL_OFFSET = WORLD_SIZE - HUD_HEIGHT - BLOCK_HEIGHT - BLOCK_SPACING;
+    float VERTICAL_OFFSET = Constants.WORLD_SIZE - Constants.HUD_HEIGHT - Constants.BLOCK_HEIGHT - Constants.BLOCK_SPACING;
     Array<SingleBlock> blocks;
     Array<Texture> blockTextures;
 
@@ -47,15 +47,15 @@ public class Blocks extends Constants {
         worldWidth = (int)viewport.getWorldWidth();
         LEVEL_LAYOUT = Levels.LEVEL_LAYOUTS[level];
         int nCols = Levels.LEVEL_WIDTH;
-        int rowWidth = (int)(nCols * (BLOCK_WIDTH + BLOCK_SPACING) - BLOCK_SPACING);
+        int rowWidth = (int)(nCols * (Constants.BLOCK_WIDTH + Constants.BLOCK_SPACING) - Constants.BLOCK_SPACING);
         int xOffset = (worldWidth - rowWidth) / 2;
         blocks = new Array<SingleBlock>();
         for (int i = 0; i < LEVEL_LAYOUT.length; i++) {
             int strength = LEVEL_LAYOUT[i];
             int row = i / nCols;
             int col = i % nCols;
-            float x = col * (BLOCK_WIDTH + BLOCK_SPACING);
-            float y = VERTICAL_OFFSET - row * (BLOCK_HEIGHT + BLOCK_SPACING);
+            float x = col * (Constants.BLOCK_WIDTH + Constants.BLOCK_SPACING);
+            float y = VERTICAL_OFFSET - row * (Constants.BLOCK_HEIGHT + Constants.BLOCK_SPACING);
             blocks.add(new SingleBlock(viewport, x+xOffset, y, strength));
         }
     }
@@ -68,15 +68,15 @@ public class Blocks extends Constants {
         worldWidth = (int)viewport.getWorldWidth();
 
         int nCols = Levels.LEVEL_WIDTH;
-        int rowWidth = (int)(nCols * (BLOCK_WIDTH + BLOCK_SPACING) - BLOCK_SPACING);
+        int rowWidth = (int)(nCols * (Constants.BLOCK_WIDTH + Constants.BLOCK_SPACING) - Constants.BLOCK_SPACING);
         int xOffset = (worldWidth - rowWidth) / 2;
         blocks = new Array<SingleBlock>();
         for (int i = 0; i < Levels.SPLASH.length; i++) {
             int strength = Levels.SPLASH[i];
             int row = i / nCols;
             int col = i % nCols;
-            float x = col * (BLOCK_WIDTH + BLOCK_SPACING);
-            float y = PLAYER_Y_POSITION - row * (BLOCK_HEIGHT + BLOCK_SPACING) + 4.5f * (BLOCK_HEIGHT + BLOCK_SPACING);
+            float x = col * (Constants.BLOCK_WIDTH + Constants.BLOCK_SPACING);
+            float y = Constants.PLAYER_Y_POSITION - row * (Constants.BLOCK_HEIGHT + Constants.BLOCK_SPACING) + 4.5f * (Constants.BLOCK_HEIGHT + Constants.BLOCK_SPACING);
             blocks.add(new SingleBlock(viewport, x+xOffset, y, strength));
         }
     }
@@ -103,7 +103,7 @@ public class Blocks extends Constants {
         Random random = new Random();
         int i = random.nextInt(LEVEL_LAYOUT.length);
         int currStrength = blocks.get(i).getStrength();
-        if (currStrength < BLOCK_MAX_STRENGTH) {
+        if (currStrength < Constants.BLOCK_MAX_STRENGTH) {
             blocks.get(i).setStrength(currStrength + 1);
         } else {
             // If block wasn't strengthen then shorten time to next regen.
@@ -118,17 +118,17 @@ public class Blocks extends Constants {
         batch.begin();
         for (SingleBlock block : blocks){
             if (block.getStrength() > 0) {
-                float xShifted = (block.x + scrollPosition) % WORLD_SIZE;
+                float xShifted = (block.x + scrollPosition) % Constants.WORLD_SIZE;
                 block.rectangle.setX(xShifted);
 
                 // Draw block
                 batch.draw(blockTextures.get(block.getStrength()),
-                        xShifted, block.y, BLOCK_WIDTH, BLOCK_HEIGHT);
+                        xShifted, block.y, Constants.BLOCK_WIDTH, Constants.BLOCK_HEIGHT);
                 // Draw again to ensure block visible on both ends of screen
-                float xLeft = xShifted - WORLD_SIZE;
-                if (xLeft < 0 && xLeft >= -BLOCK_WIDTH) {
+                float xLeft = xShifted - Constants.WORLD_SIZE;
+                if (xLeft < 0 && xLeft >= -Constants.BLOCK_WIDTH) {
                     batch.draw(blockTextures.get(block.getStrength()),
-                            xLeft, block.y, BLOCK_WIDTH, BLOCK_HEIGHT);
+                            xLeft, block.y, Constants.BLOCK_WIDTH, Constants.BLOCK_HEIGHT);
                 }
             }
         }

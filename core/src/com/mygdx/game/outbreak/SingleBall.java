@@ -14,7 +14,7 @@ import com.badlogic.gdx.utils.Array;
 /**
  * Created by Ripley on 12/28/2015.
  */
-public class SingleBall extends Constants {
+public class SingleBall {
     private static final String TAG = SingleBall.class.getName();
 
     Circle circle;
@@ -31,7 +31,7 @@ public class SingleBall extends Constants {
     Vector2 normalizedRotationVector = new Vector2();
 
     public SingleBall(float x, float y) {
-        circle = new Circle(x, y, BALL_RADIUS);
+        circle = new Circle(x, y, Constants.BALL_RADIUS);
         position = new Vector2(x, y);
         velocity = new Vector2(0f, 0f);
         time = 0f;
@@ -62,8 +62,8 @@ public class SingleBall extends Constants {
 
             // Rewind to point of collision
             do {
-                ballCopy.x -= velocity.x * COLLISION_DETECTION_PRECISION;
-                ballCopy.y -= velocity.y * COLLISION_DETECTION_PRECISION;
+                ballCopy.x -= velocity.x * Constants.COLLISION_DETECTION_PRECISION;
+                ballCopy.y -= velocity.y * Constants.COLLISION_DETECTION_PRECISION;
             } while (Intersector.overlaps(ballCopy, rect));
 
             // Only test collision across paddle top
@@ -84,9 +84,9 @@ public class SingleBall extends Constants {
             newVelocity.sub(normalizedRotationVector.scl(newVelocity.dot(normalizedRotationVector)).scl(2f));
             Gdx.app.debug(TAG, "New vec: " + newVelocity);
 
-            newVelocity.setAngle(newVelocity.angle() * (1f - ABSORB_PADDLE_ANGLE)
-                                + reorientateAngle * ABSORB_PADDLE_ANGLE);
-            newVelocity.x += player.velocity * ABSORB_VELOCITY_MULTIPLIER;
+            newVelocity.setAngle(newVelocity.angle() * (1f - Constants.ABSORB_PADDLE_ANGLE)
+                                + reorientateAngle * Constants.ABSORB_PADDLE_ANGLE);
+            newVelocity.x += player.velocity * Constants.ABSORB_VELOCITY_MULTIPLIER;
             Gdx.app.log(TAG, "Incoming angle: " + velocity.angle());
             velocity.set(newVelocity);
             Gdx.app.log(TAG, "Outgoing angle: " + velocity.angle());
@@ -128,9 +128,9 @@ public class SingleBall extends Constants {
             if (block.getStrength() > 0) {
                 if (Intersector.overlaps(ballCopy, block.rectangle)) {
                     collisions.add(block);
-                } else if (block.rectangle.x + BLOCK_WIDTH > WORLD_SIZE) {
+                } else if (block.rectangle.x + Constants.BLOCK_WIDTH > Constants.WORLD_SIZE) {
                     // This checks if blocks that wrap around to left side are hit.
-                    block.rectangle.x -= WORLD_SIZE;
+                    block.rectangle.x -= Constants.WORLD_SIZE;
                     if (Intersector.overlaps(ballCopy, block.rectangle)) {
                         collisions.add(block);
                     }
@@ -142,8 +142,8 @@ public class SingleBall extends Constants {
             Gdx.app.log(TAG, "Number of collisions: " + collisions.size);
             // Backtrack to find position just before collision
             do {
-                ballCopy.x -= velocity.x * COLLISION_DETECTION_PRECISION;
-                ballCopy.y -= velocity.y * COLLISION_DETECTION_PRECISION;
+                ballCopy.x -= velocity.x * Constants.COLLISION_DETECTION_PRECISION;
+                ballCopy.y -= velocity.y * Constants.COLLISION_DETECTION_PRECISION;
             } while (anyCollision(ballCopy));
 
             // Find closest rectangle segment to collision
@@ -236,27 +236,27 @@ public class SingleBall extends Constants {
         if (!onPlayer) {
             position.add(velocity);
             position.x += scrollVelocity;
-            velocity.y -= BALL_GRAVITY * deltaTime;
+            velocity.y -= Constants.BALL_GRAVITY * deltaTime;
             trail.insert(0, new Vector2(-velocity.x, -velocity.y));
-            if (position.y + BALL_RADIUS > WORLD_SIZE - HUD_HEIGHT) {
+            if (position.y + Constants.BALL_RADIUS > Constants.WORLD_SIZE - Constants.HUD_HEIGHT) {
                 velocity.y = -velocity.y;
                 position.y += velocity.y;
                 trail.get(0).y = 0f;
                 Audio.PADDLE.play();
             }
         }
-        velocity.clamp(BALL_MIN_VELOCITY, maxVelocity);
+        velocity.clamp(Constants.BALL_MIN_VELOCITY, maxVelocity);
 
         // Drop oldest trail vector.
-        if (trail.size > BALL_TRAIL_LENGTH) {
+        if (trail.size > Constants.BALL_TRAIL_LENGTH) {
             trail.pop();
         }
 
         // Keep ball within world boundaries.
         if (position.x < 0) {
-            position.x += WORLD_SIZE;
-        } else if (position.x > WORLD_SIZE) {
-            position.x -= WORLD_SIZE;
+            position.x += Constants.WORLD_SIZE;
+        } else if (position.x > Constants.WORLD_SIZE) {
+            position.x -= Constants.WORLD_SIZE;
         }
 
         // Set as dead if ball falls below world.
@@ -284,7 +284,7 @@ public class SingleBall extends Constants {
     public void setFree(float xVelocity) {
         onPlayer = false;
         velocity.set(
-                xVelocity * BALL_LAUNCH_VELOCITY_X_MULTIPLIER,
+                xVelocity * Constants.BALL_LAUNCH_VELOCITY_X_MULTIPLIER,
                 maxVelocity
         );
         velocity.clamp(maxVelocity / 2, maxVelocity);
@@ -296,7 +296,7 @@ public class SingleBall extends Constants {
 
     public void render(ShapeRenderer renderer) {
 
-        float adjustedXPos = position.x % WORLD_SIZE;
+        float adjustedXPos = position.x % Constants.WORLD_SIZE;
 
         // Enable alpha blending.
         Gdx.gl.glEnable(GL20.GL_BLEND);
@@ -306,20 +306,20 @@ public class SingleBall extends Constants {
         renderer.begin(ShapeRenderer.ShapeType.Filled);
         renderer.translate(adjustedXPos, position.y, 0);
         Vector2 trailTotal = new Vector2(0,0);
-        float trailRadius = BALL_RADIUS;
+        float trailRadius = Constants.BALL_RADIUS;
         for (Vector2 t: trail) {
             trailRadius *= 0.9f;
             trailTotal.add(t);
             // Keep trail within view boundary
             if (adjustedXPos + trailTotal.x < 0) {
-                trailTotal.x += WORLD_SIZE;
-            } else if (adjustedXPos + trailTotal.x > WORLD_SIZE) {
-                trailTotal.x -= WORLD_SIZE;
+                trailTotal.x += Constants.WORLD_SIZE;
+            } else if (adjustedXPos + trailTotal.x > Constants.WORLD_SIZE) {
+                trailTotal.x -= Constants.WORLD_SIZE;
             }
 
             renderer.setColor(new Color(1,1,1,0.2f));
             renderer.circle(trailTotal.x, trailTotal.y,
-                    trailRadius, BALL_SEGMENTS / 2);
+                    trailRadius, Constants.BALL_SEGMENTS / 2);
         }
         renderer.end();
 
@@ -327,18 +327,18 @@ public class SingleBall extends Constants {
         // Draw ball.
         renderer.begin(ShapeRenderer.ShapeType.Filled);
         renderer.setColor(Color.LIGHT_GRAY);
-        renderer.circle(0, 0, BALL_RADIUS, BALL_SEGMENTS);
+        renderer.circle(0, 0, Constants.BALL_RADIUS, Constants.BALL_SEGMENTS);
         renderer.end();
 
         // Add ball inner gradient and outer glow.
         renderer.begin(ShapeRenderer.ShapeType.Line);
-        for (float r=BALL_RADIUS; r > 0f; r -= 0.1) {
+        for (float r=Constants.BALL_RADIUS; r > 0f; r -= 0.1) {
             renderer.setColor(new Color(1f,1f,1f,r));
-            renderer.circle(0, 0, r, BALL_SEGMENTS);
+            renderer.circle(0, 0, r, Constants.BALL_SEGMENTS);
         }
         for (float r=0f; r < ball_glow_radius; r += 0.1) {
             renderer.setColor(new Color(1f,1f,1f, ball_glow_radius -r));
-            renderer.circle(0, 0, BALL_RADIUS+r, BALL_SEGMENTS);
+            renderer.circle(0, 0, Constants.BALL_RADIUS+r, Constants.BALL_SEGMENTS);
         }
         renderer.translate(-adjustedXPos, -position.y, 0);
         renderer.end();
