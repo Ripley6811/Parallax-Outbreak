@@ -41,6 +41,10 @@ public class Blocks {
         }
     }
 
+    /**
+     * Initializes the "GameScreen" with the given level data
+     * @param level Index for loading blocks layout from Levels.java
+     */
     public void init(int level) {
         Gdx.app.debug(TAG, "init(int)");
         scrollPosition = 0.0f;
@@ -60,6 +64,10 @@ public class Blocks {
         }
     }
 
+    /**
+     * Initialization for start screen background animation
+     * @param screenName Reference to the "OptionsScreen"
+     */
     public void init(String screenName) {
         Gdx.app.debug(TAG, "init(String)");
         if (!screenName.equals("OptionsScreen")) return;
