@@ -15,6 +15,8 @@ or Pixmap classes.
 Audio was created with [CheeseCutter SID Music Editor 2.7](http://theyamo.kapsi.fi/ccutter/about.html)
 and edited with [Audacity 2.1.1](http://audacityteam.org/).
 
+![alt tag](/parallax_outbreak.png)
+
 ##Gameplay
 
 There are three modes of game-play; "Easy", "Hard" and "Insane!". Ball max speed
