@@ -15,7 +15,8 @@ or Pixmap classes.
 Audio was created with [CheeseCutter SID Music Editor 2.7](http://theyamo.kapsi.fi/ccutter/about.html)
 and edited with [Audacity 2.1.1](http://audacityteam.org/).
 
-![alt tag](/parallax_outbreak.png)
+![alt tag](/screenshots/sample1.png)
+![alt tag](/screenshots/11.png)
 
 ##Gameplay
 
